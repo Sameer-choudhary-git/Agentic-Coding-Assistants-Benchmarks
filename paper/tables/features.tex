@@ -1,0 +1,17 @@
+% Generated from evidence/assistant_features.json (checked 2026-11-09). Do not edit by hand.
+\begin{table*}[t]
+\caption{Feature comparison of the four assistants (vendor documentation, checked 2026-11-09)}
+\label{tab:features}
+\centering\scriptsize
+\begin{tabular}{@{}p{0.08\textwidth}p{0.17\textwidth}p{0.05\textwidth}p{0.19\textwidth}p{0.15\textwidth}p{0.26\textwidth}@{}}
+\toprule
+Assistant & Interaction modes & Auton. & Context handling & Tooling & Execution and deployment\\
+\midrule
+GitHub Copilot & Inline completion; Chat; IDE agent mode; Cloud agent assigned from issues, chat or agent panel & L1--L4 & Repository-scoped; GitHub MCP server gives issue and PR history; custom instructions at personal, repository and organisation level & MCP servers, custom agents, agent skills, hooks & Cloud agent runs in a temporary cloud development environment, edits, runs tests and linters. Creates a branch and opens one PR per task; 59-minute session cap; rulesets can block it\\
+Cursor & AI-native editor with Tab completion; In-editor Agent; Cloud Agents launched from editor, web, mobile, Slack, GitHub or Linear & L1--L4 & Indexed workspace in the editor; cloud agents get the repo, dependencies and configured secrets & Editor tools, terminal, MCP; per-environment secrets and network policies & Cloud Agents run in a separate sandboxed VM per agent. Cloud agents can open a PR with videos, screenshots and logs attached\\
+Claude Code & Terminal CLI agent; VS Code and JetBrains extensions; Desktop app; Web and mobile cloud sessions; Slack and CI (GitHub Actions, GitLab CI/CD) & L3--L4 & Reads the codebase on demand; CLAUDE.md (or AGENTS.md) project instructions; auto memory & MCP, skills, hooks, subagents, Agent SDK & Runs commands locally under a permission system, or in cloud sessions. Stages, commits, creates branches and opens PRs; Slack mention can return a PR\\
+OpenAI Codex & Cloud tasks (web/ChatGPT); Codex CLI; IDE extension & L3--L4 & Checks out the repo at a branch/commit; AGENTS.md tells the agent lint and test commands & Terminal in a container; setup and maintenance scripts; MCP in the CLI & Cloud container from the 'universal' image; internet off by default during the agent phase (setup scripts may use it). Returns an answer and a diff; the user opens a PR from it\\
+\bottomrule
+\multicolumn{6}{@{}p{0.95\textwidth}@{}}{\emph{Autonomy scale.} L1: Suggestion: inline completion the developer accepts or rejects; L2: Conversational: chat proposes edits; developer applies them; L3: Supervised local agent: plans, edits files and runs commands in the developer's environment, with approvals; L4: Asynchronous delegated agent: works in a remote sandbox and returns a branch, diff or pull request for review}\\
+\end{tabular}
+\end{table*}

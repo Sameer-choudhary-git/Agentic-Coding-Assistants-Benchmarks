@@ -1,0 +1,462 @@
+{
+  "source": "https://github.com/SWE-bench/experiments",
+  "commit": "40f164d5b8f1d249bf95a6df8b74b577fd8e519d",
+  "submissions": 122,
+  "k": 10,
+  "date_range": [
+    "20240612",
+    "20260901"
+  ],
+  "best": {
+    "name": "Sonar Foundation Agent + Claude 4.5 Opus",
+    "resolve_rate": 0.792
+  },
+  "median_resolve_rate": 0.57,
+  "trajectory": [
+    {
+      "date": "20240612",
+      "name": "MASAI + GPT 4o (2024-06-12)",
+      "resolve_rate": 0.326
+    },
+    {
+      "date": "20240620",
+      "name": "SWE-agent + Claude 3.5 Sonnet",
+      "resolve_rate": 0.336
+    },
+    {
+      "date": "20240820",
+      "name": "Honeycomb",
+      "resolve_rate": 0.406
+    },
+    {
+      "date": "20240824",
+      "name": "Gru(2024-08-24)",
+      "resolve_rate": 0.452
+    },
+    {
+      "date": "20240924",
+      "name": "Solver (2024-09-12)",
+      "resolve_rate": 0.454
+    },
+    {
+      "date": "20241022",
+      "name": "Tools + Claude 3.5 Sonnet (2024-10-22)",
+      "resolve_rate": 0.49
+    },
+    {
+      "date": "20241028",
+      "name": "Solver (2024-10-28)",
+      "resolve_rate": 0.5
+    },
+    {
+      "date": "20241029",
+      "name": "OpenHands + CodeAct v2.1 (claude-3-5-sonnet-20241022)",
+      "resolve_rate": 0.53
+    },
+    {
+      "date": "20241108",
+      "name": "devlo",
+      "resolve_rate": 0.542
+    },
+    {
+      "date": "20241202",
+      "name": "Amazon Q Developer Agent (v20241202-dev)",
+      "resolve_rate": 0.55
+    },
+    {
+      "date": "20241208",
+      "name": "Gru(2024-12-08)",
+      "resolve_rate": 0.57
+    },
+    {
+      "date": "20241213",
+      "name": "devlo",
+      "resolve_rate": 0.582
+    },
+    {
+      "date": "20241221",
+      "name": "CodeStory Midwit Agent + swe-search",
+      "resolve_rate": 0.622
+    },
+    {
+      "date": "20250110",
+      "name": "Blackbox AI Agent",
+      "resolve_rate": 0.628
+    },
+    {
+      "date": "20250117",
+      "name": "W&B Programmer O1 crosscheck5",
+      "resolve_rate": 0.646
+    },
+    {
+      "date": "20250316",
+      "name": "Augment Agent v0",
+      "resolve_rate": 0.654
+    },
+    {
+      "date": "20250415",
+      "name": "OpenHands",
+      "resolve_rate": 0.658
+    },
+    {
+      "date": "20250430",
+      "name": "Zencoder (2025-04-30)",
+      "resolve_rate": 0.7
+    },
+    {
+      "date": "20250515",
+      "name": "Refact.ai Agent",
+      "resolve_rate": 0.704
+    },
+    {
+      "date": "20250519",
+      "name": "TRAE",
+      "resolve_rate": 0.706
+    },
+    {
+      "date": "20250522",
+      "name": "Tools + Claude 4 Opus (2025-05-22)",
+      "resolve_rate": 0.732
+    },
+    {
+      "date": "20250603",
+      "name": "Refact.ai Agent + Claude 4 Sonnet + o4-mini",
+      "resolve_rate": 0.744
+    },
+    {
+      "date": "20250612",
+      "name": "TRAE + Claude Sonnet 4 + Opus 4 + Sonnet 3.7 + Gemini 2.5 Pro",
+      "resolve_rate": 0.752
+    },
+    {
+      "date": "20250804",
+      "name": "EPAM AI/Run Developer Agent v20250719 + Claude 4 Sonnet",
+      "resolve_rate": 0.768
+    },
+    {
+      "date": "20250928",
+      "name": "TRAE + Doubao-Seed-Code",
+      "resolve_rate": 0.788
+    },
+    {
+      "date": "20251205",
+      "name": "Sonar Foundation Agent + Claude 4.5 Opus",
+      "resolve_rate": 0.792
+    }
+  ],
+  "hardness_bands": [
+    {
+      "band": "never solved",
+      "instances": 29
+    },
+    {
+      "band": "under 10%",
+      "instances": 57
+    },
+    {
+      "band": "10-50%",
+      "instances": 113
+    },
+    {
+      "band": "50-90%",
+      "instances": 206
+    },
+    {
+      "band": "90% or more",
+      "instances": 95
+    }
+  ],
+  "by_repo": [
+    {
+      "repo": "django/django",
+      "instances": 231,
+      "top_mean_rate": 0.8061
+    },
+    {
+      "repo": "sympy/sympy",
+      "instances": 75,
+      "top_mean_rate": 0.7427
+    },
+    {
+      "repo": "sphinx-doc/sphinx",
+      "instances": 44,
+      "top_mean_rate": 0.6841
+    },
+    {
+      "repo": "matplotlib/matplotlib",
+      "instances": 34,
+      "top_mean_rate": 0.7353
+    },
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "instances": 32,
+      "top_mean_rate": 0.9094
+    },
+    {
+      "repo": "astropy/astropy",
+      "instances": 22,
+      "top_mean_rate": 0.6
+    },
+    {
+      "repo": "pydata/xarray",
+      "instances": 22,
+      "top_mean_rate": 0.85
+    },
+    {
+      "repo": "pytest-dev/pytest",
+      "instances": 19,
+      "top_mean_rate": 0.8789
+    },
+    {
+      "repo": "pylint-dev/pylint",
+      "instances": 10,
+      "top_mean_rate": 0.44
+    },
+    {
+      "repo": "psf/requests",
+      "instances": 8,
+      "top_mean_rate": 0.6875
+    },
+    {
+      "repo": "mwaskom/seaborn",
+      "instances": 2,
+      "top_mean_rate": 0.45
+    },
+    {
+      "repo": "pallets/flask",
+      "instances": 1,
+      "top_mean_rate": 1.0
+    }
+  ],
+  "by_year": [
+    {
+      "year": "2013",
+      "instances": 3,
+      "top_mean_rate": 0.7667
+    },
+    {
+      "year": "2014",
+      "instances": 2,
+      "top_mean_rate": 0.55
+    },
+    {
+      "year": "2015",
+      "instances": 1,
+      "top_mean_rate": 0.8
+    },
+    {
+      "year": "2016",
+      "instances": 2,
+      "top_mean_rate": 1.0
+    },
+    {
+      "year": "2017",
+      "instances": 16,
+      "top_mean_rate": 0.9062
+    },
+    {
+      "year": "2018",
+      "instances": 24,
+      "top_mean_rate": 0.7417
+    },
+    {
+      "year": "2019",
+      "instances": 98,
+      "top_mean_rate": 0.8163
+    },
+    {
+      "year": "2020",
+      "instances": 108,
+      "top_mean_rate": 0.8074
+    },
+    {
+      "year": "2021",
+      "instances": 86,
+      "top_mean_rate": 0.6953
+    },
+    {
+      "year": "2022",
+      "instances": 102,
+      "top_mean_rate": 0.7549
+    },
+    {
+      "year": "2023",
+      "instances": 58,
+      "top_mean_rate": 0.7586
+    }
+  ],
+  "scaffold_spread": [
+    {
+      "model": "claude-3-5-sonnet-20241022",
+      "submissions": 20,
+      "agents": 16,
+      "min": 0.336,
+      "max": 0.634,
+      "spread_pp": 29.8
+    },
+    {
+      "model": "claude-sonnet-4-20250514",
+      "submissions": 6,
+      "agents": 6,
+      "min": 0.57,
+      "max": 0.768,
+      "spread_pp": 19.8
+    },
+    {
+      "model": "https://huggingface.co/agentica-org/DeepSWE-Preview",
+      "submissions": 2,
+      "agents": 2,
+      "min": 0.422,
+      "max": 0.588,
+      "spread_pp": 16.6
+    },
+    {
+      "model": "gpt-4o-2024-05-13",
+      "submissions": 2,
+      "agents": 2,
+      "min": 0.232,
+      "max": 0.388,
+      "spread_pp": 15.6
+    },
+    {
+      "model": "Qwen 2.5",
+      "submissions": 3,
+      "agents": 2,
+      "min": 0.302,
+      "max": 0.402,
+      "spread_pp": 10.0
+    },
+    {
+      "model": "gpt-4o-2024-08-06",
+      "submissions": 3,
+      "agents": 2,
+      "min": 0.24,
+      "max": 0.326,
+      "spread_pp": 8.6
+    },
+    {
+      "model": "claude-3-7-sonnet-20250219",
+      "submissions": 5,
+      "agents": 5,
+      "min": 0.624,
+      "max": 0.704,
+      "spread_pp": 8.0
+    },
+    {
+      "model": "claude-4-sonnet-20250514",
+      "submissions": 6,
+      "agents": 6,
+      "min": 0.666,
+      "max": 0.746,
+      "spread_pp": 8.0
+    },
+    {
+      "model": "claude-4-sonnet",
+      "submissions": 3,
+      "agents": 3,
+      "min": 0.744,
+      "max": 0.764,
+      "spread_pp": 2.0
+    }
+  ],
+  "products": {
+    "entries_searched": 182,
+    "product_entries": {
+      "GitHub Copilot": [],
+      "Cursor": [],
+      "Claude Code": [],
+      "OpenAI Codex (product)": []
+    },
+    "codex_branded_models_in_generic_scaffolds": [
+      "GPT 5.1 Codex (medium)",
+      "GPT 5.2 Codex"
+    ]
+  },
+  "pilot_candidates": [
+    {
+      "instance_id": "django__django-13658",
+      "repo": "django/django",
+      "solved_by": 121,
+      "share": 0.9918,
+      "tier": "easy"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-25122",
+      "repo": "matplotlib/matplotlib",
+      "solved_by": 108,
+      "share": 0.8852,
+      "tier": "easy"
+    },
+    {
+      "instance_id": "sympy__sympy-16450",
+      "repo": "sympy/sympy",
+      "solved_by": 104,
+      "share": 0.8525,
+      "tier": "easy"
+    },
+    {
+      "instance_id": "pydata__xarray-4629",
+      "repo": "pydata/xarray",
+      "solved_by": 122,
+      "share": 1.0,
+      "tier": "easy"
+    },
+    {
+      "instance_id": "django__django-16661",
+      "repo": "django/django",
+      "solved_by": 70,
+      "share": 0.5738,
+      "tier": "medium"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-7889",
+      "repo": "sphinx-doc/sphinx",
+      "solved_by": 89,
+      "share": 0.7295,
+      "tier": "medium"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-12682",
+      "repo": "scikit-learn/scikit-learn",
+      "solved_by": 69,
+      "share": 0.5656,
+      "tier": "medium"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-7432",
+      "repo": "pytest-dev/pytest",
+      "solved_by": 93,
+      "share": 0.7623,
+      "tier": "medium"
+    },
+    {
+      "instance_id": "sympy__sympy-17630",
+      "repo": "sympy/sympy",
+      "solved_by": 3,
+      "share": 0.0246,
+      "tier": "hard"
+    },
+    {
+      "instance_id": "django__django-16560",
+      "repo": "django/django",
+      "solved_by": 37,
+      "share": 0.3033,
+      "tier": "hard"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23299",
+      "repo": "matplotlib/matplotlib",
+      "solved_by": 5,
+      "share": 0.041,
+      "tier": "hard"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-11445",
+      "repo": "sphinx-doc/sphinx",
+      "solved_by": 55,
+      "share": 0.4508,
+      "tier": "hard"
+    }
+  ],
+  "pilot_seed": 2026
+}

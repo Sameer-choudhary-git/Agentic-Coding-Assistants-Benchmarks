@@ -1,0 +1,36 @@
+{
+  "name": "agentic-coding-benchmark",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agentic Coding Assistants: A Comparative Evaluation Platform (DTU B.Tech Project-I, Group A6)",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "node scripts/dev.mjs",
+    "build": "npm run build --workspace frontend",
+    "start": "npm run build && npm run start --workspace backend",
+    "typecheck": "npm run typecheck --workspace backend && npm run typecheck --workspace frontend",
+    "test": "npm run test:python && npm run test:backend && npm run test:frontend",
+    "test:backend": "npm run test --workspace backend",
+    "test:frontend": "npm run test --workspace frontend",
+    "test:python": "node scripts/py.mjs -m pytest",
+    "test:e2e": "npm run build && node tests/e2e/smoke.mjs",
+    "validate:tasks": "node scripts/py.mjs -m evaluator.cli validate",
+    "tasks": "node scripts/py.mjs -m evaluator.cli list-tasks",
+    "evaluator:env": "node scripts/py.mjs -m evaluator.cli env",
+    "export": "npm run export --workspace backend --",
+    "import-bundle": "npm run import-bundle --workspace backend --",
+    "analyze": "node scripts/py.mjs analysis/analyze.py",
+    "lint:python": "node scripts/py.mjs -m ruff check .",
+    "docker:evaluator": "docker build -t acb-evaluator:1.0 -f docker/evaluator.Dockerfile ."
+  },
+  "devDependencies": {
+    "playwright": "^1.50.0"
+  }
+}

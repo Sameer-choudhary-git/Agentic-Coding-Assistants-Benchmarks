@@ -1,0 +1,29 @@
+{
+  "id": "RR-02",
+  "title": "Missing audit events and ignored audit setting",
+  "category": "repository_reasoning",
+  "difficulty": "hard",
+  "difficulty_rationale": "Two independent root causes across six modules; one failure is silent because the event bus isolates handler exceptions, so the defect must be traced through the bus, the user service and the audit handler.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "User deletions never reach the audit log, and 'audit.enabled = false' in the settings file does not disable auditing.",
+  "required_behavior": [
+    "Every user lifecycle event (created, renamed, deleted) publishes a payload that follows the documented schema in app/events.py.",
+    "With auditing enabled, each lifecycle event produces exactly one audit entry with the correct event name, user id and name.",
+    "audit.enabled and audit.include_names accept true/false/yes/no/on/off/1/0 (case-insensitive); any other value raises ValueError.",
+    "With auditing disabled, no audit entries are produced.",
+    "No handler errors are recorded on the bus during normal operation."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Hidden regression tests pass."],
+  "acceptance_tests": [
+    {"id": "test_all_lifecycle_events_audited", "description": "create, rename and delete each produce one audit entry."},
+    {"id": "test_deleted_payload_follows_schema", "description": "user.deleted payload contains user_id and name."},
+    {"id": "test_audit_disabled_values", "description": "false/no/off/0 disable auditing."},
+    {"id": "test_invalid_boolean_rejected", "description": "Unrecognised boolean strings raise ValueError."},
+    {"id": "test_no_bus_errors", "description": "The bus records no handler errors."}
+  ],
+  "scope": {"allowed_paths": ["app/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 35,
+  "test_timeout_seconds": 120
+}

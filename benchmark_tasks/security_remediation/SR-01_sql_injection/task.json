@@ -1,0 +1,28 @@
+{
+  "id": "SR-01",
+  "title": "Unsafe SQL query construction",
+  "category": "security_remediation",
+  "difficulty": "easy",
+  "difficulty_rationale": "One module with three query functions; the fixes are standard (parameterised queries, an allow-list for ORDER BY, LIKE escaping) and fully specified.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "Repository functions build SQL with string formatting, allowing SQL injection through names, search prefixes and the sort column.",
+  "required_behavior": [
+    "All user-supplied values are passed as bound parameters; no user input is interpolated into SQL text.",
+    "search_users(prefix) treats % and _ in the prefix literally (LIKE wildcards are escaped).",
+    "order_by is restricted to the allow-list {'name', 'created_at'}; anything else raises ValueError.",
+    "Results and return types are unchanged for legitimate input."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Hidden regression tests pass.", "No new Semgrep findings (reported separately)."],
+  "acceptance_tests": [
+    {"id": "test_find_by_name_injection_returns_nothing", "description": "A tautology payload does not return all users."},
+    {"id": "test_find_by_name_drop_table_payload", "description": "Stacked/destructive payloads do not modify the database."},
+    {"id": "test_search_prefix_wildcards_literal", "description": "% and _ in the prefix are matched literally."},
+    {"id": "test_order_by_allow_list", "description": "Unknown order_by values raise ValueError."},
+    {"id": "test_update_email_injection", "description": "Injection through update_email does not affect other rows."}
+  ],
+  "scope": {"allowed_paths": ["userdb/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 20,
+  "test_timeout_seconds": 120
+}

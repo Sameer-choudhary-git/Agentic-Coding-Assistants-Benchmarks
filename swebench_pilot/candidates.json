@@ -1,0 +1,92 @@
+{
+  "design": "12 SWE-bench Verified instances, 4 per empirical-difficulty tertile (share of 122 leaderboard submissions resolving each instance; never-solved excluded), spread across repositories, seed 2026",
+  "source": "https://github.com/SWE-bench/experiments",
+  "commit": "40f164d5b8f1d249bf95a6df8b74b577fd8e519d",
+  "seed": 2026,
+  "instances": [
+    {
+      "instance_id": "django__django-13658",
+      "repo": "django/django",
+      "tier": "easy",
+      "share": 0.9918,
+      "solved_by": 121
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-25122",
+      "repo": "matplotlib/matplotlib",
+      "tier": "easy",
+      "share": 0.8852,
+      "solved_by": 108
+    },
+    {
+      "instance_id": "sympy__sympy-16450",
+      "repo": "sympy/sympy",
+      "tier": "easy",
+      "share": 0.8525,
+      "solved_by": 104
+    },
+    {
+      "instance_id": "pydata__xarray-4629",
+      "repo": "pydata/xarray",
+      "tier": "easy",
+      "share": 1.0,
+      "solved_by": 122
+    },
+    {
+      "instance_id": "django__django-16661",
+      "repo": "django/django",
+      "tier": "medium",
+      "share": 0.5738,
+      "solved_by": 70
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-7889",
+      "repo": "sphinx-doc/sphinx",
+      "tier": "medium",
+      "share": 0.7295,
+      "solved_by": 89
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-12682",
+      "repo": "scikit-learn/scikit-learn",
+      "tier": "medium",
+      "share": 0.5656,
+      "solved_by": 69
+    },
+    {
+      "instance_id": "pytest-dev__pytest-7432",
+      "repo": "pytest-dev/pytest",
+      "tier": "medium",
+      "share": 0.7623,
+      "solved_by": 93
+    },
+    {
+      "instance_id": "sympy__sympy-17630",
+      "repo": "sympy/sympy",
+      "tier": "hard",
+      "share": 0.0246,
+      "solved_by": 3
+    },
+    {
+      "instance_id": "django__django-16560",
+      "repo": "django/django",
+      "tier": "hard",
+      "share": 0.3033,
+      "solved_by": 37
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23299",
+      "repo": "matplotlib/matplotlib",
+      "tier": "hard",
+      "share": 0.041,
+      "solved_by": 5
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-11445",
+      "repo": "sphinx-doc/sphinx",
+      "tier": "hard",
+      "share": 0.4508,
+      "solved_by": 55
+    }
+  ]
+}

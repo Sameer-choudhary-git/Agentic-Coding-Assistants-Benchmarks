@@ -1,0 +1,69 @@
+{
+  "$comment": "Published figures only, each traceable to evidence/sources.json. Values are as reported by the source (percent unless unit says otherwise). Nothing here was measured by this project. 'theme' maps to outline Section V/VI subsections.",
+  "checkedOn": "2026-11-09",
+  "themes": {
+    "benchmark": "V-A SWE-bench and derivatives",
+    "acceptance": "V-B PR acceptance and merge rates",
+    "task_type": "V-C Task-type dependence",
+    "post_merge": "V-D Post-merge quality and regressions",
+    "productivity": "V-E Productivity evidence",
+    "security": "VI-A Security",
+    "review": "VI-C Review burden",
+    "benchmark_validity": "VI-D Benchmark-to-practice gap"
+  },
+  "items": [
+    {"id": "E01", "theme": "benchmark", "source": "jimenez2024swebench", "subject": "Claude 2 (RAG baseline)", "metric": "SWE-bench resolve rate", "value": 1.96, "unit": "%", "n": 2294, "conditions": "Full SWE-bench, 12 Python repositories, non-agentic retrieval baseline"},
+    {"id": "E02", "theme": "benchmark", "source": "openai2024verified", "subject": "SWE-bench Verified", "metric": "Instances", "value": 500, "unit": "tasks", "n": 1699, "conditions": "Screened by 93 developers, 3 labels per sample; 68.3% of annotated samples filtered"},
+    {"id": "E03", "theme": "benchmark", "source": "openai2024verified", "subject": "GPT-4o (best open scaffold)", "metric": "Resolve rate, Verified vs original", "value": 33.2, "unit": "%", "conditions": "16% on original SWE-bench under the same scaffold"},
+    {"id": "E04", "theme": "benchmark", "source": "yang2024sweagent", "subject": "SWE-agent", "metric": "SWE-bench pass@1", "value": 12.5, "unit": "%", "conditions": "Full SWE-bench; first agent-computer interface result"},
+    {"id": "E05", "theme": "benchmark", "source": "zhang2024autocoderover", "subject": "AutoCodeRover", "metric": "SWE-bench Lite resolve rate", "value": 19, "unit": "%", "n": 300, "conditions": "About $0.43 per issue"},
+    {"id": "E06", "theme": "benchmark", "source": "yang2025multimodal", "subject": "SWE-agent", "metric": "SWE-bench Multimodal resolve rate", "value": 12, "unit": "%", "n": 617, "conditions": "JavaScript, visual issues; next best system 6%"},
+    {"id": "E07", "theme": "benchmark", "source": "yang2025swesmith", "subject": "SWE-agent-LM-32B", "metric": "SWE-bench Verified pass@1", "value": 40.2, "unit": "%", "conditions": "Open-weight model trained on 50k SWE-smith instances from 128 repositories"},
+    {"id": "E08", "theme": "benchmark", "source": "wang2025swebenchpp", "subject": "claude-sonnet-4.5", "metric": "SWE-Bench++ pass@10", "value": 36.2, "unit": "%", "n": 1782, "conditions": "Evaluated subset of 11,133 instances, 11 languages; gpt-5 34.57%, gemini-2.5-pro 24.92%, gpt-4o 16.89%"},
+    {"id": "E09", "theme": "benchmark", "source": "bhati2026", "subject": "Best reported system (Claude Opus 4.7)", "metric": "SWE-bench Verified resolve rate (survey trajectory)", "value": 78.4, "unit": "%", "conditions": "Secondary report in a survey preprint; trajectory 1.96% (Oct 2023) to 78.4% (spring 2026). Model-level, not product-level."},
+    {"id": "E10", "theme": "benchmark_validity", "source": "aleithan2024swebenchplus", "subject": "SWE-Agent + GPT-4 passing patches", "metric": "Solution leakage in issue text", "value": 32.67, "unit": "%", "n": 251, "conditions": "Plus 31.08% passing only because tests were weak"},
+    {"id": "E11", "theme": "benchmark_validity", "source": "aleithan2024swebenchplus", "subject": "SWE-Agent + GPT-4 on Verified", "metric": "Resolve rate before vs after filtering", "value": 10.0, "unit": "%", "conditions": "22.4% before removing leaked/weak-test cases"},
+    {"id": "E12", "theme": "benchmark_validity", "source": "aleithan2024swebenchplus", "subject": "AutoCodeRover + GPT-4o", "metric": "SWE-Bench+ resolve rate", "value": 3.83, "unit": "%", "n": 548, "conditions": "Post-cutoff issues; previously reported 18.83% on SWE-bench"},
+    {"id": "E13", "theme": "benchmark_validity", "source": "chen2026beyond", "subject": "8 agents on Verified", "metric": "Resolution when a task had more than 20 execution errors", "value": 22.6, "unit": "%", "n": 3977, "conditions": "53.8% with no errors; 3 SWE-bench platform bugs confirmed"},
+
+    {"id": "E20", "theme": "acceptance", "source": "li2026aidev", "subject": "AIDev", "metric": "Agentic PRs in dataset", "value": 932791, "unit": "PRs", "conditions": "116,211 repositories, 72,189 developers, cutoff 1 Aug 2025; five agents"},
+    {"id": "E21", "theme": "acceptance", "source": "li2025teammates", "subject": "Human", "metric": "Merge rate (AIDev-pop)", "value": 76.8, "unit": "%", "conditions": "Repos >500 stars, AIDev v1"},
+    {"id": "E22", "theme": "acceptance", "source": "li2025teammates", "subject": "OpenAI Codex", "metric": "Merge rate (AIDev-pop)", "value": 65.3, "unit": "%", "n": 2686, "conditions": "AIDev v1"},
+    {"id": "E23", "theme": "acceptance", "source": "li2025teammates", "subject": "Claude Code", "metric": "Merge rate (AIDev-pop)", "value": 52.5, "unit": "%", "n": 101, "conditions": "AIDev v1"},
+    {"id": "E24", "theme": "acceptance", "source": "li2025teammates", "subject": "Cursor", "metric": "Merge rate (AIDev-pop)", "value": 51.4, "unit": "%", "n": 144, "conditions": "AIDev v1"},
+    {"id": "E25", "theme": "acceptance", "source": "li2025teammates", "subject": "GitHub Copilot", "metric": "Merge rate (AIDev-pop)", "value": 38.2, "unit": "%", "n": 1462, "conditions": "AIDev v1"},
+    {"id": "E26", "theme": "acceptance", "source": "rahman2026", "subject": "OpenAI Codex", "metric": "Mean acceptance across task types", "value": 83, "unit": "%", "n": 21799, "conditions": "AIDev subset, repos >100 stars, 12 task types"},
+    {"id": "E27", "theme": "acceptance", "source": "rahman2026", "subject": "Cursor", "metric": "Mean acceptance across task types", "value": 67, "unit": "%", "n": 1541, "conditions": "Same"},
+    {"id": "E28", "theme": "acceptance", "source": "rahman2026", "subject": "Claude Code", "metric": "Mean acceptance across task types", "value": 66, "unit": "%", "n": 459, "conditions": "Same"},
+    {"id": "E29", "theme": "acceptance", "source": "rahman2026", "subject": "GitHub Copilot", "metric": "Mean acceptance across task types", "value": 45, "unit": "%", "n": 4970, "conditions": "Same"},
+    {"id": "E30", "theme": "acceptance", "source": "mazloomzadeh2026", "subject": "Claude Code", "metric": "Estimated merge probability (GLMM)", "value": 84.3, "unit": "%", "conditions": "489 Python repos; not significantly different from Codex"},
+    {"id": "E31", "theme": "acceptance", "source": "mazloomzadeh2026", "subject": "OpenAI Codex", "metric": "Estimated merge probability (GLMM)", "value": 73.5, "unit": "%", "conditions": "Same"},
+    {"id": "E32", "theme": "acceptance", "source": "mazloomzadeh2026", "subject": "Cursor", "metric": "Estimated merge probability (GLMM)", "value": 63.9, "unit": "%", "conditions": "Same"},
+    {"id": "E33", "theme": "acceptance", "source": "mazloomzadeh2026", "subject": "GitHub Copilot", "metric": "Estimated merge probability (GLMM)", "value": 59.6, "unit": "%", "conditions": "Same; human merge rate 84-86% per quarter"},
+    {"id": "E34", "theme": "acceptance", "source": "cynthia2026core", "subject": "Core vs peripheral developers", "metric": "Acceptance of agentic PRs", "value": 72.8, "unit": "%", "n": 9427, "conditions": "Core 72.8% vs peripheral 72.3%; 74.1% accepted without modification"},
+
+    {"id": "E40", "theme": "task_type", "source": "pinna2026", "subject": "All agents", "metric": "Largest gap between task types (v1)", "value": 29, "unit": "pp", "n": 7156, "conditions": "chore 84.0% vs perf 55.4%; v2 headlines docs 82.1% vs feat 66.1% (16 pp)"},
+    {"id": "E41", "theme": "task_type", "source": "pinna2026", "subject": "Claude Code", "metric": "Acceptance on documentation tasks", "value": 92.3, "unit": "%", "conditions": "Leads docs and features (72.6%); small docs sample"},
+    {"id": "E42", "theme": "task_type", "source": "pinna2026", "subject": "OpenAI Codex", "metric": "Acceptance range across 9 task types", "value": 88.6, "unit": "% (max)", "conditions": "Range 59.6-88.6%"},
+    {"id": "E43", "theme": "task_type", "source": "li2025teammates", "subject": "OpenAI Codex", "metric": "Documentation PR merge rate", "value": 88.6, "unit": "%", "conditions": "Exceeds humans (76.5%); agents trail humans by 15-40 pp on feature, fix and performance work"},
+    {"id": "E44", "theme": "task_type", "source": "rahman2026", "subject": "GitHub Copilot", "metric": "Acceptance on performance tasks", "value": 27, "unit": "%", "conditions": "Lowest cell in the study; maintenance tasks (docs, build, ci) accepted more often than feat/fix"},
+    {"id": "E45", "theme": "task_type", "source": "mazloomzadeh2026", "subject": "All agents", "metric": "Topics with merge ratio >= 0.80", "value": 9, "unit": "topics", "conditions": "CI/build, workflows, dependencies, docs, typos etc.; lowest: LLM integration, model evaluation"},
+
+    {"id": "E50", "theme": "post_merge", "source": "cynthia2026postmerge", "subject": "Merged agent bug-fix PRs", "metric": "Share of SonarQube issues that are code smells", "value": 89, "unit": "%", "n": 1210, "conditions": "1,059 of 1,190 issues; 48 bugs, 83 security hotspots, 0 vulnerabilities"},
+    {"id": "E51", "theme": "post_merge", "source": "cynthia2026postmerge", "subject": "Per-agent issue density", "metric": "Kruskal-Wallis difference after churn normalisation", "value": null, "unit": "not significant", "conditions": "Raw count differences disappear once normalised by lines changed"},
+    {"id": "E52", "theme": "post_merge", "source": "alonso2026tdad", "subject": "Qwen3-Coder 30B on Verified", "metric": "Test-level regression rate: vanilla / TDD prompt / TDAD", "value": 1.82, "unit": "%", "n": 100, "conditions": "6.08% vanilla, 9.94% with TDD prompt only, 1.82% with code-to-test map"},
+    {"id": "E53", "theme": "post_merge", "source": "mazloomzadeh2026", "subject": "Agentic vs human merged PRs", "metric": "Size, time-to-merge and defect-proneness differences", "value": null, "unit": "mostly negligible", "n": 4550, "conditions": "2,275 per group; agentic PRs merge somewhat faster (significant for Copilot, Codex)"},
+
+    {"id": "E60", "theme": "productivity", "source": "peng2023copilot", "subject": "GitHub Copilot", "metric": "Task completion time reduction", "value": 55.8, "unit": "%", "n": 70, "conditions": "Controlled; JavaScript HTTP server; 95% CI 21-89%"},
+    {"id": "E61", "theme": "productivity", "source": "cui2025effects", "subject": "AI code completion", "metric": "Increase in completed tasks (pooled)", "value": 26.08, "unit": "%", "n": 4867, "conditions": "Three field RCTs; SE 10.3%; larger gains for less experienced developers"},
+    {"id": "E62", "theme": "productivity", "source": "bhati2026", "subject": "Evidence base", "metric": "Effect size pattern by evidence tier", "value": null, "unit": "qualitative", "conditions": "Controlled > field > longitudinal; longitudinal studies see flat commit metrics"},
+
+    {"id": "E70", "theme": "security", "source": "perry2023insecure", "subject": "AI-assisted participants", "metric": "Secure encryption solutions, AI vs control", "value": 21, "unit": "%", "n": 47, "conditions": "43% control; AI group also rated its code as more secure"},
+    {"id": "E71", "theme": "security", "source": "perry2023insecure", "subject": "AI-assisted participants", "metric": "SQL-injectable solutions, AI vs control", "value": 36, "unit": "%", "conditions": "7% control (p=0.041)"},
+    {"id": "E72", "theme": "security", "source": "cynthia2026postmerge", "subject": "Merged agent bug-fix PRs", "metric": "Security hotspots introduced", "value": 83, "unit": "hotspots", "n": 1210, "conditions": "Encryption-related most common; no confirmed vulnerabilities"},
+
+    {"id": "E80", "theme": "review", "source": "rahman2026", "subject": "All agent PRs", "metric": "PRs with zero recorded review comments", "value": 90.6, "unit": "%", "conditions": "98.2% for Codex; Copilot draws most (2.56 per PR incl. bots)"},
+    {"id": "E81", "theme": "review", "source": "li2025teammates", "subject": "Agent vs human PRs", "metric": "PRs with no review", "value": 58.2, "unit": "%", "conditions": "75.3% for human PRs; bot reviewers involved in 20.1% of agent PRs"},
+    {"id": "E82", "theme": "review", "source": "cynthia2026core", "subject": "Peripheral developers", "metric": "Agentic PRs merged with no CI checks", "value": 19.1, "unit": "%", "conditions": "11.2% for core developers"}
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "RR-03",
+  "title": "Add a validated ISBN field end to end",
+  "category": "repository_reasoning",
+  "difficulty": "hard",
+  "difficulty_rationale": "A new field must flow consistently through the model, serializer, versioned JSON storage (with a v1 to v2 migration), validation and query layers of a five-module package, following existing conventions.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "Add an optional, checksum-validated ISBN-13 to books across models, serialization, storage (schema v2 with v1 migration) and the API layer.",
+  "required_behavior": [
+    "Book gains an optional isbn field (default None) stored in normalised 13-digit form.",
+    "api.create_book and api.update_book accept isbn; hyphens and spaces are stripped; invalid ISBN-13 checksums or formats raise ValidationError.",
+    "ISBNs are unique across the library; duplicates raise ValidationError.",
+    "Serializers include isbn; storage writes schema_version 2 and loads both v1 (no isbn, treated as None) and v2 files.",
+    "api.list_books(isbn=...) filters by normalised ISBN; other existing filters keep working."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Hidden regression tests pass."],
+  "acceptance_tests": [
+    {"id": "test_create_with_isbn_normalised", "description": "ISBN is normalised and stored."},
+    {"id": "test_invalid_isbn_rejected", "description": "Bad checksums/formats raise ValidationError."},
+    {"id": "test_duplicate_isbn_rejected", "description": "Duplicate ISBNs are rejected on create and update."},
+    {"id": "test_update_isbn", "description": "update_book can set and clear the ISBN."},
+    {"id": "test_roundtrip_storage_v2", "description": "Saving writes schema_version 2 with isbn; loading round-trips."},
+    {"id": "test_load_v1_file", "description": "v1 files load with isbn None and are re-saved as v2."},
+    {"id": "test_list_books_isbn_filter", "description": "list_books filters by ISBN in any accepted format."}
+  ],
+  "scope": {"allowed_paths": ["library/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 40,
+  "test_timeout_seconds": 120
+}

@@ -1,0 +1,607 @@
+{
+  "$comment": "Every source here was opened and read on 2026-11-09 (abstract page, HTML or PDF). 'verified' lists what was checked against the source itself. 'cautions' records inconsistencies found inside the source or between the source and the paper outline.",
+  "checkedOn": "2026-11-09",
+  "sources": [
+    {
+      "id": "pinna2026",
+      "title": "Comparing AI Coding Agents: A Task-Stratified Analysis of Pull Request Acceptance",
+      "authors": [
+        "Giovanni Pinna",
+        "Jingzhi Gong",
+        "David Williams",
+        "Federica Sarro"
+      ],
+      "year": 2026,
+      "venue": "MSR 2026 (23rd Int. Conf. on Mining Software Repositories)",
+      "arxiv": "2602.08915",
+      "url": "https://arxiv.org/abs/2602.08915",
+      "role": "Closest prior work. Task-stratified PR acceptance of five agents on 7,156 AIDev PRs.",
+      "verified": [
+        "title",
+        "authors",
+        "venue (v1)",
+        "PR count",
+        "task-type rates",
+        "29 pp gap (v1)"
+      ],
+      "cautions": [
+        "The 29 pp gap is chore 84.0% vs perf 55.4% in v1 (exactly 28.6 pp). v2 (7 May 2026) headlines a 16 pp gap, docs 82.1% vs features 66.1%. Name the version when quoting.",
+        "The abstract says Cursor leads fix tasks (80.4%), but Section 4.3 reports Codex at 83.0% on fix."
+      ]
+    },
+    {
+      "id": "mazloomzadeh2026",
+      "title": "How Do AI Coding Agents Contribute to Software Development? An Empirical Study of Agentic Pull Requests",
+      "authors": [
+        "Iren Mazloomzadeh",
+        "Mohammad Mehdi Morovati",
+        "Foutse Khomh"
+      ],
+      "year": 2026,
+      "venue": "Proc. ACM Meas. Anal. Comput. Syst. 37(4), Article 111",
+      "arxiv": "2607.21832",
+      "url": "https://arxiv.org/abs/2607.21832",
+      "role": "Agentic vs human PRs across lifecycle stages (quarters) in 489 Python repositories.",
+      "verified": [
+        "title",
+        "authors",
+        "venue",
+        "dataset size",
+        "GLMM merge probabilities",
+        "quarterly rates"
+      ],
+      "cautions": [
+        "Table 1 column labels look inconsistent with Table 3; use the GLMM estimates from RQ1 only."
+      ]
+    },
+    {
+      "id": "rahman2026",
+      "title": "A Task-Level Evaluation of AI Agents in Open-Source Projects",
+      "authors": [
+        "Shojibur Rahman",
+        "Md Fazle Rabbi",
+        "Minhaz F. Zibran"
+      ],
+      "year": 2026,
+      "venue": "MSR 2026",
+      "arxiv": "2602.02345",
+      "url": "https://arxiv.org/abs/2602.02345",
+      "role": "Acceptance, review-discussion volume and commit-message quality by agent and task type (AIDev-pop, 33,549 PRs).",
+      "verified": [
+        "title",
+        "authors",
+        "venue",
+        "per-agent acceptance",
+        "comment volume",
+        "commit quality"
+      ],
+      "cautions": [
+        "The RQ2 text calls Copilot and Devin 'closest' in comment volume, which the reported averages do not support."
+      ]
+    },
+    {
+      "id": "li2025teammates",
+      "title": "The Rise of AI Teammates in Software Engineering (SE) 3.0: How Autonomous Coding Agents Are Reshaping Software Engineering",
+      "authors": [
+        "Hao Li",
+        "Haoxiang Zhang",
+        "Ahmed E. Hassan"
+      ],
+      "year": 2025,
+      "venue": "arXiv preprint",
+      "arxiv": "2507.15003",
+      "url": "https://arxiv.org/abs/2507.15003",
+      "role": "First AIDev release (v1: 456,535 PRs) with agent vs human acceptance and turnaround in AIDev-pop.",
+      "verified": [
+        "title",
+        "authors",
+        "v1 dataset size",
+        "acceptance rates",
+        "turnaround times"
+      ],
+      "cautions": [
+        "The outline's 932,791 PRs / 116,211 repositories figure comes from the later MSR'26 dataset paper (li2026aidev), not from this v1."
+      ]
+    },
+    {
+      "id": "li2026aidev",
+      "title": "AIDev: Studying AI Coding Agents on GitHub",
+      "authors": [
+        "Hao Li",
+        "Haoxiang Zhang",
+        "Ahmed E. Hassan"
+      ],
+      "year": 2026,
+      "venue": "MSR 2026 (Mining Challenge dataset)",
+      "arxiv": "2602.09185",
+      "url": "https://arxiv.org/abs/2602.09185",
+      "role": "Dataset paper: 932,791 agentic PRs, 116,211 repositories, 72,189 developers; curated 33,596-PR subset.",
+      "verified": [
+        "title",
+        "authors",
+        "venue",
+        "dataset counts",
+        "hosting (Hugging Face hao-li/AIDev, Zenodo 10.5281/zenodo.16899501, GitHub)"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "bhati2026",
+      "title": "Agentic AI in the Software Development Lifecycle: Architecture, Empirical Evidence, and the Reshaping of Software Engineering",
+      "authors": [
+        "Happy Bhati"
+      ],
+      "year": 2026,
+      "venue": "arXiv preprint (under review)",
+      "arxiv": "2604.26275",
+      "url": "https://arxiv.org/abs/2604.26275",
+      "role": "Survey with a three-tier view of productivity evidence (controlled, field, longitudinal) and a SWE-bench Verified trajectory.",
+      "verified": [
+        "title",
+        "author",
+        "evidence tiers",
+        "benchmark trajectory figures"
+      ],
+      "cautions": [
+        "Single-author, not yet peer-reviewed.",
+        "Calls SWE-bench Verified a 489-task subset; OpenAI's release says 500.",
+        "The field-experiment tier cites [19], whose reference entry is a different paper (Dohmke et al.). Cite Cui et al. directly.",
+        "Tool-level scores in its Table 2 are marked approximate; do not quote them as measurements."
+      ]
+    },
+    {
+      "id": "cynthia2026postmerge",
+      "title": "Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests",
+      "authors": [
+        "Shamse Tasnim Cynthia",
+        "Al Muttakin",
+        "Banani Roy"
+      ],
+      "year": 2026,
+      "venue": "MSR 2026",
+      "arxiv": "2601.20109",
+      "url": "https://arxiv.org/abs/2601.20109",
+      "role": "SonarQube differential analysis of 1,210 merged agent bug-fix PRs.",
+      "verified": [
+        "title",
+        "authors",
+        "venue",
+        "PR counts",
+        "issue counts by type",
+        "density test result"
+      ],
+      "cautions": [
+        "Claude Code (15 PRs) and Cursor (40 PRs) samples are small."
+      ]
+    },
+    {
+      "id": "chen2026beyond",
+      "title": "Beyond Final Code: A Process-Oriented Error Analysis of Software Development Agents in Real-World GitHub Scenarios",
+      "authors": [
+        "Zhi Chen",
+        "Wei Ma",
+        "Lingxiao Jiang"
+      ],
+      "year": 2026,
+      "venue": "ICSE 2026",
+      "arxiv": "2503.12374",
+      "url": "https://arxiv.org/abs/2503.12374",
+      "role": "Execution errors in 3,977 trajectories of 8 agents on SWE-bench Verified; three benchmark platform bugs.",
+      "verified": [
+        "title",
+        "authors",
+        "venue",
+        "trajectory counts",
+        "error frequencies",
+        "resolution by error count"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "cynthia2026core",
+      "title": "Are We All Using Agents the Same Way? An Empirical Study of Core and Peripheral Developers' Use of Coding Agents",
+      "authors": [
+        "Shamse Tasnim Cynthia",
+        "Joy Krishan Das",
+        "Banani Roy"
+      ],
+      "year": 2026,
+      "venue": "MSR 2026",
+      "arxiv": "2601.20106",
+      "url": "https://arxiv.org/abs/2601.20106",
+      "role": "How core vs peripheral developers delegate, review, modify and verify 9,427 agentic PRs.",
+      "verified": [
+        "title",
+        "authors",
+        "venue",
+        "acceptance by group",
+        "modification rates",
+        "CI outcomes"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "alonso2026tdad",
+      "title": "TDAD: Test-Driven Agentic Development - Reducing Code Regressions in AI Coding Agents via Graph-Based Impact Analysis",
+      "authors": [
+        "Pepe Alonso",
+        "Sergio Yovine",
+        "Victor A. Braberman"
+      ],
+      "year": 2026,
+      "venue": "arXiv preprint",
+      "arxiv": "2603.17973",
+      "url": "https://arxiv.org/abs/2603.17973",
+      "role": "Code-to-test impact map cuts regressions on SWE-bench Verified; TDD prompting alone increased them.",
+      "verified": [
+        "title",
+        "authors",
+        "regression rates",
+        "resolution rates"
+      ],
+      "cautions": [
+        "Small samples (100 and 25 instances), quantised local models, no significance tests."
+      ]
+    },
+    {
+      "id": "jimenez2024swebench",
+      "title": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+      "authors": [
+        "Carlos E. Jimenez",
+        "John Yang",
+        "Alexander Wettig",
+        "Shunyu Yao",
+        "Kexin Pei",
+        "Ofir Press",
+        "Karthik Narasimhan"
+      ],
+      "year": 2024,
+      "venue": "ICLR 2024",
+      "arxiv": "2310.06770",
+      "url": "https://arxiv.org/abs/2310.06770",
+      "role": "Original benchmark: 2,294 issues from 12 Python repositories.",
+      "verified": [
+        "title",
+        "authors",
+        "venue",
+        "size",
+        "best baseline 1.96%"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "openai2024verified",
+      "title": "Introducing SWE-bench Verified",
+      "authors": [
+        "OpenAI"
+      ],
+      "year": 2024,
+      "venue": "OpenAI blog, 13 Aug 2024 (updated 24 Feb 2025)",
+      "url": "https://openai.com/index/introducing-swe-bench-verified/",
+      "role": "500 human-validated instances screened by 93 developers.",
+      "verified": [
+        "date",
+        "size",
+        "annotation process",
+        "filter rate",
+        "GPT-4o 33.2% vs 16%"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "yang2024sweagent",
+      "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+      "authors": [
+        "John Yang",
+        "Carlos E. Jimenez",
+        "Alexander Wettig",
+        "Kilian Lieret",
+        "Shunyu Yao",
+        "Karthik Narasimhan",
+        "Ofir Press"
+      ],
+      "year": 2024,
+      "venue": "NeurIPS 2024",
+      "arxiv": "2405.15793",
+      "url": "https://arxiv.org/abs/2405.15793",
+      "role": "Agent-computer interface; 12.5% pass@1 on SWE-bench.",
+      "verified": [
+        "title",
+        "authors",
+        "results",
+        "venue (NeurIPS proceedings listing)"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "aleithan2024swebenchplus",
+      "title": "SWE-Bench+: Enhanced Coding Benchmark for LLMs",
+      "authors": [
+        "Reem Aleithan",
+        "Haoran Xue",
+        "Mohammad Mahdi Mohajer",
+        "Elijah Nnorom",
+        "Gias Uddin",
+        "Song Wang"
+      ],
+      "year": 2024,
+      "venue": "arXiv preprint",
+      "arxiv": "2410.06992",
+      "url": "https://arxiv.org/abs/2410.06992",
+      "role": "Solution leakage and weak tests in SWE-bench; new 548-instance post-cutoff set.",
+      "verified": [
+        "title",
+        "authors",
+        "leakage 32.67%",
+        "weak tests 31.08%",
+        "resolution drops"
+      ],
+      "cautions": [
+        "Reports both 3.97% and 5.49% as SWE-Agent+GPT-4's filtered rate."
+      ]
+    },
+    {
+      "id": "zhang2024autocoderover",
+      "title": "AutoCodeRover: Autonomous Program Improvement",
+      "authors": [
+        "Yuntong Zhang",
+        "Haifeng Ruan",
+        "Zhiyu Fan",
+        "Abhik Roychoudhury"
+      ],
+      "year": 2024,
+      "venue": "ISSTA 2024",
+      "arxiv": "2404.05427",
+      "url": "https://arxiv.org/abs/2404.05427",
+      "role": "Program-structure-aware code search plus spectrum-based localisation; 19% on SWE-bench Lite at about $0.43 per issue.",
+      "verified": [
+        "title",
+        "authors",
+        "Lite result",
+        "cost"
+      ],
+      "cautions": [
+        "Venue taken from the published version; the arXiv page lists no venue."
+      ]
+    },
+    {
+      "id": "wang2025openhands",
+      "title": "OpenHands: An Open Platform for AI Software Developers as Generalist Agents",
+      "authors": [
+        "Xingyao Wang",
+        "Boxuan Li",
+        "Yufan Song",
+        "et al. (24 authors)",
+        "Graham Neubig"
+      ],
+      "year": 2025,
+      "venue": "ICLR 2025",
+      "arxiv": "2407.16741",
+      "url": "https://arxiv.org/abs/2407.16741",
+      "role": "Open agent platform evaluated on 15 benchmarks including SWE-bench and WebArena.",
+      "verified": [
+        "title",
+        "authors",
+        "15 benchmarks",
+        "ICLR proceedings listing"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "yang2025multimodal",
+      "title": "SWE-bench Multimodal: Do AI Systems Generalize to Visual Software Domains?",
+      "authors": [
+        "John Yang",
+        "Carlos E. Jimenez",
+        "Alex L. Zhang",
+        "et al.",
+        "Ofir Press"
+      ],
+      "year": 2024,
+      "venue": "arXiv preprint",
+      "arxiv": "2410.03859",
+      "url": "https://arxiv.org/abs/2410.03859",
+      "role": "617 JavaScript instances with images; best system (SWE-agent) 12%.",
+      "verified": [
+        "title",
+        "authors",
+        "size",
+        "best result"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "yang2025swesmith",
+      "title": "SWE-smith: Scaling Data for Software Engineering Agents",
+      "authors": [
+        "John Yang",
+        "Kilian Lieret",
+        "Carlos E. Jimenez",
+        "Alexander Wettig",
+        "Kabir Khandpur",
+        "Yanzhe Zhang",
+        "Binyuan Hui",
+        "Ofir Press",
+        "Ludwig Schmidt",
+        "Diyi Yang"
+      ],
+      "year": 2025,
+      "venue": "NeurIPS 2025 (spotlight)",
+      "arxiv": "2504.21798",
+      "url": "https://arxiv.org/abs/2504.21798",
+      "role": "50k synthetic task instances from 128 repositories; SWE-agent-LM-32B reaches 40.2% on Verified.",
+      "verified": [
+        "title",
+        "authors",
+        "size",
+        "result"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "wang2025swebenchpp",
+      "title": "SWE-Bench++: A Framework for the Scalable Generation of Software Engineering Benchmarks from Open-Source Repositories",
+      "authors": [
+        "Lilin Wang",
+        "Lucas Ramalho",
+        "Alan Celestino",
+        "Phuc Anthony Pham",
+        "Yu Liu",
+        "Umang Kumar Sinha",
+        "Andres Portillo",
+        "Onassis Osunwa",
+        "Gabriel Maduekwe"
+      ],
+      "year": 2025,
+      "venue": "arXiv preprint",
+      "arxiv": "2512.17419",
+      "url": "https://arxiv.org/abs/2512.17419",
+      "role": "11,133 instances from 3,971 repositories in 11 languages, built from live PRs.",
+      "verified": [
+        "title",
+        "authors",
+        "size",
+        "pass@10 results"
+      ],
+      "cautions": []
+    },
+    {
+      "id": "peng2023copilot",
+      "title": "The Impact of AI on Developer Productivity: Evidence from GitHub Copilot",
+      "authors": [
+        "Sida Peng",
+        "Eirini Kalliamvakou",
+        "Peter Cihon",
+        "Mert Demirer"
+      ],
+      "year": 2023,
+      "venue": "arXiv preprint",
+      "arxiv": "2302.06590",
+      "url": "https://arxiv.org/abs/2302.06590",
+      "role": "Controlled experiment: Copilot group 55.8% faster on a JavaScript HTTP-server task.",
+      "verified": [
+        "title",
+        "authors",
+        "sample",
+        "55.8%",
+        "95% CI 21-89%",
+        "p=0.0017"
+      ],
+      "cautions": [
+        "One small, well-specified greenfield task; 35 completers per arm."
+      ]
+    },
+    {
+      "id": "perry2023insecure",
+      "title": "Do Users Write More Insecure Code with AI Assistants?",
+      "authors": [
+        "Neil Perry",
+        "Megha Srivastava",
+        "Deepak Kumar",
+        "Dan Boneh"
+      ],
+      "year": 2023,
+      "venue": "ACM CCS 2023, pp. 2785-2799",
+      "doi": "10.1145/3576915.3623157",
+      "arxiv": "2211.03622",
+      "url": "https://arxiv.org/abs/2211.03622",
+      "role": "User study (47 analysed): AI-assisted participants wrote less secure code yet rated it more secure.",
+      "verified": [
+        "title",
+        "authors",
+        "venue",
+        "DOI",
+        "per-task results"
+      ],
+      "cautions": [
+        "Page range taken from the outline; DOI confirmed."
+      ]
+    },
+    {
+      "id": "pearce2025asleep",
+      "title": "Asleep at the Keyboard? Assessing the Security of GitHub Copilot's Code Contributions",
+      "authors": [
+        "Hammond Pearce",
+        "Baleegh Ahmad",
+        "Benjamin Tan",
+        "Brendan Dolan-Gavitt",
+        "Ramesh Karri"
+      ],
+      "year": 2025,
+      "venue": "Communications of the ACM 68(2):96-105",
+      "doi": "10.1145/3610721",
+      "url": "https://doi.org/10.1145/3610721",
+      "role": "Copilot output evaluated against MITRE Top-25 CWE scenarios.",
+      "verified": [
+        "title",
+        "authors",
+        "journal",
+        "volume/issue/pages",
+        "DOI"
+      ],
+      "cautions": [
+        "Original IEEE S&P 2022 version reported about 40% of generated programs vulnerable; the CACM page read here gave no percentage, so the paper text does not quote one."
+      ]
+    },
+    {
+      "id": "cui2025effects",
+      "title": "The Effects of Generative AI on High-Skilled Work: Evidence from Three Field Experiments with Software Developers",
+      "authors": [
+        "Kevin Zheyuan Cui",
+        "Mert Demirer",
+        "Sonia Jaffe",
+        "Leon Musolff",
+        "Sida Peng",
+        "Tobias Salz"
+      ],
+      "year": 2025,
+      "venue": "Management Science",
+      "doi": "10.1287/mnsc.2025.00535",
+      "url": "https://doi.org/10.1287/mnsc.2025.00535",
+      "role": "Three field RCTs (Microsoft, Accenture, Fortune 100 firm), 4,867 developers: +26.08% completed tasks (SE 10.3%).",
+      "verified": [
+        "title",
+        "journal DOI",
+        "sample",
+        "pooled effect",
+        "experience heterogeneity"
+      ],
+      "cautions": [
+        "The publisher page did not list authors; author list from the SSRN/MIT working paper."
+      ]
+    },
+    {
+      "id": "swebench2026experiments",
+      "title": "SWE-bench experiments: open-sourced predictions, logs, trajectories and results of leaderboard submissions",
+      "authors": [
+        "SWE-bench team"
+      ],
+      "year": 2026,
+      "venue": "GitHub repository, commit 40f164d5b8 (3 Sep 2026)",
+      "url": "https://github.com/SWE-bench/experiments",
+      "role": "Primary data for this study's SWE-bench Verified re-analysis (per-instance results of 122 complete submissions).",
+      "verified": [
+        "per-instance results files read directly",
+        "commit hash recorded in analysis/swebench/data/verified_snapshot.json"
+      ],
+      "cautions": [
+        "47 Verified entries have no results files and 13 report per-repo totals that are not the 500 Verified instances; both groups are excluded from the analysis but included in the product search."
+      ]
+    },
+    {
+      "id": "swebench2026leaderboard",
+      "title": "SWE-bench leaderboards (data/leaderboards.json)",
+      "authors": [
+        "SWE-bench team"
+      ],
+      "year": 2026,
+      "venue": "GitHub repository SWE-bench/swe-bench.github.io",
+      "url": "https://github.com/SWE-bench/swe-bench.github.io",
+      "role": "Leaderboard entries for all five SWE-bench boards, used to check for product-level submissions.",
+      "verified": [
+        "searched all 5 boards for Copilot, Cursor, Claude Code and Codex"
+      ],
+      "cautions": []
+    }
+  ]
+}

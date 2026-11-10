@@ -1,0 +1,36 @@
+{
+  "id": "BF-01",
+  "title": "Pagination boundary errors",
+  "category": "bug_fixing",
+  "difficulty": "easy",
+  "difficulty_rationale": "Single function in one file; three localized arithmetic/boundary defects; the docstring fully specifies the contract.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "paginate() returns the wrong slice, miscounts pages for partial last pages, and reports has_next incorrectly.",
+  "required_behavior": [
+    "Pages are 1-indexed: page 1 returns items[0:per_page].",
+    "total_pages is ceil(len(items) / per_page); an empty list has total_pages == 0.",
+    "has_next is True only when page < total_pages; has_prev is True only when page > 1.",
+    "Page 1 of an empty list is valid and returns an empty page; any other page outside 1..total_pages raises ValueError.",
+    "per_page < 1 raises ValueError."
+  ],
+  "acceptance_criteria": [
+    "All hidden acceptance tests pass.",
+    "Hidden regression tests for unchanged behaviour (type of result, input validation) pass.",
+    "Public API (function name, parameters, Page fields) is unchanged."
+  ],
+  "acceptance_tests": [
+    {"id": "test_first_page_slice", "description": "Page 1 returns the first per_page items."},
+    {"id": "test_partial_last_page", "description": "A partial last page is reachable and correctly sized."},
+    {"id": "test_total_pages_rounds_up", "description": "total_pages uses ceiling division."},
+    {"id": "test_has_next_on_last_page", "description": "has_next is False on the last page."},
+    {"id": "test_has_prev_flags", "description": "has_prev is False on page 1 and True afterwards."},
+    {"id": "test_empty_list_page_one", "description": "Empty input returns an empty page 1 with total_pages 0."},
+    {"id": "test_out_of_range_page", "description": "Pages beyond total_pages raise ValueError."},
+    {"id": "test_exact_multiple", "description": "Item counts that are exact multiples do not create an extra empty page."}
+  ],
+  "scope": {"allowed_paths": ["pager/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 20,
+  "test_timeout_seconds": 120
+}

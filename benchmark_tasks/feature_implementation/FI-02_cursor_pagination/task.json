@@ -1,0 +1,33 @@
+{
+  "id": "FI-02",
+  "title": "Cursor-based pagination for a note store",
+  "category": "feature_implementation",
+  "difficulty": "medium",
+  "difficulty_rationale": "New method plus a new exception in an existing class; requires stable keyset ordering, opaque cursor encoding/decoding and robustness to concurrent deletions.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "Add NoteStore.list_page(limit, cursor) using keyset (cursor) pagination ordered by (created_at, id).",
+  "required_behavior": [
+    "Notes are ordered by (created_at, id) ascending.",
+    "list_page(limit, cursor=None) returns (notes, next_cursor); next_cursor is None when there are no further notes.",
+    "The cursor is an opaque URL-safe string; clients never parse it.",
+    "Paging with cursors visits every note exactly once even if notes that were already returned are deleted between calls, or new notes with later timestamps are added.",
+    "limit must be an int in 1..100, otherwise ValueError.",
+    "A malformed or tampered cursor raises InvalidCursor (a ValueError subclass exported from notes.store)."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Existing NoteStore behaviour preserved."],
+  "acceptance_tests": [
+    {"id": "test_pages_cover_all_notes_in_order", "description": "Walking all pages yields every note once in order."},
+    {"id": "test_next_cursor_none_at_end", "description": "The last page returns next_cursor None."},
+    {"id": "test_ties_on_created_at_broken_by_id", "description": "Equal timestamps are ordered by id."},
+    {"id": "test_deletion_between_pages_does_not_skip", "description": "Deleting a returned note does not skip unseen notes."},
+    {"id": "test_cursor_is_opaque_string", "description": "Cursor is a URL-safe string."},
+    {"id": "test_invalid_limit", "description": "limit outside 1..100 raises ValueError."},
+    {"id": "test_invalid_cursor", "description": "Malformed cursors raise InvalidCursor."},
+    {"id": "test_empty_store", "description": "Empty store returns ([], None)."}
+  ],
+  "scope": {"allowed_paths": ["notes/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 30,
+  "test_timeout_seconds": 120
+}

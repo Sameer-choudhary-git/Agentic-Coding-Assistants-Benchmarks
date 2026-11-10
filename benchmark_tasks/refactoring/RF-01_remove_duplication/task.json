@@ -1,0 +1,27 @@
+{
+  "id": "RF-01",
+  "title": "Remove duplicated CSV export logic",
+  "category": "refactoring",
+  "difficulty": "easy",
+  "difficulty_rationale": "Single module; three near-identical functions must be collapsed onto two named helpers while keeping byte-identical output.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "Three CSV exporters copy-paste the same escaping and row-writing code; extract it into shared helpers without changing output.",
+  "required_behavior": [
+    "Output of export_sales_csv, export_inventory_csv and export_staff_csv is byte-for-byte identical to the original for all inputs.",
+    "A private helper _escape_field(value) contains the only field-escaping logic in the module.",
+    "A private helper _render_csv(headers, rows) renders header + rows and is called by all three exporters.",
+    "The three public exporters contain no for/while loops or comprehensions; each delegates to _render_csv."
+  ],
+  "acceptance_criteria": ["Behaviour-preservation tests pass.", "Structural checks (AST-based) pass."],
+  "acceptance_tests": [
+    {"id": "test_outputs_identical", "description": "Golden outputs for all three exporters, including quoting edge cases."},
+    {"id": "test_helpers_exist", "description": "_escape_field and _render_csv exist as module-level functions."},
+    {"id": "test_exporters_delegate", "description": "Each exporter calls _render_csv and contains no loops/comprehensions."},
+    {"id": "test_escaping_not_duplicated", "description": "String replace() calls only appear inside _escape_field."}
+  ],
+  "scope": {"allowed_paths": ["reports/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 20,
+  "test_timeout_seconds": 120
+}

@@ -1,0 +1,170 @@
+{
+  "task_id": "SR-01",
+  "task_version": "1.0.0",
+  "test_version": "1.0.0",
+  "task_hash": "6468a994042827363bde24b27bc5e3ad61cb2b9dfcc1e0ac6639d2db191759ef",
+  "prompt_hash": "fca5b26dee89b1b72cf00e9d507447aaa5581688c7f8897f6f603d7101833c1d",
+  "test_hash": "dbc723254d1929797b6e8bcec81a5d964e21c6d26b760ab74282d760e8a70a9c",
+  "reference_hash": "e5b3b256cdf52c64db7e4d9dcac4f7f81305e0144e8f2ac1328f0f44858089ac",
+  "passed": true,
+  "validated_at": "2026-11-05T18:20:03Z",
+  "evaluator_version": "1.0.0",
+  "execution_mode": "local",
+  "expected_acceptance_total": 9,
+  "checks": [
+    {
+      "id": "prompt_no_leak_markers",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "id": "prompt_not_empty",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "id": "starter_contains_no_hidden_material",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "id": "reference_differs_from_starter",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "id": "starter_evaluation_completed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "id": "reference_evaluation_completed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "id": "starter_fails_acceptance",
+      "passed": true,
+      "detail": {
+        "status": "ran",
+        "passed": 0,
+        "failed": 9,
+        "errors": 0,
+        "skipped": 0,
+        "total": 9
+      }
+    },
+    {
+      "id": "reference_passes_acceptance",
+      "passed": true,
+      "detail": {
+        "status": "ran",
+        "passed": 9,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "total": 9
+      }
+    },
+    {
+      "id": "reference_passes_regression",
+      "passed": true,
+      "detail": {
+        "status": "ran",
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "total": 3
+      }
+    },
+    {
+      "id": "starter_passes_regression",
+      "passed": true,
+      "detail": {
+        "status": "ran",
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "total": 3
+      },
+      "severity": "warning"
+    },
+    {
+      "id": "reference_within_scope",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "starter": {
+    "status": "completed",
+    "success": false,
+    "outcome": "acceptance_failed",
+    "error": null,
+    "acceptance": {
+      "status": "ran",
+      "passed": 0,
+      "failed": 9,
+      "errors": 0,
+      "skipped": 0,
+      "total": 9
+    },
+    "regression": {
+      "status": "ran",
+      "passed": 3,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "total": 3
+    },
+    "out_of_scope_files": [],
+    "test_quality": null,
+    "ruff_new": 0,
+    "semgrep_status": "unavailable",
+    "semgrep_baseline": null,
+    "semgrep_submission": null
+  },
+  "reference": {
+    "status": "completed",
+    "success": true,
+    "outcome": "passed",
+    "error": null,
+    "acceptance": {
+      "status": "ran",
+      "passed": 9,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "total": 9
+    },
+    "regression": {
+      "status": "ran",
+      "passed": 3,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "total": 3
+    },
+    "out_of_scope_files": [],
+    "test_quality": null,
+    "ruff_new": 0,
+    "semgrep_status": "unavailable",
+    "semgrep_baseline": null,
+    "semgrep_submission": null
+  },
+  "environment": {
+    "host_platform": "Linux-6.18.44-fc-v236-x86_64-with-glibc2.39",
+    "host_python": "3.13.18",
+    "execution": {
+      "mode": "local",
+      "isolation": "none (host subprocess with scrubbed environment and timeout)",
+      "python": "3.13.18",
+      "pytest": "9.1.1",
+      "network_disabled": false
+    }
+  },
+  "manual_review_required": [
+    "Prompt read by a second team member for ambiguity (see docs/experimental-protocol.md, section 3)."
+  ]
+}

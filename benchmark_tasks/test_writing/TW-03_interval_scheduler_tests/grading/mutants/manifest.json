@@ -1,0 +1,60 @@
+{
+  "target": "scheduling/intervals.py",
+  "mutants": [
+    {
+      "id": "M1_touching_overlap",
+      "file": "M1_touching_overlap.py",
+      "description": "touching intervals reported as overlapping"
+    },
+    {
+      "id": "M2_touching_not_merged",
+      "file": "M2_touching_not_merged.py",
+      "description": "touching intervals not merged"
+    },
+    {
+      "id": "M3_merge_shrinks",
+      "file": "M3_merge_shrinks.py",
+      "description": "contained interval shrinks the merged block"
+    },
+    {
+      "id": "M4_unsorted_input",
+      "file": "M4_unsorted_input.py",
+      "description": "input not sorted before merging"
+    },
+    {
+      "id": "M5_equal_bounds_allowed",
+      "file": "M5_equal_bounds_allowed.py",
+      "description": "zero-length intervals accepted"
+    },
+    {
+      "id": "M6_min_length_off_by_one",
+      "file": "M6_min_length_off_by_one.py",
+      "description": "slots exactly min_length long dropped (inner)"
+    },
+    {
+      "id": "M8_trailing_slot_missing",
+      "file": "M8_trailing_slot_missing.py",
+      "description": "final free slot omitted"
+    },
+    {
+      "id": "M9_min_length_zero_allowed",
+      "file": "M9_min_length_zero_allowed.py",
+      "description": "min_length of 0 accepted"
+    },
+    {
+      "id": "M11_float_bounds",
+      "file": "M11_float_bounds.py",
+      "description": "non-integer bounds accepted"
+    },
+    {
+      "id": "M7_trailing_min_length",
+      "file": "M7_trailing_min_length.py",
+      "description": "trailing slot exactly min_length long dropped"
+    },
+    {
+      "id": "M10_overlap_or",
+      "file": "M10_overlap_or.py",
+      "description": "overlap check uses OR"
+    }
+  ]
+}

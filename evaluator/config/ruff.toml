@@ -1,0 +1,13 @@
+# Fixed Ruff configuration used for every evaluation (passed with --config so that configuration
+# files inside a submitted workspace cannot change the rule set).
+line-length = 120
+target-version = "py310"
+
+[lint]
+# E/W pycodestyle, F pyflakes, B bugbear, C90 mccabe complexity, S bandit-style security, SIM simplify
+select = ["E", "F", "W", "B", "C90", "S", "SIM"]
+# S101 (assert) is expected in pytest code.
+ignore = ["S101"]
+
+[lint.mccabe]
+max-complexity = 10

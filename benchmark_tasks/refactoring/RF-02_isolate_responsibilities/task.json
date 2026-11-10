@@ -1,0 +1,32 @@
+{
+  "id": "RF-02",
+  "title": "Isolate responsibilities in the order service",
+  "category": "refactoring",
+  "difficulty": "medium",
+  "difficulty_rationale": "Splits one monolithic function across three new modules with specified interfaces and dependency rules, while preserving exact Decimal arithmetic and receipt formatting.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "process_order() validates, prices and formats in one function; split it into validation, pricing and receipt modules with specified interfaces.",
+  "required_behavior": [
+    "orders.validation.validate_order(order) raises OrderError for invalid orders and returns None otherwise.",
+    "orders.pricing.price_order(order) returns a PricedOrder(subtotal, discount, tax, total) of Decimals, quantised to 0.01.",
+    "orders.receipt.format_receipt(order, priced) returns the receipt string.",
+    "orders.service.process_order(order) only orchestrates the three functions and returns exactly the same string as before.",
+    "pricing must not import receipt or service; validation must not import pricing, receipt or service.",
+    "OrderError remains importable from orders.service and orders."
+  ],
+  "acceptance_criteria": ["Behaviour-preservation tests pass.", "Interface and dependency checks pass."],
+  "acceptance_tests": [
+    {"id": "test_process_order_golden", "description": "Receipts identical to the original implementation for a set of orders."},
+    {"id": "test_validation_errors_preserved", "description": "Same OrderError messages for invalid orders."},
+    {"id": "test_validate_order_interface", "description": "validate_order raises/returns as specified."},
+    {"id": "test_price_order_interface", "description": "price_order returns PricedOrder with Decimal fields."},
+    {"id": "test_format_receipt_interface", "description": "format_receipt renders from order + PricedOrder."},
+    {"id": "test_dependency_rules", "description": "Import rules between modules are respected."},
+    {"id": "test_service_is_thin", "description": "process_order has at most 6 statements and delegates to all three functions."}
+  ],
+  "scope": {"allowed_paths": ["orders/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 30,
+  "test_timeout_seconds": 120
+}

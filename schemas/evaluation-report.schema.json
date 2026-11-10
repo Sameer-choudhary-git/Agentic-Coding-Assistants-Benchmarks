@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://acb.local/schemas/evaluation-report.schema.json",
+  "title": "Evaluator report (report.json)",
+  "type": "object",
+  "required": ["schema_version", "evaluator_version", "status", "error", "success", "outcome", "execution_mode", "started_at",
+               "finished_at", "duration_s", "task", "integrity", "workspace", "acceptance", "regression", "ruff", "semgrep",
+               "environment", "success_rule", "artifacts"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "evaluator_version": { "type": "string" },
+    "status": { "enum": ["completed", "error"] },
+    "error": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "object", "required": ["class", "message"], "properties": { "class": { "type": "string" }, "message": { "type": "string" } } }
+      ]
+    },
+    "success": { "type": ["boolean", "null"] },
+    "outcome": { "enum": ["passed", "acceptance_failed", "regression_failed", "test_timeout", "collection_error", "evaluator_error"] },
+    "execution_mode": { "type": "string" },
+    "started_at": { "type": "string" },
+    "finished_at": { "type": ["string", "null"] },
+    "duration_s": { "type": ["number", "null"] },
+    "run_context": { "type": "object" },
+    "task": { "type": "object", "required": ["id"] },
+    "integrity": { "type": "object" },
+    "workspace": { "type": "object" },
+    "diff": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["changed_files", "files_changed", "lines_added", "lines_removed", "out_of_scope_files"],
+          "properties": {
+            "changed_files": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["path", "change", "in_scope"],
+                "properties": { "change": { "enum": ["added", "modified", "deleted"] } }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "acceptance": { "$ref": "#/$defs/suite" },
+    "regression": { "$ref": "#/$defs/suite" },
+    "ruff": { "$ref": "#/$defs/tool" },
+    "semgrep": { "$ref": "#/$defs/tool" },
+    "test_quality": { "type": ["object", "null"] },
+    "environment": { "type": "object" },
+    "success_rule": { "type": "string" },
+    "artifacts": { "type": "object", "required": ["files"] }
+  },
+  "$defs": {
+    "suite": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["status", "passed", "failed", "errors", "skipped", "total", "tests"],
+          "properties": {
+            "status": { "enum": ["ran", "none", "timeout", "collection_error", "error"] },
+            "passed": { "type": "integer", "minimum": 0 },
+            "failed": { "type": "integer", "minimum": 0 },
+            "errors": { "type": "integer", "minimum": 0 },
+            "skipped": { "type": "integer", "minimum": 0 },
+            "total": { "type": "integer", "minimum": 0 },
+            "tests": { "type": "array", "items": { "type": "object", "required": ["id", "outcome"] } }
+          }
+        }
+      ]
+    },
+    "tool": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["status", "available"],
+          "properties": {
+            "status": { "enum": ["ran", "unavailable", "error"] },
+            "available": { "type": "boolean" }
+          }
+        }
+      ]
+    }
+  }
+}

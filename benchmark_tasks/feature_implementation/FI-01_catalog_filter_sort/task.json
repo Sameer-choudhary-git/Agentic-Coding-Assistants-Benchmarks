@@ -1,0 +1,33 @@
+{
+  "id": "FI-01",
+  "title": "Catalog filtering and sorting",
+  "category": "feature_implementation",
+  "difficulty": "easy",
+  "difficulty_rationale": "One new function in one file with a fully specified signature; requires combining filters and a deterministic multi-key sort.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "Implement search_products() with optional filters, sort keys, deterministic tie-breaking and input validation.",
+  "required_behavior": [
+    "Filters (all optional, combined with AND): category (exact, case-insensitive), min_price and max_price (inclusive), in_stock (True => stock > 0, False => stock == 0).",
+    "sort_by is one of 'name', 'price', 'rating'; name sorting is case-insensitive.",
+    "Ties are broken by product id ascending regardless of the descending flag.",
+    "descending=True reverses the primary sort key only.",
+    "Invalid sort_by, negative prices, or min_price > max_price raise ValueError.",
+    "The input list is never mutated; a new list is returned."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Existing filter_by_category behaviour is preserved."],
+  "acceptance_tests": [
+    {"id": "test_no_filters_sorted_by_name", "description": "Default call returns all products sorted by name case-insensitively."},
+    {"id": "test_category_filter_case_insensitive", "description": "Category filter matches case-insensitively."},
+    {"id": "test_price_range_inclusive", "description": "Price bounds are inclusive."},
+    {"id": "test_in_stock_filter", "description": "in_stock filters on stock > 0 / == 0."},
+    {"id": "test_sort_price_descending_with_tiebreak", "description": "Descending price with id ascending tie-break."},
+    {"id": "test_sort_rating", "description": "Rating sort with tie-break."},
+    {"id": "test_validation_errors", "description": "Invalid arguments raise ValueError."},
+    {"id": "test_input_not_mutated", "description": "Input list order is unchanged and a new list is returned."}
+  ],
+  "scope": {"allowed_paths": ["catalog/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 20,
+  "test_timeout_seconds": 120
+}

@@ -1,0 +1,97 @@
+# Project-specific, offline Semgrep rules for the Python benchmark tasks.
+# They are intentionally narrow and auditable. Additional registry rule packs can be added with
+# ACB_SEMGREP_EXTRA_CONFIGS (e.g. "p/python"), but that requires network access and changes the
+# rule set, so record it in the experiment notes if you do.
+rules:
+  - id: acb-sql-string-formatting
+    languages: [python]
+    severity: ERROR
+    message: SQL statement built with string formatting or concatenation; use bound parameters.
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+    pattern-either:
+      - pattern: $CUR.execute(f"...", ...)
+      - pattern: $CUR.execute("..." % $X, ...)
+      - pattern: $CUR.execute("...".format(...), ...)
+      - pattern: $CUR.execute("..." + $X, ...)
+      - pattern: $CUR.executescript(f"...")
+      - pattern: $CUR.executemany(f"...", ...)
+      - patterns:
+          - pattern-inside: |
+              $Q = f"..."
+              ...
+          - pattern: $CUR.execute($Q, ...)
+      - patterns:
+          - pattern-inside: |
+              $Q = "..." + $X
+              ...
+          - pattern: $CUR.execute($Q, ...)
+
+  - id: acb-unsafe-deserialization
+    languages: [python]
+    severity: ERROR
+    message: Deserializing untrusted data with pickle/marshal/dill can execute arbitrary code.
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+    pattern-either:
+      - pattern: pickle.loads(...)
+      - pattern: pickle.load(...)
+      - pattern: pickle.Unpickler(...)
+      - pattern: marshal.loads(...)
+      - pattern: dill.loads(...)
+
+  - id: acb-yaml-unsafe-load
+    languages: [python]
+    severity: ERROR
+    message: yaml.load without SafeLoader can construct arbitrary objects.
+    patterns:
+      - pattern: yaml.load(...)
+      - pattern-not: yaml.load(..., Loader=yaml.SafeLoader)
+      - pattern-not: yaml.load(..., Loader=yaml.CSafeLoader)
+
+  - id: acb-eval-exec
+    languages: [python]
+    severity: ERROR
+    message: eval/exec on dynamic input allows code injection; use ast.literal_eval or explicit parsing.
+    metadata:
+      cwe: "CWE-95: Eval Injection"
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+
+  - id: acb-shell-injection
+    languages: [python]
+    severity: ERROR
+    message: Command executed through a shell; pass an argument list without shell=True.
+    metadata:
+      cwe: "CWE-78: OS Command Injection"
+    pattern-either:
+      - pattern: subprocess.$FUNC(..., shell=True, ...)
+      - pattern: os.system(...)
+      - pattern: os.popen(...)
+
+  - id: acb-non-constant-time-compare
+    languages: [python]
+    severity: WARNING
+    message: Comparing MAC/signature values with == leaks timing information; use hmac.compare_digest.
+    metadata:
+      cwe: "CWE-208: Observable Timing Discrepancy"
+    pattern-either:
+      - pattern: hmac.new(...).hexdigest() == $X
+      - pattern: $X == hmac.new(...).hexdigest()
+      - pattern: hmac.new(...).digest() == $X
+      - pattern: $X == hmac.new(...).digest()
+
+  - id: acb-weak-hash
+    languages: [python]
+    severity: INFO
+    message: MD5/SHA-1 are not suitable for integrity protection.
+    pattern-either:
+      - pattern: hashlib.md5(...)
+      - pattern: hashlib.sha1(...)
+
+  - id: acb-insecure-tempfile
+    languages: [python]
+    severity: WARNING
+    message: tempfile.mktemp is race-prone; use NamedTemporaryFile or mkstemp.
+    pattern: tempfile.mktemp(...)

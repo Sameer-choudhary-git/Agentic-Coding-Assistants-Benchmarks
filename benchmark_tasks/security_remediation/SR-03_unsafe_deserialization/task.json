@@ -1,0 +1,30 @@
+{
+  "id": "SR-03",
+  "title": "Unsafe deserialization of session tokens and settings",
+  "category": "security_remediation",
+  "difficulty": "medium",
+  "difficulty_rationale": "Requires replacing pickle with an authenticated JSON format (HMAC, constant-time comparison) and replacing eval() with literal parsing across two functions, while preserving round-trip behaviour.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "Session tokens are base64-encoded pickles without integrity protection, and settings values are parsed with eval().",
+  "required_behavior": [
+    "Session tokens are JSON-serialised and authenticated with HMAC-SHA256 using the supplied secret; verification uses a constant-time comparison.",
+    "decode_session raises InvalidSession (ValueError subclass) for malformed, tampered, wrongly-signed or legacy pickle tokens, without executing any embedded code.",
+    "encode_session raises TypeError for data that is not JSON-serialisable.",
+    "parse_settings parses values as Python literals only (numbers, strings, booleans, None, lists, dicts); anything else raises ValueError."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Hidden regression tests pass."],
+  "acceptance_tests": [
+    {"id": "test_roundtrip", "description": "encode/decode round-trips JSON data."},
+    {"id": "test_malicious_pickle_not_executed", "description": "A crafted pickle token is rejected and its payload never runs."},
+    {"id": "test_tampered_token_rejected", "description": "Changing any character invalidates the token."},
+    {"id": "test_wrong_secret_rejected", "description": "Tokens signed with another secret are rejected."},
+    {"id": "test_non_json_data_rejected", "description": "encode_session rejects non-JSON data with TypeError."},
+    {"id": "test_settings_no_code_execution", "description": "parse_settings never evaluates expressions."},
+    {"id": "test_invalid_session_is_value_error", "description": "InvalidSession subclasses ValueError."}
+  ],
+  "scope": {"allowed_paths": ["sessions/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 30,
+  "test_timeout_seconds": 120
+}

@@ -1,0 +1,10 @@
+# Evaluator, task validation and analysis (Python 3.10+; 3.12 recommended).
+pytest>=8.0,<10
+ruff>=0.6
+jsonschema>=4.20
+pandas>=2.0
+matplotlib>=3.7
+scipy>=1.10
+# Semgrep is installed separately because it is large and not available as a native Windows
+# wheel on every Python version; see README "Installing Semgrep". Alternatively set
+# ACB_SEMGREP_DOCKER=1 to run it from the official Docker image.

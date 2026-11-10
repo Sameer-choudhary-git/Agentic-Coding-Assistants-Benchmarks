@@ -1,0 +1,66 @@
+{
+  "$comment": "Feature comparison for outline Section IV. Product facts change often: each row records where it came from and when it was checked. 'autonomy' uses the scale defined below. Pricing is deliberately left out of the paper table because plans change monthly.",
+  "checkedOn": "2026-11-09",
+  "autonomyScale": {
+    "L1": "Suggestion: inline completion the developer accepts or rejects",
+    "L2": "Conversational: chat proposes edits; developer applies them",
+    "L3": "Supervised local agent: plans, edits files and runs commands in the developer's environment, with approvals",
+    "L4": "Asynchronous delegated agent: works in a remote sandbox and returns a branch, diff or pull request for review"
+  },
+  "dimensions": ["interactionModes", "autonomy", "context", "tooling", "execution", "deployment", "prOutput"],
+  "assistants": [
+    {
+      "id": "copilot",
+      "name": "GitHub Copilot",
+      "vendor": "GitHub (Microsoft)",
+      "interactionModes": ["Inline completion", "Chat", "IDE agent mode", "Cloud agent assigned from issues, chat or agent panel"],
+      "autonomy": ["L1", "L2", "L3", "L4"],
+      "context": "Repository-scoped; GitHub MCP server gives issue and PR history; custom instructions at personal, repository and organisation level",
+      "tooling": "MCP servers, custom agents, agent skills, hooks",
+      "execution": "Cloud agent runs in a temporary cloud development environment, edits, runs tests and linters",
+      "deployment": "IDE extensions plus GitHub.com; cloud agent works only on GitHub-hosted repositories",
+      "prOutput": "Creates a branch and opens one PR per task; 59-minute session cap; rulesets can block it",
+      "sources": ["https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/coding-agent/about-copilot-coding-agent"]
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "vendor": "Anysphere",
+      "interactionModes": ["AI-native editor with Tab completion", "In-editor Agent", "Cloud Agents launched from editor, web, mobile, Slack, GitHub or Linear"],
+      "autonomy": ["L1", "L2", "L3", "L4"],
+      "context": "Indexed workspace in the editor; cloud agents get the repo, dependencies and configured secrets",
+      "tooling": "Editor tools, terminal, MCP; per-environment secrets and network policies",
+      "execution": "Cloud Agents run in a separate sandboxed VM per agent",
+      "deployment": "Desktop editor (VS Code-derived) plus web and mobile control surfaces",
+      "prOutput": "Cloud agents can open a PR with videos, screenshots and logs attached",
+      "sources": ["https://cursor.com/help/ai-features/background-agents"]
+    },
+    {
+      "id": "claude_code",
+      "name": "Claude Code",
+      "vendor": "Anthropic",
+      "interactionModes": ["Terminal CLI agent", "VS Code and JetBrains extensions", "Desktop app", "Web and mobile cloud sessions", "Slack and CI (GitHub Actions, GitLab CI/CD)"],
+      "autonomy": ["L3", "L4"],
+      "context": "Reads the codebase on demand; CLAUDE.md (or AGENTS.md) project instructions; auto memory",
+      "tooling": "MCP, skills, hooks, subagents, Agent SDK",
+      "execution": "Runs commands locally under a permission system, or in cloud sessions",
+      "deployment": "Local CLI/IDE/desktop, browser, scheduled cloud tasks, CI",
+      "prOutput": "Stages, commits, creates branches and opens PRs; Slack mention can return a PR",
+      "sources": ["https://code.claude.com/docs/en/overview"]
+    },
+    {
+      "id": "codex",
+      "name": "OpenAI Codex",
+      "vendor": "OpenAI",
+      "interactionModes": ["Cloud tasks (web/ChatGPT)", "Codex CLI", "IDE extension"],
+      "autonomy": ["L3", "L4"],
+      "context": "Checks out the repo at a branch/commit; AGENTS.md tells the agent lint and test commands",
+      "tooling": "Terminal in a container; setup and maintenance scripts; MCP in the CLI",
+      "execution": "Cloud container from the 'universal' image; internet off by default during the agent phase (setup scripts may use it)",
+      "deployment": "Cloud plus local CLI and IDE",
+      "prOutput": "Returns an answer and a diff; the user opens a PR from it",
+      "sources": ["https://learn.chatgpt.com/codex/environments/cloud-environment", "https://simonwillison.net/2025/Jun/3/codex-agent-internet-access/"],
+      "note": "Not the 2021 Codex model that powered the first Copilot. The paper must keep the two apart."
+    }
+  ]
+}

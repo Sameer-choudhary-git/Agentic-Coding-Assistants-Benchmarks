@@ -1,0 +1,4 @@
+# Optional: needed only for the SWE-bench Verified benchmark (dataset download and official harness).
+# Scoring also needs a running Docker engine. Install with: pip install -r requirements-swebench.txt
+swebench>=4.0
+datasets>=2.19

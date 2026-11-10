@@ -1,0 +1,30 @@
+{
+  "id": "SR-02",
+  "title": "Path traversal prevention in file storage",
+  "category": "security_remediation",
+  "difficulty": "medium",
+  "difficulty_rationale": "Requires correct path canonicalisation (absolute paths, '..', symlinks, NUL bytes) for both read and write paths while preserving nested sub-directory support.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "read_user_file() and save_upload() join user-controlled paths onto a base directory without containment checks.",
+  "required_behavior": [
+    "Resolved targets must stay inside the resolved base directory, including after following symlinks.",
+    "Absolute paths, '..' escapes, NUL bytes and empty names raise UnsafePathError (a ValueError subclass).",
+    "Legitimate nested relative paths (e.g. 'reports/2024/q1.txt') keep working; save_upload creates parent directories.",
+    "No file outside the base directory is ever read, created or overwritten."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Hidden regression tests pass."],
+  "acceptance_tests": [
+    {"id": "test_read_rejects_dotdot", "description": "'..' escapes are rejected on read."},
+    {"id": "test_read_rejects_absolute", "description": "Absolute paths are rejected on read."},
+    {"id": "test_save_rejects_escape_and_writes_nothing", "description": "Escaping uploads raise and create no file outside the base."},
+    {"id": "test_rejects_nul_and_empty", "description": "NUL bytes and empty names are rejected."},
+    {"id": "test_symlink_escape_rejected", "description": "Symlinks pointing outside the base are rejected (skipped where symlinks are unsupported)."},
+    {"id": "test_unsafe_path_error_is_value_error", "description": "UnsafePathError subclasses ValueError."},
+    {"id": "test_dotdot_that_stays_inside_is_allowed", "description": "Paths with '..' that resolve inside the base are allowed."}
+  ],
+  "scope": {"allowed_paths": ["filestore/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 25,
+  "test_timeout_seconds": 120
+}

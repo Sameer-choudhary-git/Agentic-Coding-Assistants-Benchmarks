@@ -1,0 +1,30 @@
+{
+  "id": "RF-03",
+  "title": "Replace plan conditionals with an extensible plan registry",
+  "category": "refactoring",
+  "difficulty": "hard",
+  "difficulty_rationale": "Design-level refactoring: three branching functions must be replaced by a polymorphic Plan hierarchy with a registry, keeping behaviour identical and making new plans addable without editing existing functions.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "monthly_price(), seat_limit() and can_upgrade() branch on plan names with long if/elif chains; replace them with Plan classes registered in a registry.",
+  "required_behavior": [
+    "A base class Plan with attributes name, rank and methods monthly_price(seats, annual) and seat_limit().",
+    "Concrete plans free, team, business, enterprise registered via register_plan(); get_plan(name) returns the instance and raises UnknownPlanError (KeyError subclass) for unknown names.",
+    "The public functions monthly_price, seat_limit and can_upgrade keep their signatures and results and contain no if/elif comparisons on plan names.",
+    "A new Plan subclass registered with register_plan() works with all three public functions without modifying them.",
+    "No function in billing/plans.py has more than 3 branch nodes (if/elif/ternary/match cases)."
+  ],
+  "acceptance_criteria": ["Behaviour-preservation tests pass.", "Extensibility and complexity checks pass."],
+  "acceptance_tests": [
+    {"id": "test_prices_unchanged", "description": "Prices for every plan/seat/annual combination are unchanged."},
+    {"id": "test_seat_limits_unchanged", "description": "Seat limits are unchanged."},
+    {"id": "test_upgrade_rules_unchanged", "description": "Upgrade matrix is unchanged."},
+    {"id": "test_unknown_plan", "description": "Unknown plans raise UnknownPlanError (a KeyError)."},
+    {"id": "test_new_plan_extensible", "description": "A new registered Plan subclass works without code changes."},
+    {"id": "test_low_branching", "description": "Each function has at most 3 branch nodes and no string comparisons on plan names."}
+  ],
+  "scope": {"allowed_paths": ["billing/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 35,
+  "test_timeout_seconds": 120
+}

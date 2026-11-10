@@ -1,0 +1,40 @@
+{
+  "id": "TW-01",
+  "title": "Edge-case tests for a text statistics module",
+  "category": "test_writing",
+  "difficulty": "easy",
+  "difficulty_rationale": "Small pure-function module with a clear docstring contract; edge cases (empty input, punctuation, ties, n bounds) are listed in the docstrings.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "test_writing",
+  "summary": "Write a pytest suite for textstats.stats that passes on the correct implementation, covers it and detects seeded faults.",
+  "required_behavior": [
+    "Tests live in tests/test_stats.py and use pytest.",
+    "The suite passes against the unmodified module.",
+    "Line coverage of textstats/stats.py is at least 90%.",
+    "The suite detects (fails on) at least 80% of the hidden mutants of the module.",
+    "The module under test must not be modified."
+  ],
+  "acceptance_criteria": [
+    "Submitted tests pass on the original module.",
+    "At least 6 test cases are collected.",
+    "Line coverage >= 0.90 of the target module.",
+    "Mutation score >= 0.80 on the hidden mutant set."
+  ],
+  "acceptance_tests": [
+    {"id": "tests_pass_on_original", "description": "Submitted suite passes against the original module."},
+    {"id": "min_test_count", "description": "At least 6 test cases collected."},
+    {"id": "line_coverage", "description": "Line coverage of the target module >= 90%."},
+    {"id": "mutation_score", "description": "At least 80% of hidden mutants are killed."}
+  ],
+  "test_writing": {
+    "target_module": "textstats/stats.py",
+    "test_paths": ["tests"],
+    "min_tests": 6,
+    "min_line_coverage": 0.9,
+    "min_mutation_score": 0.8
+  },
+  "scope": {"allowed_paths": ["tests/**"], "protected_paths": ["textstats/**"]},
+  "time_limit_minutes": 25,
+  "test_timeout_seconds": 120
+}

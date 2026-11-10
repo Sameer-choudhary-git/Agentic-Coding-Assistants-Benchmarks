@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/*
+  Design tokens. The interface is a lab instrument: cool paper base, slate ink, one accent for
+  actions, and a fixed categorical colour per assistant so that every chart and the experiment
+  matrix use the same identity colours. Status colours are reserved for run state.
+*/
+@theme static {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --color-paper: #f6f8f6;
+  --color-panel: #ffffff;
+  --color-rule: #d9dfdb;
+  --color-rule-strong: #b9c2bd;
+  --color-ink: #17212b;
+  --color-ink-soft: #46525e;
+  --color-ink-faint: #6b7680;
+  --color-action: #1d5c8c;
+  --color-action-strong: #154a73;
+  --color-action-tint: #e4eef6;
+
+  --color-pass: #2d7a4c;
+  --color-pass-tint: #e2f1e7;
+  --color-fail: #b02a3c;
+  --color-fail-tint: #f8e3e6;
+  --color-pending: #a86a12;
+  --color-pending-tint: #f7ecd8;
+  --color-void: #7a8089;
+  --color-void-tint: #ebedef;
+
+  --color-copilot: #3b5ba5;
+  --color-cursor: #23887c;
+  --color-claude: #8b4f9b;
+  --color-codex: #b8801f;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.prose-prompt h1 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+.prose-prompt h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+.prose-prompt p,
+.prose-prompt li {
+  max-width: 78ch;
+}

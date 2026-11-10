@@ -1,0 +1,20 @@
+# Docker is used for sandboxed evaluation, not for running the web app (the app runs directly on
+# the host so that it can create workspaces and talk to the Docker daemon).
+#
+#   docker compose build evaluator     # same as: npm run docker:evaluator
+#   docker compose run --rm semgrep --version
+services:
+  evaluator:
+    build:
+      context: .
+      dockerfile: docker/evaluator.Dockerfile
+    image: acb-evaluator:1.0
+    network_mode: none
+    read_only: true
+    user: "10001:10001"
+    profiles: ["build"]
+
+  semgrep:
+    image: semgrep/semgrep:latest
+    entrypoint: ["semgrep"]
+    profiles: ["tools"]

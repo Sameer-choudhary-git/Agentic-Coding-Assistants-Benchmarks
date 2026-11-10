@@ -1,0 +1,25 @@
+% Generated from evidence/evidence.json. Do not edit by hand.
+\begin{table}[t]
+\caption{SWE-bench family: reported results and validity findings}
+\label{tab:benchmarks}
+\centering\scriptsize
+\begin{tabular}{@{}p{0.27\columnwidth}p{0.42\columnwidth}r@{\ }l@{}}
+\toprule
+System / set & Metric & \multicolumn{2}{l}{Value}\\
+\midrule
+Claude 2 (RAG baseline) & SWE-bench resolve rate & 1.96\% & \cite{jimenez2024swebench}\\
+SWE-bench Verified & Instances & 500 & \cite{openai2024verified}\\
+GPT-4o (best open scaffold) & Resolve rate, Verified vs original & 33.2\% & \cite{openai2024verified}\\
+SWE-agent & SWE-bench pass@1 & 12.5\% & \cite{yang2024sweagent}\\
+AutoCodeRover & SWE-bench Lite resolve rate & 19\% & \cite{zhang2024autocoderover}\\
+SWE-agent & SWE-bench Multimodal resolve rate & 12\% & \cite{yang2025multimodal}\\
+SWE-agent-LM-32B & SWE-bench Verified pass@1 & 40.2\% & \cite{yang2025swesmith}\\
+claude-sonnet-4.5 & SWE-Bench++ pass@10 & 36.2\% & \cite{wang2025swebenchpp}\\
+Best reported system (Claude Opus 4.7) & SWE-bench Verified resolve rate (survey trajectory) & 78.4\% & \cite{bhati2026}\\
+SWE-Agent + GPT-4 passing patches & Solution leakage in issue text & 32.67\% & \cite{aleithan2024swebenchplus}\\
+SWE-Agent + GPT-4 on Verified & Resolve rate before vs after filtering & 10\% & \cite{aleithan2024swebenchplus}\\
+AutoCodeRover + GPT-4o & SWE-Bench+ resolve rate & 3.83\% & \cite{aleithan2024swebenchplus}\\
+8 agents on Verified & Resolution when a task had more than 20 execution errors & 22.6\% & \cite{chen2026beyond}\\
+\bottomrule
+\end{tabular}
+\end{table}

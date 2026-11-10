@@ -1,0 +1,33 @@
+{
+  "id": "BF-03",
+  "title": "Duration parser input handling",
+  "category": "bug_fixing",
+  "difficulty": "medium",
+  "difficulty_rationale": "Single module, but several input-validation edge cases (empty input, case, whitespace, ordering, duplicates, bare numbers) interact inside a regex-based parser.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "parse_duration() silently accepts malformed strings (empty, repeated or out-of-order units, bare numbers) and rejects valid upper-case or padded input.",
+  "required_behavior": [
+    "Accepted format: one or more <integer><unit> components with units d, h, m, s, in strictly descending order (d before h before m before s), each unit at most once.",
+    "Units are case-insensitive; leading/trailing whitespace is ignored; no whitespace is allowed inside the string.",
+    "The result is the total number of seconds as an int.",
+    "Empty strings, strings with only whitespace, bare numbers without a unit, unknown units, repeated units, out-of-order units, signs and decimals raise ValueError.",
+    "Non-string input raises TypeError.",
+    "format_duration() keeps its current behaviour."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Hidden regression tests pass.", "Public API unchanged."],
+  "acceptance_tests": [
+    {"id": "test_valid_inputs", "description": "Valid component combinations parse to the right number of seconds."},
+    {"id": "test_case_and_padding", "description": "Upper-case units and surrounding whitespace are accepted."},
+    {"id": "test_empty_rejected", "description": "Empty and whitespace-only input raises ValueError."},
+    {"id": "test_bare_number_rejected", "description": "A number without a unit raises ValueError."},
+    {"id": "test_repeated_unit_rejected", "description": "Repeated units raise ValueError."},
+    {"id": "test_out_of_order_rejected", "description": "Units out of descending order raise ValueError."},
+    {"id": "test_garbage_rejected", "description": "Signs, decimals, inner spaces and unknown units raise ValueError."},
+    {"id": "test_type_error", "description": "Non-string input raises TypeError."}
+  ],
+  "scope": {"allowed_paths": ["durations/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 25,
+  "test_timeout_seconds": 120
+}

@@ -1,0 +1,45 @@
+{
+  "target": "textstats/stats.py",
+  "mutants": [
+    {
+      "id": "M1_no_lowercase",
+      "file": "M1_no_lowercase.py",
+      "description": "Does not lower-case input"
+    },
+    {
+      "id": "M2_keep_apostrophes",
+      "file": "M2_keep_apostrophes.py",
+      "description": "Does not strip leading/trailing apostrophes"
+    },
+    {
+      "id": "M3_tie_order",
+      "file": "M3_tie_order.py",
+      "description": "Ties not ordered alphabetically"
+    },
+    {
+      "id": "M4_n_zero_allowed",
+      "file": "M4_n_zero_allowed.py",
+      "description": "Accepts n == 0"
+    },
+    {
+      "id": "M5_off_by_one_top",
+      "file": "M5_off_by_one_top.py",
+      "description": "Returns n+1 items"
+    },
+    {
+      "id": "M6_no_rounding",
+      "file": "M6_no_rounding.py",
+      "description": "Average not rounded"
+    },
+    {
+      "id": "M7_hyphen_joins",
+      "file": "M7_hyphen_joins.py",
+      "description": "Hyphens do not separate words"
+    },
+    {
+      "id": "M8_ascending_counts",
+      "file": "M8_ascending_counts.py",
+      "description": "Sorted by ascending count"
+    }
+  ]
+}

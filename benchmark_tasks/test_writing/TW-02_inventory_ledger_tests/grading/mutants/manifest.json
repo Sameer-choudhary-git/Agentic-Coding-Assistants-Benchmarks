@@ -1,0 +1,55 @@
+{
+  "target": "inventory/ledger.py",
+  "mutants": [
+    {
+      "id": "M1_bool_qty_accepted",
+      "file": "M1_bool_qty_accepted.py",
+      "description": "bool quantities accepted"
+    },
+    {
+      "id": "M2_zero_qty_accepted",
+      "file": "M2_zero_qty_accepted.py",
+      "description": "zero quantities accepted"
+    },
+    {
+      "id": "M3_reserve_boundary",
+      "file": "M3_reserve_boundary.py",
+      "description": "cannot reserve exactly the available amount"
+    },
+    {
+      "id": "M4_ship_keeps_on_hand",
+      "file": "M4_ship_keeps_on_hand.py",
+      "description": "ship does not reduce on-hand"
+    },
+    {
+      "id": "M5_release_no_check",
+      "file": "M5_release_no_check.py",
+      "description": "release allows more than reserved"
+    },
+    {
+      "id": "M6_adjust_uses_on_hand",
+      "file": "M6_adjust_uses_on_hand.py",
+      "description": "write-off can consume reserved units"
+    },
+    {
+      "id": "M7_receive_overwrites",
+      "file": "M7_receive_overwrites.py",
+      "description": "receive overwrites instead of adding"
+    },
+    {
+      "id": "M8_unknown_sku_default",
+      "file": "M8_unknown_sku_default.py",
+      "description": "unknown SKUs silently created"
+    },
+    {
+      "id": "M9_history_missing_release",
+      "file": "M9_history_missing_release.py",
+      "description": "release not recorded in history"
+    },
+    {
+      "id": "M10_skus_unsorted",
+      "file": "M10_skus_unsorted.py",
+      "description": "skus not sorted"
+    }
+  ]
+}

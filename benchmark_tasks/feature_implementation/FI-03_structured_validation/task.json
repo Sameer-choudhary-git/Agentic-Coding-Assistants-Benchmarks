@@ -1,0 +1,33 @@
+{
+  "id": "FI-03",
+  "title": "Structured registration validation",
+  "category": "feature_implementation",
+  "difficulty": "hard",
+  "difficulty_rationale": "Many interacting rules (8 error codes across 6 fields), deterministic error ordering, collect-all semantics and strict type handling (bool is not int) must all match the specification.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "Implement validate_registration() returning all field errors as structured (field, code) pairs in a deterministic order.",
+  "required_behavior": [
+    "Return ValidationResult(ok, errors, cleaned) where errors is a list of FieldError(field, code).",
+    "All errors are collected (not only the first) and ordered by FIELD_ORDER, then by the rule order defined in the prompt.",
+    "Each field produces at most one error code.",
+    "Unknown keys produce FieldError(<key>, 'unknown_field') after all known-field errors, sorted by key.",
+    "cleaned contains normalized values (username lower-cased and stripped, email stripped and lower-cased) only when ok is True; otherwise it is an empty dict."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Dataclass definitions and FIELD_ORDER remain unchanged."],
+  "acceptance_tests": [
+    {"id": "test_valid_registration", "description": "A valid payload yields ok=True and normalized cleaned data."},
+    {"id": "test_required_fields", "description": "Missing or blank fields yield 'required'."},
+    {"id": "test_username_rules", "description": "Length, character and leading-letter rules."},
+    {"id": "test_email_rule", "description": "Email format validation."},
+    {"id": "test_age_rules", "description": "Type and range rules for age, bool rejected."},
+    {"id": "test_password_rules", "description": "Length and composition rules."},
+    {"id": "test_password_confirm", "description": "Confirmation mismatch."},
+    {"id": "test_collects_all_errors_in_order", "description": "Errors from all fields in FIELD_ORDER order."},
+    {"id": "test_unknown_fields", "description": "Unknown keys reported after known fields, sorted."}
+  ],
+  "scope": {"allowed_paths": ["signup/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 35,
+  "test_timeout_seconds": 120
+}

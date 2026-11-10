@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt semgrep
+      - name: Install Node dependencies
+        run: npm ci || npm install
+      - name: Lint Python
+        run: ruff check .
+      - name: Validate Semgrep rules
+        run: semgrep --validate --config evaluator/config/semgrep/rules.yml --metrics=off
+      - name: Validate benchmark tasks (local mode)
+        run: python -m evaluator.cli validate --mode local --dry-run
+      - name: Build evaluator image and validate in Docker mode
+        run: |
+          docker build -t acb-evaluator:1.0 -f docker/evaluator.Dockerfile .
+          python -m evaluator.cli validate --mode docker --dry-run --task BF-01 --task TW-01 --task SR-02
+      - name: Python tests
+        run: python -m pytest
+        env:
+          ACB_PYTHON: python
+      - name: Type-check
+        run: npm run typecheck
+      - name: Backend tests
+        run: npm run test:backend
+        env:
+          ACB_TEST_PYTHON: python
+      - name: Frontend tests
+        run: npm run test:frontend
+      - name: End-to-end smoke test
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:e2e
+        env:
+          ACB_PYTHON: python

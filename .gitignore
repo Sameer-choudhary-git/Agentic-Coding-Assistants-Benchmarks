@@ -1,0 +1,29 @@
+node_modules/
+dist/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+data/
+artifacts/*
+!artifacts/.gitkeep
+analysis/output/
+*.log
+.DS_Store
+Thumbs.db
+coverage/
+playwright-report/
+test-results/
+
+
+# Python virtual environments
+.venv/
+.venv-wsl/
+venv/
+
+# Python generated files
+__pycache__/
+*.py[cod]

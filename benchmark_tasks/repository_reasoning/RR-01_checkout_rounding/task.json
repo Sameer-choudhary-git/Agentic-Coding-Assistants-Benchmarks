@@ -1,0 +1,26 @@
+{
+  "id": "RR-01",
+  "title": "Trace a checkout total mismatch across modules",
+  "category": "repository_reasoning",
+  "difficulty": "medium",
+  "difficulty_rationale": "Symptom-only bug report in a five-module package; the root cause lives in pricing.py and must be fixed using the existing Money helpers in currency.py rather than patched in checkout.py.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "Invoice totals differ from the sum of displayed line totals for discounted lines because pricing bypasses the currency helpers.",
+  "required_behavior": [
+    "Every invoice line total is computed in Money (integer minor units) using currency.apply_percentage, which rounds half-up per line.",
+    "Invoice.total equals the sum of the displayed line totals plus shipping, to the cent, for all carts.",
+    "Public interfaces of cart, pricing, checkout and currency are unchanged."
+  ],
+  "acceptance_criteria": ["All hidden acceptance tests pass.", "Hidden regression tests for all modules pass."],
+  "acceptance_tests": [
+    {"id": "test_total_equals_sum_of_lines", "description": "Invoice and pricing totals equal the sum of line totals plus shipping for many carts."},
+    {"id": "test_known_discount_case", "description": "A known half-cent case rounds half-up per line."},
+    {"id": "test_line_totals_are_money", "description": "pricing.line_total returns Money."},
+    {"id": "test_free_shipping_threshold_uses_discounted_subtotal", "description": "Free shipping uses the discounted subtotal."}
+  ],
+  "scope": {"allowed_paths": ["shop/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 30,
+  "test_timeout_seconds": 120
+}

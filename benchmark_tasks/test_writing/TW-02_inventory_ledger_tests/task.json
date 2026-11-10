@@ -1,0 +1,40 @@
+{
+  "id": "TW-02",
+  "title": "Tests for a stateful inventory ledger",
+  "category": "test_writing",
+  "difficulty": "medium",
+  "difficulty_rationale": "Stateful class with reservations, error types and invariants; meaningful tests need multi-step scenarios and exception checks rather than single calls.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "test_writing",
+  "summary": "Write a pytest suite for inventory.ledger.Ledger that passes on the correct implementation, covers it and detects seeded faults.",
+  "required_behavior": [
+    "Tests live under tests/ and use pytest.",
+    "The suite passes against the unmodified module.",
+    "Line coverage of inventory/ledger.py is at least 90%.",
+    "The suite detects at least 80% of the hidden mutants.",
+    "The module under test must not be modified."
+  ],
+  "acceptance_criteria": [
+    "Submitted tests pass on the original module.",
+    "At least 8 test cases are collected.",
+    "Line coverage >= 0.90 of the target module.",
+    "Mutation score >= 0.80 on the hidden mutant set."
+  ],
+  "acceptance_tests": [
+    {"id": "tests_pass_on_original", "description": "Submitted suite passes against the original module."},
+    {"id": "min_test_count", "description": "At least 8 test cases collected."},
+    {"id": "line_coverage", "description": "Line coverage of the target module >= 90%."},
+    {"id": "mutation_score", "description": "At least 80% of hidden mutants are killed."}
+  ],
+  "test_writing": {
+    "target_module": "inventory/ledger.py",
+    "test_paths": ["tests"],
+    "min_tests": 8,
+    "min_line_coverage": 0.9,
+    "min_mutation_score": 0.8
+  },
+  "scope": {"allowed_paths": ["tests/**"], "protected_paths": ["inventory/**"]},
+  "time_limit_minutes": 30,
+  "test_timeout_seconds": 120
+}

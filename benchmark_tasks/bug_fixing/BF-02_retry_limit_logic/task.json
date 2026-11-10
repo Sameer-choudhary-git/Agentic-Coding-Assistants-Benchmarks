@@ -1,0 +1,36 @@
+{
+  "id": "BF-02",
+  "title": "Retry-limit and backoff logic",
+  "category": "bug_fixing",
+  "difficulty": "medium",
+  "difficulty_rationale": "One module, but four interacting defects in control flow (attempt counting, exception filtering, delay capping, re-raising) that must all be fixed without breaking the injected-sleep design.",
+  "version": "1.0.0",
+  "test_version": "1.0.0",
+  "kind": "standard",
+  "summary": "retry_call() performs one call too many, retries non-retryable exceptions, ignores the backoff cap and hides the original exception.",
+  "required_behavior": [
+    "func is called at most max_attempts times in total (max_attempts >= 1, otherwise ValueError).",
+    "Only exceptions that are instances of retry_on are retried; any other exception propagates immediately.",
+    "The delay before retry k (k = 1, 2, ...) is min(base * factor**(k-1), max_delay) and is passed to the injected sleep function.",
+    "No sleep happens after the final failed attempt.",
+    "When all attempts fail, the last exception raised by func is re-raised unchanged.",
+    "on_retry, if given, is called as on_retry(attempt_number, exception, delay) before each sleep."
+  ],
+  "acceptance_criteria": [
+    "All hidden acceptance tests pass.",
+    "Hidden regression tests pass.",
+    "Public API of retrykit is unchanged."
+  ],
+  "acceptance_tests": [
+    {"id": "test_call_count_respects_max_attempts", "description": "func is called exactly max_attempts times when it always fails."},
+    {"id": "test_non_retryable_exception_propagates", "description": "Exceptions outside retry_on are not retried."},
+    {"id": "test_delays_are_capped", "description": "Backoff delays follow base*factor^(k-1) capped at max_delay."},
+    {"id": "test_no_sleep_after_last_attempt", "description": "Sleep is not called after the last attempt."},
+    {"id": "test_last_exception_reraised", "description": "The final exception object is re-raised unchanged."},
+    {"id": "test_on_retry_callback", "description": "on_retry receives attempt number, exception and delay."},
+    {"id": "test_invalid_max_attempts", "description": "max_attempts < 1 raises ValueError."}
+  ],
+  "scope": {"allowed_paths": ["retrykit/**", "tests/**"], "protected_paths": []},
+  "time_limit_minutes": 25,
+  "test_timeout_seconds": 120
+}
