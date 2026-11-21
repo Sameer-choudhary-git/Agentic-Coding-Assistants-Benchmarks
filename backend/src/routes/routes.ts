@@ -315,6 +315,21 @@ export function buildRouter(s: Services): Router {
     }),
   );
 
+  // ------------------------------------------------------------------------------ golden dataset (offline analysis)
+  r.get(
+    '/golden',
+    h((_req, res) => {
+      res.json(s.golden.overview());
+    }),
+  );
+
+  r.get(
+    '/golden/figures/:name',
+    h((req, res) => {
+      res.sendFile(s.golden.figurePath(String(req.params.name)));
+    }),
+  );
+
   r.get(
     '/evidence/export',
     h((req, res) => {

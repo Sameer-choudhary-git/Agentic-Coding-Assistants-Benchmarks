@@ -2,6 +2,7 @@ import type {
   Assistant,
   EventItem,
   EvidenceRegistry,
+  GoldenOverview,
   Experiment,
   PlannedAttempt,
   Progress,
@@ -107,6 +108,7 @@ export const api = {
   syncTasks: () => request<{ count: number }>('POST', '/tasks/sync'),
   assistants: () => request<{ assistants: Assistant[] }>('GET', '/assistants'),
   evidence: () => request<EvidenceRegistry>('GET', '/evidence'),
+  golden: () => request<GoldenOverview>('GET', '/golden'),
   detectAssistants: () => request<{ assistants: Assistant[] }>('POST', '/assistants/detect'),
   updateAssistant: (id: string, version: string | null, model: string | null) =>
     request<{ assistant: Assistant }>('PATCH', `/assistants/${id}`, { version, model }),
@@ -155,4 +157,5 @@ export const api = {
 export const exportUrl = (format: string, experimentId?: string) =>
   `${BASE}/results/export?format=${format}${experimentId ? `&experimentId=${experimentId}` : ''}`;
 export const artifactUrl = (runId: string, artifactId: string) => `${BASE}/runs/${runId}/artifacts/${artifactId}`;
+export const goldenFigureUrl = (name: string) => `${BASE}/golden/figures/${encodeURIComponent(name)}`;
 export const evidenceExportUrl = (format: 'csv' | 'latex' | 'json') => `${BASE}/evidence/export?format=${format}`;

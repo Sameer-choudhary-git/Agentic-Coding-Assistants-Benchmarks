@@ -6,6 +6,7 @@ import { Dashboard } from './pages/Dashboard.tsx';
 import { ExperimentDetail, Experiments, NewExperiment, Runs } from './pages/Experiments.tsx';
 import { Evidence } from './pages/Evidence.tsx';
 import { Exports } from './pages/Exports.tsx';
+import { Golden } from './pages/Golden.tsx';
 import { Results } from './pages/Results.tsx';
 import { RunDetail } from './pages/RunDetail.tsx';
 import { TaskDetail, Tasks } from './pages/Tasks.tsx';
@@ -23,6 +24,7 @@ export function Routes() {
   if ((m = matchRoute('/runs/:id', path))) return <RunDetail key={m.id} id={m.id} />;
   if (matchRoute('/results', path)) return <Results />;
   if (matchRoute('/assistants', path)) return <Assistants />;
+  if (matchRoute('/golden', path)) return <Golden />;
   if (matchRoute('/evidence', path)) return <Evidence />;
   if (matchRoute('/exports', path)) return <Exports />;
   return (

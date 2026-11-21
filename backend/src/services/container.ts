@@ -6,6 +6,7 @@ import { createRepositories, type Repositories } from '../repositories/repositor
 import { AssistantService } from './assistantService.ts';
 import { EvaluatorClient } from './evaluatorClient.ts';
 import { EvidenceService } from './evidenceService.ts';
+import { GoldenService } from './goldenService.ts';
 import { ExperimentService } from './experimentService.ts';
 import { ExportService } from './exportService.ts';
 import { ResultsService } from './resultsService.ts';
@@ -25,6 +26,7 @@ export interface Services {
   results: ResultsService;
   exports: ExportService;
   evidence: EvidenceService;
+  golden: GoldenService;
 }
 
 export function createServices(cfg: Config, logger: Logger, db = new Database(cfg.ACB_DB_PATH)): Services {
@@ -39,5 +41,6 @@ export function createServices(cfg: Config, logger: Logger, db = new Database(cf
   const results = new ResultsService(repos);
   const exports = new ExportService(cfg, db, repos, results);
   const evidence = new EvidenceService(path.join(cfg.repoRoot, 'evidence'));
-  return { cfg, db, logger, repos, evaluator, tasks, assistants, experiments, runs, results, exports, evidence };
+  const golden = new GoldenService(process.env.ACB_GOLDEN_DIR ?? path.join(cfg.repoRoot, 'golden'));
+  return { cfg, db, logger, repos, evaluator, tasks, assistants, experiments, runs, results, exports, evidence, golden };
 }

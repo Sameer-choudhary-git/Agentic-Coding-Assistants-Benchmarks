@@ -29,6 +29,16 @@ describe('API integration', () => {
     assert.equal(r.body.database.schemaVersion, 1);
   });
 
+  it('serves the golden dataset overview and only whitelisted figures', async () => {
+    const r = await api(env, 'GET', '/golden');
+    assert.equal(r.status, 200);
+    assert.equal(r.body.nTasks, 350);
+    assert.equal(Object.values(r.body.summary.by_domain as Record<string, number>).reduce((a, b) => a + b, 0), 350);
+    assert.ok(r.body.results.agents.length > 0);
+    assert.ok(r.body.figures.includes('fig1_composition.png'));
+    assert.equal((await api(env, 'GET', '/golden/figures/..%2Fresults.json')).status, 404);
+  });
+
   it('discovers all 18 custom tasks with filters', async () => {
     const r = await api(env, 'GET', '/tasks?benchmark=custom');
     assert.equal(r.status, 200);

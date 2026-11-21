@@ -55,7 +55,7 @@ export function DashboardView({ data, controls }: { data: DashboardData; control
     <>
       <PageHeader title="Dashboard" actions={controls}>
         Planned work, recorded runs and measured outcomes for {benchmarkLabel(s.scope.benchmark)}. Every figure is computed from stored run
-        and evaluation records; the two benchmarks are never pooled here.
+        and evaluation records; benchmarks are never pooled here.
       </PageHeader>
 
       <Section title="Study design and progress">

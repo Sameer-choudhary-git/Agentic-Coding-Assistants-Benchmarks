@@ -336,3 +336,51 @@ export interface EvidenceRegistry {
   items: EvidenceItem[];
   features: { checkedOn: string; autonomyScale: Record<string, string>; assistants: AssistantFeatures[] };
 }
+
+/** Golden dataset overview (GET /golden): written offline by the golden pipeline in golden/. */
+export interface GoldenAgentQuality {
+  patches: number;
+  resolved: number;
+  resolve_rate: number;
+  quality_adjusted: number;
+  qs_resolved: number | null;
+  qs_unresolved: number | null;
+  size_ratio_median: number | null;
+  stray_rate: number | null;
+  tests_rate: number | null;
+}
+
+export interface GoldenResults {
+  agents: string[];
+  overall: Record<string, { pool: number; golden: number }>;
+  by_difficulty: Record<string, Record<string, number>>;
+  by_repo: Record<string, { repos: Record<string, number>; repo_gap_pp: number }>;
+  quality: Record<string, GoldenAgentQuality>;
+  gates: Record<string, Record<string, number>>;
+  rank_tau: number | null;
+  top2_diff: { a: string; b: string; diff: number; lo: number; hi: number } | null;
+}
+
+export interface GoldenOverview {
+  name: string;
+  version: string;
+  seed: number;
+  builtAt: string;
+  nTasks: number;
+  summary: {
+    pool_size: number;
+    pool_admitted: number;
+    by_domain: Record<string, number>;
+    by_source: Record<string, number>;
+    by_language: Record<string, number>;
+    by_difficulty: Record<string, number>;
+    by_domain_difficulty: Record<string, number>;
+    repos?: number;
+    gold_quality_mean?: number;
+  };
+  gateStats: Record<string, Record<string, number>>;
+  difficultyCalibration: { n: number; balanced_accuracy: number; spearman_rho: number; within_one: number } | null;
+  appTasks: number;
+  results: GoldenResults | null;
+  figures: string[];
+}

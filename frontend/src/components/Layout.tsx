@@ -9,6 +9,7 @@ const NAV: { to: string; label: string; match: RegExp }[] = [
   { to: '/runs', label: 'Runs', match: /^\/runs/ },
   { to: '/results', label: 'Results', match: /^\/results/ },
   { to: '/assistants', label: 'Assistants', match: /^\/assistants/ },
+  { to: '/golden', label: 'Golden dataset', match: /^\/golden/ },
   { to: '/evidence', label: 'Literature evidence', match: /^\/evidence/ },
   { to: '/exports', label: 'Exports and data', match: /^\/exports/ },
 ];
