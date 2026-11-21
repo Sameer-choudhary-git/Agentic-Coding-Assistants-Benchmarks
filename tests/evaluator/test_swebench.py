@@ -14,6 +14,12 @@ from evaluator import cli, swebench
 IID = "acme__widgets-42"
 
 
+@pytest.fixture(autouse=True)
+def no_real_golden(tmp_path, monkeypatch):
+    """Keep the repo's golden task file out of these tests; the golden test points at its own file."""
+    monkeypatch.setenv("ACB_GOLDEN_APP_FILE", str(tmp_path / "no-golden.json"))
+
+
 def git(cwd, *args):
     cmd = ["git", "-c", "user.email=t@t", "-c", "user.name=t", *args]
     return subprocess.run(cmd, cwd=cwd, check=True, capture_output=True, text=True).stdout
@@ -186,3 +192,25 @@ def test_harness_dataset_matches_installed_harness_version(monkeypatch):
     assert swebench.harness_dataset() == "princeton-nlp/SWE-bench_Verified"
     monkeypatch.setenv("ACB_SWEBENCH_HARNESS_DATASET", "/data/verified.jsonl")
     assert swebench.harness_dataset() == "/data/verified.jsonl"
+
+
+def test_golden_tasks_become_third_benchmark(tmp_path, monkeypatch):
+    monkeypatch.setenv("ACB_SWEBENCH_DIR", str(write_pilot(tmp_path, base="abc123")))
+
+    def entry(iid, domain, tier):
+        ps = f"{iid}: something is broken."
+        return {"instance_id": iid, "golden_task_id": f"swebench_verified::{iid}", "repo": "acme/widgets",
+                "base_commit": "abc123", "tier": tier, "domain": domain, "subdomain": None, "gold_quality_score": 97.0,
+                "gate_flags": [], "fail_to_pass_count": 1, "pass_to_pass_count": 2,
+                "problem_statement": ps, "problem_statement_sha256": hashlib.sha256(ps.encode()).hexdigest()}
+
+    gf = tmp_path / "golden.json"
+    gf.write_text(json.dumps({"instances": [entry(IID, "bug_fix", "easy"), entry("acme__widgets-7", "performance", "hard")]}))
+    monkeypatch.setenv("ACB_GOLDEN_APP_FILE", str(gf))
+    by_id = {s["id"]: s for s in swebench.list_summaries()}
+    # the pilot keeps its own task and only gains the golden labels
+    assert by_id[IID]["benchmark"] == "swebench_verified" and by_id[IID]["swebench"]["golden"]["domain"] == "bug_fix"
+    g = by_id["acme__widgets-7"]
+    assert g["benchmark"] == "golden_verified" and g["category"] == "performance" and g["difficulty"] == "hard"
+    assert g["validation"]["status"] == "validated" and "something is broken" in g["prompt"]
+    assert swebench.is_swebench_id("acme__widgets-7")

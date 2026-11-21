@@ -21,9 +21,10 @@ import {
   ASSISTANTS,
   assistantName,
   BENCHMARKS,
-  CATEGORIES,
+  categoriesFor,
   dateTime,
   FAILURE_CLASS_LABEL,
+  isHarnessBenchmark,
   plannedAttemptCount,
   STATUS_LABEL,
   taskBenchmark,
@@ -63,7 +64,8 @@ export function Experiments() {
       ) : state.data.experiments.length === 0 ? (
         <EmptyState title="No experiments yet">
           Create one to generate the planned attempt matrix. Custom suite: 18 tasks × 4 assistants × 2 attempts = 144 attempts. SWE-bench
-          Verified pilot: 12 tasks × 4 assistants × 1 attempt = 48 attempts. Each experiment uses one benchmark.
+          Verified pilot: 12 tasks × 4 assistants × 1 attempt = 48 attempts. Golden set: up to 67 tasks × 4 assistants × 1 attempt.
+          Each experiment uses one benchmark.
         </EmptyState>
       ) : (
         <Table caption="Experiments">
@@ -171,8 +173,8 @@ export function NewExperiment() {
   const chooseBenchmark = (b: string) => {
     setBenchmark(b);
     setTaskIds(tasks.data!.tasks.filter((t) => taskBenchmark(t) === b).map((t) => t.id));
-    setAttempts(b === 'swebench_verified' ? 1 : 2);
-    setName(b === 'swebench_verified' ? 'SWE-bench Verified pilot' : 'Full study');
+    setAttempts(isHarnessBenchmark(b) ? 1 : 2);
+    setName(b === 'swebench_verified' ? 'SWE-bench Verified pilot' : b === 'golden_verified' ? 'Golden set study' : 'Full study');
   };
   const groups =
     benchmark === 'swebench_verified'
@@ -181,7 +183,7 @@ export function NewExperiment() {
           label: `${d[0].toUpperCase()}${d.slice(1)} (leaderboard tertile)`,
           match: (t: Task) => t.difficulty === d,
         }))
-      : CATEGORIES.map((c) => ({ id: c.id, label: c.label, match: (t: Task) => t.category === c.id }));
+      : categoriesFor(benchmark).map((c) => ({ id: c.id, label: c.label, match: (t: Task) => t.category === c.id }));
   const toggle = (list: string[], id: string) => (list.includes(id) ? list.filter((x) => x !== id) : [...list, id]);
 
   return (

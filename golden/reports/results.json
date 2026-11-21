@@ -1,0 +1,589 @@
+{
+  "agents": [
+    "mini-claude-opus-4.6",
+    "mini-gpt-5.1-codex",
+    "mini-gemini-3-pro",
+    "openhands-claude-opus-4.5",
+    "sweagent-claude-4-sonnet",
+    "amazon-q-dev-agent",
+    "autocoderover-v2.1",
+    "agentless-1.5",
+    "google-jules-gemini-2.0"
+  ],
+  "gates": {
+    "swebench_verified": {
+      "admitted": 0.944,
+      "solution_leak": 0.05,
+      "solution_hint_partial": 0.016,
+      "weak_tests_single_f2p": 0.08,
+      "dup": 0.0
+    },
+    "swebench_plusplus": {
+      "admitted": 0.85,
+      "solution_leak": 0.03,
+      "solution_hint_partial": 0.026,
+      "weak_tests_single_f2p": 0.008,
+      "dup": 0.002
+    },
+    "swebench_plus": {
+      "admitted": 0.16129032258064516,
+      "solution_leak": 0.009216589861751152,
+      "solution_hint_partial": 0.009216589861751152,
+      "weak_tests_single_f2p": 0.0,
+      "dup": 0.8248847926267281
+    },
+    "swebench_pro": {
+      "admitted": 0.9096573208722741,
+      "solution_leak": 0.0264797507788162,
+      "solution_hint_partial": 0.059190031152647975,
+      "weak_tests_single_f2p": 0.00778816199376947,
+      "dup": 0.0
+    },
+    "swebench_multimodal": {
+      "admitted": 0.88,
+      "solution_leak": 0.04,
+      "solution_hint_partial": 0.0,
+      "weak_tests_single_f2p": 0.05,
+      "dup": 0.0
+    },
+    "swebench_multilingual": {
+      "admitted": 0.9466666666666667,
+      "solution_leak": 0.006666666666666667,
+      "solution_hint_partial": 0.006666666666666667,
+      "weak_tests_single_f2p": 0.04,
+      "dup": 0.0
+    },
+    "swe_rebench": {
+      "admitted": 0.4292265362274534,
+      "solution_leak": 0.019413023540201774,
+      "solution_hint_partial": 0.027973096912259247,
+      "weak_tests_single_f2p": 0.053194741669214306,
+      "dup": 0.006878630388260471
+    },
+    "nyu_ctf": {
+      "admitted": 1.0,
+      "solution_leak": 0.0,
+      "solution_hint_partial": 0.0,
+      "weak_tests_single_f2p": 0.0,
+      "dup": 0.0
+    }
+  },
+  "overall": {
+    "openhands-claude-opus-4.5": {
+      "pool": 0.7754237288135594,
+      "golden": 0.6956521739130435
+    },
+    "mini-claude-opus-4.6": {
+      "pool": 0.7563559322033898,
+      "golden": 0.6666666666666666
+    },
+    "mini-gemini-3-pro": {
+      "pool": 0.701271186440678,
+      "golden": 0.6521739130434783
+    },
+    "sweagent-claude-4-sonnet": {
+      "pool": 0.6588983050847458,
+      "golden": 0.5797101449275363
+    },
+    "mini-gpt-5.1-codex": {
+      "pool": 0.6504237288135594,
+      "golden": 0.5797101449275363
+    },
+    "amazon-q-dev-agent": {
+      "pool": 0.6483050847457628,
+      "golden": 0.5942028985507246
+    },
+    "google-jules-gemini-2.0": {
+      "pool": 0.510593220338983,
+      "golden": 0.42028985507246375
+    },
+    "autocoderover-v2.1": {
+      "pool": 0.5063559322033898,
+      "golden": 0.4492753623188406
+    },
+    "agentless-1.5": {
+      "pool": 0.4957627118644068,
+      "golden": 0.43478260869565216
+    }
+  },
+  "by_domain": {
+    "openhands-claude-opus-4.5": {
+      "rates": {
+        "bug_fix": 0.7736263736263737,
+        "feature_implementation": 0.7857142857142857
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 1.2087912087912045,
+      "cramers_v": 0.00491829714750504
+    },
+    "mini-claude-opus-4.6": {
+      "rates": {
+        "bug_fix": 0.7538461538461538,
+        "feature_implementation": 0.7857142857142857
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 3.1868131868131866,
+      "cramers_v": 0.012605955524867379
+    },
+    "mini-gemini-3-pro": {
+      "rates": {
+        "bug_fix": 0.7032967032967034,
+        "feature_implementation": 0.6428571428571429
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 6.043956043956045,
+      "cramers_v": 0.022476518730703072
+    },
+    "sweagent-claude-4-sonnet": {
+      "rates": {
+        "bug_fix": 0.654945054945055,
+        "feature_implementation": 0.7142857142857143
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 5.934065934065935,
+      "cramers_v": 0.021268349450945485
+    },
+    "mini-gpt-5.1-codex": {
+      "rates": {
+        "bug_fix": 0.6505494505494506,
+        "feature_implementation": 0.5714285714285714
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 7.912087912087918,
+      "cramers_v": 0.02819564645836313
+    },
+    "amazon-q-dev-agent": {
+      "rates": {
+        "bug_fix": 0.6461538461538462,
+        "feature_implementation": 0.6428571428571429
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 0.3296703296703285,
+      "cramers_v": 0.0011732058511951346
+    },
+    "google-jules-gemini-2.0": {
+      "rates": {
+        "bug_fix": 0.5098901098901099,
+        "feature_implementation": 0.5
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 0.9890109890109855,
+      "cramers_v": 0.0033667274876792073
+    },
+    "autocoderover-v2.1": {
+      "rates": {
+        "bug_fix": 0.5032967032967033,
+        "feature_implementation": 0.5714285714285714
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 6.813186813186811,
+      "cramers_v": 0.023190058697008582
+    },
+    "agentless-1.5": {
+      "rates": {
+        "bug_fix": 0.4967032967032967,
+        "feature_implementation": 0.42857142857142855
+      },
+      "n": {
+        "bug_fix": 455,
+        "feature_implementation": 14
+      },
+      "gap_pp": 6.8131868131868165,
+      "cramers_v": 0.023190058697008586
+    }
+  },
+  "by_repo": {
+    "openhands-claude-opus-4.5": {
+      "subtypes": {
+        "crash_exception": 0.7724550898203593,
+        "logic_error": 0.7714285714285715
+      },
+      "repos": {
+        "django/django": 0.8,
+        "sympy/sympy": 0.75,
+        "sphinx-doc/sphinx": 0.6818181818181818,
+        "matplotlib/matplotlib": 0.7647058823529411,
+        "scikit-learn/scikit-learn": 0.9285714285714286,
+        "pydata/xarray": 0.8095238095238095,
+        "astropy/astropy": 0.6
+      },
+      "repo_gap_pp": 32.85714285714286
+    },
+    "mini-claude-opus-4.6": {
+      "subtypes": {
+        "crash_exception": 0.7724550898203593,
+        "logic_error": 0.7464285714285714
+      },
+      "repos": {
+        "django/django": 0.772093023255814,
+        "sympy/sympy": 0.7638888888888888,
+        "sphinx-doc/sphinx": 0.7045454545454546,
+        "matplotlib/matplotlib": 0.7352941176470589,
+        "scikit-learn/scikit-learn": 0.9285714285714286,
+        "pydata/xarray": 0.8095238095238095,
+        "astropy/astropy": 0.6
+      },
+      "repo_gap_pp": 32.85714285714286
+    },
+    "mini-gemini-3-pro": {
+      "subtypes": {
+        "crash_exception": 0.7425149700598802,
+        "logic_error": 0.6821428571428572
+      },
+      "repos": {
+        "django/django": 0.7534883720930232,
+        "sympy/sympy": 0.5833333333333334,
+        "sphinx-doc/sphinx": 0.6818181818181818,
+        "matplotlib/matplotlib": 0.7058823529411765,
+        "scikit-learn/scikit-learn": 0.7857142857142857,
+        "pydata/xarray": 0.8095238095238095,
+        "astropy/astropy": 0.65
+      },
+      "repo_gap_pp": 22.619047619047617
+    },
+    "sweagent-claude-4-sonnet": {
+      "subtypes": {
+        "crash_exception": 0.6826347305389222,
+        "logic_error": 0.6357142857142857
+      },
+      "repos": {
+        "django/django": 0.7209302325581395,
+        "sympy/sympy": 0.6111111111111112,
+        "sphinx-doc/sphinx": 0.6363636363636364,
+        "matplotlib/matplotlib": 0.4411764705882353,
+        "scikit-learn/scikit-learn": 0.75,
+        "pydata/xarray": 0.7619047619047619,
+        "astropy/astropy": 0.55
+      },
+      "repo_gap_pp": 32.07282913165266
+    },
+    "mini-gpt-5.1-codex": {
+      "subtypes": {
+        "crash_exception": 0.6646706586826348,
+        "logic_error": 0.6428571428571429
+      },
+      "repos": {
+        "django/django": 0.6930232558139535,
+        "sympy/sympy": 0.5972222222222222,
+        "sphinx-doc/sphinx": 0.6363636363636364,
+        "matplotlib/matplotlib": 0.5294117647058824,
+        "scikit-learn/scikit-learn": 0.7857142857142857,
+        "pydata/xarray": 0.8571428571428571,
+        "astropy/astropy": 0.55
+      },
+      "repo_gap_pp": 32.773109243697476
+    },
+    "amazon-q-dev-agent": {
+      "subtypes": {
+        "crash_exception": 0.6526946107784432,
+        "logic_error": 0.6392857142857142
+      },
+      "repos": {
+        "django/django": 0.6883720930232559,
+        "sympy/sympy": 0.6666666666666666,
+        "sphinx-doc/sphinx": 0.6136363636363636,
+        "matplotlib/matplotlib": 0.5,
+        "scikit-learn/scikit-learn": 0.8214285714285714,
+        "pydata/xarray": 0.7142857142857143,
+        "astropy/astropy": 0.4
+      },
+      "repo_gap_pp": 42.14285714285714
+    },
+    "google-jules-gemini-2.0": {
+      "subtypes": {
+        "crash_exception": 0.5089820359281437,
+        "logic_error": 0.5071428571428571
+      },
+      "repos": {
+        "django/django": 0.5023255813953489,
+        "sympy/sympy": 0.4861111111111111,
+        "sphinx-doc/sphinx": 0.36363636363636365,
+        "matplotlib/matplotlib": 0.5294117647058824,
+        "scikit-learn/scikit-learn": 0.75,
+        "pydata/xarray": 0.5238095238095238,
+        "astropy/astropy": 0.6
+      },
+      "repo_gap_pp": 38.63636363636363
+    },
+    "autocoderover-v2.1": {
+      "subtypes": {
+        "crash_exception": 0.49700598802395207,
+        "logic_error": 0.5071428571428571
+      },
+      "repos": {
+        "django/django": 0.5162790697674419,
+        "sympy/sympy": 0.4861111111111111,
+        "sphinx-doc/sphinx": 0.38636363636363635,
+        "matplotlib/matplotlib": 0.5294117647058824,
+        "scikit-learn/scikit-learn": 0.75,
+        "pydata/xarray": 0.47619047619047616,
+        "astropy/astropy": 0.5
+      },
+      "repo_gap_pp": 36.36363636363637
+    },
+    "agentless-1.5": {
+      "subtypes": {
+        "crash_exception": 0.5149700598802395,
+        "logic_error": 0.4857142857142857
+      },
+      "repos": {
+        "django/django": 0.5023255813953489,
+        "sympy/sympy": 0.4305555555555556,
+        "sphinx-doc/sphinx": 0.36363636363636365,
+        "matplotlib/matplotlib": 0.5,
+        "scikit-learn/scikit-learn": 0.7857142857142857,
+        "pydata/xarray": 0.5714285714285714,
+        "astropy/astropy": 0.4
+      },
+      "repo_gap_pp": 42.2077922077922
+    }
+  },
+  "by_difficulty": {
+    "openhands-claude-opus-4.5": {
+      "easy": 0.8595505617977528,
+      "medium": 0.772,
+      "hard": 0.45454545454545453
+    },
+    "mini-claude-opus-4.6": {
+      "easy": 0.8707865168539326,
+      "medium": 0.732,
+      "hard": 0.4318181818181818
+    },
+    "mini-gemini-3-pro": {
+      "easy": 0.8314606741573034,
+      "medium": 0.672,
+      "hard": 0.3409090909090909
+    },
+    "sweagent-claude-4-sonnet": {
+      "easy": 0.7921348314606742,
+      "medium": 0.632,
+      "hard": 0.2727272727272727
+    },
+    "mini-gpt-5.1-codex": {
+      "easy": 0.7752808988764045,
+      "medium": 0.632,
+      "hard": 0.25
+    },
+    "amazon-q-dev-agent": {
+      "easy": 0.797752808988764,
+      "medium": 0.612,
+      "hard": 0.25
+    },
+    "google-jules-gemini-2.0": {
+      "easy": 0.6685393258426966,
+      "medium": 0.472,
+      "hard": 0.09090909090909091
+    },
+    "autocoderover-v2.1": {
+      "easy": 0.6797752808988764,
+      "medium": 0.448,
+      "hard": 0.13636363636363635
+    },
+    "agentless-1.5": {
+      "easy": 0.6797752808988764,
+      "medium": 0.428,
+      "hard": 0.13636363636363635
+    }
+  },
+  "quality": {
+    "gold": {
+      "patches": 69,
+      "qs_resolved": 97.11304347826088,
+      "qs_unresolved": NaN,
+      "resolved_below_bar": 2,
+      "resolved": 69,
+      "size_ratio_median": NaN,
+      "loc_f1": NaN,
+      "stray_rate": 0.0,
+      "tests_rate": 0.0,
+      "resolve_rate": 1.0,
+      "quality_adjusted": 0.9710144927536232
+    },
+    "openhands-claude-opus-4.5": {
+      "patches": 69,
+      "qs_resolved": 97.76041666666667,
+      "qs_unresolved": 92.61428571428571,
+      "resolved_below_bar": 1,
+      "resolved": 48,
+      "size_ratio_median": 1.0,
+      "loc_f1": 0.7758115942028986,
+      "stray_rate": 0.0,
+      "tests_rate": 0.014492753623188406,
+      "resolve_rate": 0.6956521739130435,
+      "quality_adjusted": 0.6811594202898551
+    },
+    "mini-claude-opus-4.6": {
+      "patches": 68,
+      "qs_resolved": 97.26521739130435,
+      "qs_unresolved": 93.61363636363636,
+      "resolved_below_bar": 1,
+      "resolved": 46,
+      "size_ratio_median": 1.0,
+      "loc_f1": 0.9034558823529412,
+      "stray_rate": 0.0,
+      "tests_rate": 0.0,
+      "resolve_rate": 0.6666666666666666,
+      "quality_adjusted": 0.6521739130434783
+    },
+    "mini-gemini-3-pro": {
+      "patches": 65,
+      "qs_resolved": 97.43111111111111,
+      "qs_unresolved": 91.03999999999999,
+      "resolved_below_bar": 2,
+      "resolved": 45,
+      "size_ratio_median": 1.0,
+      "loc_f1": 0.8417538461538462,
+      "stray_rate": 0.0,
+      "tests_rate": 0.015384615384615385,
+      "resolve_rate": 0.6521739130434783,
+      "quality_adjusted": 0.6231884057971014
+    },
+    "sweagent-claude-4-sonnet": {
+      "patches": 69,
+      "qs_resolved": 96.0275,
+      "qs_unresolved": 86.78620689655172,
+      "resolved_below_bar": 1,
+      "resolved": 40,
+      "size_ratio_median": 1.25,
+      "loc_f1": 0.7508115942028986,
+      "stray_rate": 0.028985507246376812,
+      "tests_rate": 0.15942028985507245,
+      "resolve_rate": 0.5797101449275363,
+      "quality_adjusted": 0.5652173913043478
+    },
+    "mini-gpt-5.1-codex": {
+      "patches": 66,
+      "qs_resolved": 96.75750000000001,
+      "qs_unresolved": 91.52692307692307,
+      "resolved_below_bar": 1,
+      "resolved": 40,
+      "size_ratio_median": 1.0,
+      "loc_f1": 0.7868939393939395,
+      "stray_rate": 0.0,
+      "tests_rate": 0.0,
+      "resolve_rate": 0.5797101449275363,
+      "quality_adjusted": 0.5652173913043478
+    },
+    "amazon-q-dev-agent": {
+      "patches": 69,
+      "qs_resolved": 96.08780487804877,
+      "qs_unresolved": 94.10714285714288,
+      "resolved_below_bar": 2,
+      "resolved": 41,
+      "size_ratio_median": 1.412,
+      "loc_f1": 0.8525652173913043,
+      "stray_rate": 0.0,
+      "tests_rate": 0.0,
+      "resolve_rate": 0.5942028985507246,
+      "quality_adjusted": 0.5652173913043478
+    },
+    "google-jules-gemini-2.0": {
+      "patches": 69,
+      "qs_resolved": 98.91379310344827,
+      "qs_unresolved": 95.84,
+      "resolved_below_bar": 1,
+      "resolved": 29,
+      "size_ratio_median": 0.75,
+      "loc_f1": 0.8080434782608695,
+      "stray_rate": 0.0,
+      "tests_rate": 0.0,
+      "resolve_rate": 0.42028985507246375,
+      "quality_adjusted": 0.4057971014492754
+    },
+    "autocoderover-v2.1": {
+      "patches": 69,
+      "qs_resolved": 98.93870967741935,
+      "qs_unresolved": 97.39473684210526,
+      "resolved_below_bar": 0,
+      "resolved": 31,
+      "size_ratio_median": 0.6,
+      "loc_f1": 0.7821594202898551,
+      "stray_rate": 0.0,
+      "tests_rate": 0.0,
+      "resolve_rate": 0.4492753623188406,
+      "quality_adjusted": 0.4492753623188406
+    },
+    "agentless-1.5": {
+      "patches": 68,
+      "qs_resolved": 99.12333333333332,
+      "qs_unresolved": 97.19736842105263,
+      "resolved_below_bar": 0,
+      "resolved": 30,
+      "size_ratio_median": 0.519,
+      "loc_f1": 0.8179705882352941,
+      "stray_rate": 0.0,
+      "tests_rate": 0.0,
+      "resolve_rate": 0.43478260869565216,
+      "quality_adjusted": 0.43478260869565216
+    }
+  },
+  "issues": {
+    "smells:long_line": 50,
+    "lint_new:PLR0912": 44,
+    "lint_new:PLW2901": 34,
+    "smells:lint_suppression": 28,
+    "lint_new:SIM108": 20,
+    "lint_new:PLR0915": 19,
+    "lint_new:SIM102": 16,
+    "smells:broad_exception": 16,
+    "lint_new:F821": 15,
+    "lint_new:RUF005": 14,
+    "lint_new:B904": 13,
+    "lint_new:B007": 12,
+    "lint_new:B026": 11,
+    "lint_new:F401": 10,
+    "smells:commented_out_code": 9,
+    "lint_new:F841": 8,
+    "lint_new:E741": 7,
+    "lint_new:PLR0911": 7,
+    "lint_new:B905": 6,
+    "lint_new:RUF012": 6,
+    "smells:debug_statement": 5,
+    "lint_new:SIM114": 4,
+    "lint_new:F507": 3,
+    "lint_new:B009": 3,
+    "lint_new:SIM103": 2,
+    "lint_new:E402": 2,
+    "security_patterns:dom_xss_sink": 2,
+    "lint_new:SIM105": 1,
+    "lint_new:E722": 1,
+    "lint_new:PLR0913": 1,
+    "lint_new:B010": 1,
+    "lint_new:F811": 1,
+    "lint_new:SIM401": 1,
+    "bandit_new:B608": 1,
+    "bandit_new:B307": 1
+  },
+  "rank_tau": 0.8888888888888888,
+  "top2_diff": {
+    "a": "openhands-claude-opus-4.5",
+    "b": "mini-claude-opus-4.6",
+    "diff": 0.019067796610169493,
+    "lo": -0.01059322033898305,
+    "hi": 0.048728813559322036
+  }
+}

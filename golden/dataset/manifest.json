@@ -1,0 +1,289 @@
+{
+  "name": "AgentBench-Golden",
+  "version": "1.0.0",
+  "seed": 20261121,
+  "built_at": "2026-11-21T07:44:13+00:00",
+  "n_tasks": 350,
+  "files": {
+    "jsonl": "data/golden\\golden_v1.0.0.jsonl"
+  },
+  "sources": {
+    "swebench_verified": {
+      "hf": "princeton-nlp/SWE-bench_Verified",
+      "split": "default/test/0.parquet",
+      "rows": 500,
+      "sha256": "a45b1fe4e2f0c8390b2b2938ac83e92ed5979000856808f3679c07812e9e6dcd",
+      "loaded": 500
+    },
+    "swebench_plusplus": {
+      "hf": "TuringEnterprises/SWE-Bench-plus-plus",
+      "split": "default/test/0.parquet",
+      "rows": 500,
+      "sha256": "339c21dbc7eb0d5c039e57d77d2f0c745b0f32b7012f3ba53b270cf1c6e7c813",
+      "loaded": 500
+    },
+    "swebench_plus": {
+      "hf": "hrtxsny/SWE-bench-plus",
+      "split": "default/train/0.parquet",
+      "rows": 217,
+      "sha256": "41a86e9369c47fefc62fc0b16c8dbe005b93339cccad7a9770398ce3272bf2c6",
+      "loaded": 217
+    },
+    "swebench_pro": {
+      "hf": "ScaleAI/SWE-bench_Pro",
+      "split": "default/test/0.parquet",
+      "rows": 642,
+      "sha256": "1067f72c1f43bbc578276888625db3b836cebb535546c9eaf824c5d5dd104a7f",
+      "loaded": 642
+    },
+    "swebench_multimodal": {
+      "hf": "SWE-bench/SWE-bench_Multimodal",
+      "split": "default/dev/0.parquet",
+      "rows": 100,
+      "sha256": "714f4b815680608168d620c87c6b3420b3d4690d6656fc85b1da6511bfb55931",
+      "loaded": 100
+    },
+    "swebench_multilingual": {
+      "hf": "SWE-bench/SWE-bench_Multilingual",
+      "split": "default/test/0.parquet",
+      "rows": 300,
+      "sha256": "92abca7cb527b41a9f66d03a26ce441ff7319e3a49f985998fd56be4bb9b08b2",
+      "loaded": 300
+    },
+    "swe_rebench": {
+      "hf": "nebius/SWE-rebench",
+      "split": "default/filtered/0.parquet",
+      "rows": 6542,
+      "sha256": "b2f037217a849732bf2e9b9d2b59d11561d03b4191a55c3142e1e58248817cfa",
+      "loaded": 6542
+    },
+    "nyu_ctf": {
+      "hf": "penfever/nyuctf-harbor",
+      "split": "default/test/0.parquet",
+      "rows": 199,
+      "sha256": "7b06b8637bdf86b084a8f0567cce43417ff700c484c3d47c1ace7aeff4838345",
+      "loaded": 199
+    }
+  },
+  "gate_stats": {
+    "swebench_verified": {
+      "total": 500,
+      "admitted": 472,
+      "possible_contamination": 500,
+      "hints_contain_code": 121,
+      "rejected": 28,
+      "solution_leak": 25,
+      "solution_hint_partial": 8,
+      "weak_tests_single_f2p": 40,
+      "problem_too_long": 2,
+      "too_many_files": 1
+    },
+    "swebench_plusplus": {
+      "total": 500,
+      "admitted": 425,
+      "rejected": 75,
+      "too_many_files": 42,
+      "patch_too_large": 30,
+      "solution_hint_partial": 13,
+      "weak_tests_single_f2p": 4,
+      "solution_leak": 15,
+      "test_patch_touches_source": 11,
+      "possible_contamination": 9,
+      "near_duplicate": 1,
+      "problem_too_long": 2
+    },
+    "swebench_plus": {
+      "total": 217,
+      "rejected": 182,
+      "possible_contamination": 217,
+      "duplicate_instance": 179,
+      "hints_contain_code": 33,
+      "solution_hint_partial": 2,
+      "admitted": 35,
+      "problem_too_short": 1,
+      "solution_leak": 2,
+      "test_patch_touches_source": 3
+    },
+    "swebench_pro": {
+      "total": 642,
+      "admitted": 584,
+      "rejected": 58,
+      "patch_too_large": 24,
+      "too_many_files": 21,
+      "solution_hint_partial": 38,
+      "problem_too_long": 1,
+      "weak_tests_single_f2p": 5,
+      "solution_leak": 17,
+      "test_patch_touches_source": 5
+    },
+    "swebench_multimodal": {
+      "total": 100,
+      "admitted": 88,
+      "possible_contamination": 100,
+      "rejected": 12,
+      "patch_too_large": 5,
+      "too_many_files": 6,
+      "weak_tests_single_f2p": 5,
+      "hints_contain_code": 15,
+      "solution_leak": 4
+    },
+    "swebench_multilingual": {
+      "total": 300,
+      "admitted": 284,
+      "possible_contamination": 208,
+      "rejected": 16,
+      "solution_leak": 2,
+      "solution_hint_partial": 2,
+      "hints_contain_code": 58,
+      "weak_tests_single_f2p": 12,
+      "test_patch_touches_source": 9,
+      "problem_too_long": 1,
+      "patch_too_large": 5
+    },
+    "swe_rebench": {
+      "total": 6542,
+      "rejected": 3734,
+      "rebench_low_quality": 3571,
+      "possible_contamination": 5317,
+      "weak_tests_single_f2p": 348,
+      "admitted": 2808,
+      "solution_hint_partial": 183,
+      "hints_contain_code": 1155,
+      "problem_too_short": 73,
+      "solution_leak": 127,
+      "test_patch_touches_source": 130,
+      "near_duplicate": 42,
+      "docs_only_patch": 3,
+      "problem_too_long": 23,
+      "too_many_files": 9,
+      "tests_only_patch": 2,
+      "patch_too_large": 5,
+      "duplicate_instance": 3
+    },
+    "nyu_ctf": {
+      "total": 199,
+      "admitted": 199
+    }
+  },
+  "difficulty_calibration": {
+    "t1": 4.2,
+    "t2": 5.6,
+    "n": 998,
+    "balanced_accuracy": 0.657,
+    "accuracy": 0.595,
+    "within_one": 0.976,
+    "spearman_rho": 0.678
+  },
+  "summary": {
+    "pool_size": 9000,
+    "pool_admitted": 4895,
+    "by_domain": {
+      "bug_fix": 110,
+      "feature_implementation": 60,
+      "offensive_security_ctf": 45,
+      "refactoring": 30,
+      "security_fix": 30,
+      "test_generation": 30,
+      "frontend_visual": 25,
+      "performance": 20
+    },
+    "by_source": {
+      "swebench_pro": 109,
+      "swebench_verified": 90,
+      "swebench_multilingual": 55,
+      "nyu_ctf": 45,
+      "swebench_multimodal": 25,
+      "swebench_plusplus": 19,
+      "swe_rebench": 7
+    },
+    "by_language": {
+      "python": 128,
+      "javascript": 67,
+      "go": 47,
+      "java": 14,
+      "rust": 14,
+      "typescript": 11,
+      "ruby": 9,
+      "c/binary": 9,
+      "binary": 9,
+      "web": 9,
+      "mixed": 9,
+      "c": 8,
+      "php": 7,
+      "cpp": 6,
+      "other": 3
+    },
+    "by_difficulty": {
+      "hard": 130,
+      "medium": 120,
+      "easy": 100
+    },
+    "by_domain_difficulty": {
+      "bug_fix|medium": 37,
+      "bug_fix|easy": 39,
+      "bug_fix|hard": 34,
+      "feature_implementation|easy": 22,
+      "feature_implementation|hard": 22,
+      "feature_implementation|medium": 16,
+      "refactoring|easy": 6,
+      "refactoring|hard": 13,
+      "refactoring|medium": 11,
+      "performance|easy": 4,
+      "performance|medium": 8,
+      "performance|hard": 8,
+      "security_fix|easy": 7,
+      "security_fix|medium": 11,
+      "security_fix|hard": 12,
+      "frontend_visual|hard": 7,
+      "frontend_visual|medium": 8,
+      "frontend_visual|easy": 10,
+      "test_generation|easy": 12,
+      "test_generation|medium": 9,
+      "test_generation|hard": 9,
+      "offensive_security_ctf|hard": 25,
+      "offensive_security_ctf|medium": 20
+    },
+    "by_subdomain": {
+      "bug_fix/logic_error": 76,
+      "feature_implementation/new_capability": 33,
+      "test_generation/issue_reproduction_test": 30,
+      "bug_fix/crash_exception": 29,
+      "refactoring/restructuring": 28,
+      "feature_implementation/api_extension": 27,
+      "frontend_visual/visual_issue": 25,
+      "performance/runtime": 18,
+      "security_fix/authz_authn": 12,
+      "security_fix/vulnerability": 9,
+      "offensive_security_ctf/pwn": 9,
+      "offensive_security_ctf/rev": 9,
+      "offensive_security_ctf/web": 9,
+      "offensive_security_ctf/crypto": 9,
+      "offensive_security_ctf/misc": 8,
+      "bug_fix/regression": 5,
+      "security_fix/secret_exposure": 4,
+      "security_fix/path_traversal": 3,
+      "refactoring/deprecation": 2,
+      "performance/memory": 2,
+      "security_fix/injection": 1,
+      "security_fix/csrf": 1,
+      "offensive_security_ctf/forensics": 1
+    },
+    "repos": 82,
+    "human_validated_share": 0.854,
+    "gold_quality_mean": 96.92,
+    "gold_quality_lt80": 8,
+    "rejection_reasons_pool": {
+      "rebench_low_quality": 3571,
+      "solution_leak": 192,
+      "duplicate_instance": 182,
+      "test_patch_touches_source": 158,
+      "too_many_files": 79,
+      "problem_too_short": 74,
+      "patch_too_large": 69,
+      "near_duplicate": 43,
+      "problem_too_long": 29,
+      "docs_only_patch": 3,
+      "tests_only_patch": 2
+    }
+  }
+}

@@ -105,11 +105,11 @@ export const DATA_DICTIONARY: { field: keyof FlatRecord; type: string; descripti
   {
     field: 'task_category',
     type: 'enum',
-    description: 'bug_fixing | feature_implementation | security_remediation | refactoring | test_writing | repository_reasoning | swebench_verified.',
+    description: 'bug_fixing | feature_implementation | security_remediation | refactoring | test_writing | repository_reasoning | swebench_verified | performance (golden tasks use their dataset domain).',
   },
   { field: 'task_difficulty', type: 'enum', description: 'easy | medium | hard (criteria in docs/experimental-protocol.md).' },
   { field: 'task_kind', type: 'enum', description: 'standard (hidden acceptance tests), test_writing (coverage + mutation checks) or swebench (official SWE-bench harness).' },
-  { field: 'task_benchmark', type: 'enum', description: 'custom (the 18-task suite) or swebench_verified (real GitHub issues scored by the SWE-bench harness).' },
+  { field: 'task_benchmark', type: 'enum', description: 'custom (the 18-task suite), swebench_verified (pilot issues) or golden_verified (golden-dataset issues); both SWE-bench benchmarks use the official harness.' },
   { field: 'task_version', type: 'semver', description: 'Task metadata version.' },
   { field: 'test_version', type: 'semver', description: 'Hidden test-suite version.' },
   {
@@ -447,9 +447,11 @@ export class ResultsService {
         'Success rate = successful completed effective runs / completed effective runs. Runs that never completed evaluation are excluded and reported separately.',
         ...(benchmark === 'swebench_verified'
           ? ['SWE-bench success = resolved by the official harness: every FAIL_TO_PASS and PASS_TO_PASS test passes. The 12-task sample is a pilot; report exact counts.']
-          : ['Category-level results are exploratory: each category has only three tasks.']),
+          : benchmark === 'golden_verified'
+            ? ['Golden success = resolved by the official SWE-bench harness. Categories are golden-dataset domains; non-bug-fix domains have few tasks, so report exact counts.']
+            : ['Category-level results are exploratory: each category has only three tasks.']),
         ...(!benchmark && new Set(rows.map((r) => r.task_benchmark)).size > 1
-          ? ['These figures pool the custom suite and SWE-bench Verified. Filter by benchmark before comparing.']
+          ? ['These figures pool several benchmarks. Filter by benchmark before comparing.']
           : []),
         'Confidence intervals are Wilson 95% intervals for a binomial proportion and assume independent attempts; repeated attempts on the same task are not independent.',
         ...(evalModes.length > 1 ? [`Results mix evaluation modes (${evalModes.join(', ')}); compare with care.`] : []),

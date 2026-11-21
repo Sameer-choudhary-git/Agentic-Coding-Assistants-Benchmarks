@@ -16,6 +16,12 @@ lists them. Their issue text and base commit come from the dataset, which ``sweb
 downloads into ``swebench_pilot/manifest.json`` (Hugging Face access needed, free). Until then the tasks
 show as "dataset missing" and cannot be put into an experiment.
 
+Golden tasks: ``golden/dataset/app_swebench_verified.json`` (written by ``python -m agentbench export-app`` in
+``golden/``) adds the golden dataset's SWE-bench Verified tasks as a third benchmark, ``golden_verified``. They
+carry their issue text, so no download is needed, and they are scored by the same harness. Their category is
+the golden domain (bug_fixing, feature_implementation, performance, refactoring, ...) and their difficulty is the
+golden set's calibrated tier. A task already in the pilot stays in the pilot and only gains the golden labels.
+
 No AI service is called here. Scoring needs ``pip install swebench`` and a running Docker engine.
 """
 
@@ -40,6 +46,16 @@ from evaluator.paths import REPO_ROOT
 DATASET = "princeton-nlp/SWE-bench_Verified"
 BENCHMARK = "swebench_verified"
 CATEGORY = "swebench_verified"
+GOLDEN_BENCHMARK = "golden_verified"
+# golden domain -> platform category (custom-suite names where one exists)
+GOLDEN_CATEGORY = {
+    "bug_fix": "bug_fixing",
+    "feature_implementation": "feature_implementation",
+    "refactoring": "refactoring",
+    "security_fix": "security_remediation",
+    "performance": "performance",
+    "frontend_visual": "frontend_visual",
+}
 ISSUE_FILE = "ISSUE.md"
 TIME_LIMIT_MINUTES = 30
 
@@ -63,6 +79,10 @@ def _pilot_dir() -> Path:
     return Path(os.environ.get("ACB_SWEBENCH_DIR", REPO_ROOT / "swebench_pilot"))
 
 
+def _golden_file() -> Path:
+    return Path(os.environ.get("ACB_GOLDEN_APP_FILE", REPO_ROOT / "golden" / "dataset" / "app_swebench_verified.json"))
+
+
 def _sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
@@ -80,7 +100,37 @@ def load_instances() -> List[Dict[str, Any]]:
             manifest[e["instance_id"]] = e
     order = [c["instance_id"] for c in candidates] + [i for i in manifest if i not in {c["instance_id"] for c in candidates}]
     by_cand = {c["instance_id"]: c for c in candidates}
-    return [{**by_cand.get(i, {}), **manifest.get(i, {}), "instance_id": i, "_has_dataset": i in manifest} for i in order]
+    out = [{**by_cand.get(i, {}), **manifest.get(i, {}), "instance_id": i, "_has_dataset": i in manifest} for i in order]
+    golden = _load_golden()
+    pilot_ids = set(order)
+    for inst in out:  # pilot tasks that are also golden keep their benchmark and gain the golden labels
+        g = golden.get(inst["instance_id"])
+        if g:
+            inst["golden"] = _golden_labels(g)
+    out += [
+        {**g, "golden": _golden_labels(g), "benchmark": GOLDEN_BENCHMARK, "_has_dataset": True}
+        for i, g in golden.items()
+        if i not in pilot_ids
+    ]
+    return out
+
+
+def _golden_labels(g: Dict[str, Any]) -> Dict[str, Any]:
+    keys = ("golden_task_id", "domain", "subdomain", "domain_confidence", "tier", "gold_quality_score", "gate_flags")
+    return {k: g.get(k) for k in keys}
+
+
+def _load_golden() -> Dict[str, Dict[str, Any]]:
+    path = _golden_file()
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    out: Dict[str, Dict[str, Any]] = {}
+    for e in data["instances"]:
+        if _sha(e["problem_statement"]) != e["problem_statement_sha256"]:
+            raise SwebenchError(f"golden entry {e['instance_id']} was edited (problem statement hash mismatch)")
+        out[e["instance_id"]] = e
+    return out
 
 
 def is_swebench_id(task_id: str) -> bool:
@@ -130,6 +180,9 @@ def public_summary(inst: Dict[str, Any]) -> Dict[str, Any]:
     repo = inst.get("repo") or repo_of(iid)
     tier = inst.get("tier") or "medium"
     share = inst.get("share")
+    benchmark = inst.get("benchmark", BENCHMARK)
+    golden = inst.get("golden")
+    is_golden = benchmark == GOLDEN_BENCHMARK
     number = iid.rsplit("-", 1)[1]
     first_line = ""
     if inst["_has_dataset"]:
@@ -140,13 +193,15 @@ def public_summary(inst: Dict[str, Any]) -> Dict[str, Any]:
         if isinstance(share, (int, float))
         else f"Empirical-difficulty tertile: {tier}."
     )
+    if is_golden:
+        rationale = f"Golden-set calibrated tier: {tier} (patch complexity, thresholds fitted to SWE-bench annotators' labels)."
     if inst.get("difficulty"):
         rationale += f" Dataset annotators' time estimate: {inst['difficulty']}."
     return {
         "id": iid,
         "title": f"{repo} #{number}",
-        "category": CATEGORY,
-        "benchmark": BENCHMARK,
+        "category": GOLDEN_CATEGORY.get(golden["domain"], golden["domain"]) if is_golden else CATEGORY,
+        "benchmark": benchmark,
         "difficulty": tier,
         "difficulty_rationale": rationale,
         "version": "verified",
@@ -186,6 +241,7 @@ def public_summary(inst: Dict[str, Any]) -> Dict[str, Any]:
             "fail_to_pass_count": inst.get("fail_to_pass_count"),
             "pass_to_pass_count": inst.get("pass_to_pass_count"),
             "has_dataset": inst["_has_dataset"],
+            "golden": golden,
         },
     }
 

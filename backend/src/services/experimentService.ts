@@ -60,7 +60,7 @@ export class ExperimentService {
     const evalMode = input.evalMode ?? this.cfg.ACB_EVAL_MODE;
     const warnings: string[] = [];
     const benchmarks = [...new Set(taskIds.map((id) => this.repos.tasks.get(id)).filter(Boolean).map((t) => benchmarkOf(t!)))];
-    if (benchmarks.includes('swebench_verified')) {
+    if (benchmarks.includes('swebench_verified') || benchmarks.includes('golden_verified')) {
       warnings.push('SWE-bench tasks are scored by the official SWE-bench harness, which needs Docker and the swebench Python package.');
     }
     if (evalMode === 'local') {
@@ -87,7 +87,7 @@ export class ExperimentService {
     const preview = this.preview(input);
     if (preview.unknownTasks.length) throw badRequest('unknown task ids', preview.unknownTasks);
     if (preview.benchmark === 'mixed') {
-      throw badRequest('An experiment must use one benchmark: either custom tasks or SWE-bench Verified tasks, not both.');
+      throw badRequest('An experiment must use one benchmark: custom tasks, SWE-bench Verified pilot tasks or golden tasks, not a mix.');
     }
     if (preview.unvalidatedTasks.length && !input.allowUnvalidatedTasks) {
       throw unprocessable(

@@ -14,7 +14,7 @@ import {
 } from '../components/ui.tsx';
 import { api } from '../lib/api.ts';
 import { BenchmarkSwitch } from '../components/BenchmarkSwitch.tsx';
-import { BENCHMARKS, bytes, CATEGORIES, categoryLabel, dateTime, isSwebench, pct, taskBenchmark } from '../lib/format.ts';
+import { BENCHMARKS, bytes, CATEGORIES, categoriesFor, categoryLabel, dateTime, isSwebench, pct, taskBenchmark } from '../lib/format.ts';
 import { Link } from '../lib/router.tsx';
 import type { Task } from '../lib/types.ts';
 import { useAsync } from '../lib/useAsync.ts';
@@ -81,10 +81,12 @@ export function TasksView({ tasks, initialBenchmark = '' }: { tasks: Task[]; ini
           />
         }
       >
-        Two benchmarks. The <strong className="font-medium">custom suite</strong> has {counts.custom} synthetic Python tasks, three per
+        Three benchmarks. The <strong className="font-medium">custom suite</strong> has {counts.custom} synthetic Python tasks, three per
         category, scored by hidden tests that are never shown here or given to an assistant.{' '}
         <strong className="font-medium">SWE-bench Verified</strong> has {counts.swebench_verified} real GitHub issues, chosen from
-        leaderboard difficulty tertiles and scored by the official SWE-bench harness.
+        leaderboard difficulty tertiles and scored by the official SWE-bench harness.{' '}
+        <strong className="font-medium">Golden</strong> has {counts.golden_verified ?? 0} more Verified issues from the golden dataset
+        (golden/), labelled by domain (bug fix, feature, performance, refactoring) and calibrated difficulty, scored by the same harness.
       </PageHeader>
       {sweMissing && f.benchmark !== 'custom' ? (
         <div className="mb-4 rounded border border-pending/40 bg-pending-tint px-4 py-2.5 text-sm">
@@ -108,7 +110,7 @@ export function TasksView({ tasks, initialBenchmark = '' }: { tasks: Task[]; ini
           <select className={inputClass} value={f.category} onChange={(e) => setF({ ...f, category: e.target.value })}>
             <option value="">All categories</option>
             {f.benchmark !== 'swebench_verified'
-              ? CATEGORIES.map((c) => (
+              ? (f.benchmark ? categoriesFor(f.benchmark) : [...CATEGORIES, { id: 'performance', label: 'Performance' }]).map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.label}
                   </option>
@@ -401,7 +403,8 @@ export function SwebenchTaskDetail({ t }: { t: Task }) {
         crumbs={[{ label: 'Benchmark tasks', to: '/tasks' }, { label: t.id }]}
         actions={<ValidationBadge status={t.validationStatus} />}
       >
-        SWE-bench Verified, {t.difficulty}. {t.metadata.difficultyRationale}
+        {taskBenchmark(t) === 'golden_verified' ? 'Golden set (SWE-bench Verified)' : 'SWE-bench Verified'}, {t.difficulty}.{' '}
+        {t.metadata.difficultyRationale}
       </PageHeader>
       {!ready ? (
         <div className="mb-6 rounded border border-pending/40 bg-pending-tint px-4 py-2.5 text-sm">
@@ -442,6 +445,18 @@ export function SwebenchTaskDetail({ t }: { t: Task }) {
         <div>
           <Section title="Task facts">
             <dl className="space-y-2 text-sm">
+              {sw?.golden ? (
+                <div>
+                  <dt className="text-ink-soft">Golden domain</dt>
+                  <dd>
+                    {sw.golden.domain.replace(/_/g, ' ')}
+                    {sw.golden.subdomain ? <span className="text-ink-faint"> / {sw.golden.subdomain.replace(/_/g, ' ')}</span> : null}
+                    {sw.golden.gold_quality_score != null ? (
+                      <div className="text-xs text-ink-faint">Reference patch QualityScore {sw.golden.gold_quality_score.toFixed(1)}</div>
+                    ) : null}
+                  </dd>
+                </div>
+              ) : null}
               <div>
                 <dt className="text-ink-soft">Repository</dt>
                 <dd className="font-mono text-xs">{sw?.repo}</dd>

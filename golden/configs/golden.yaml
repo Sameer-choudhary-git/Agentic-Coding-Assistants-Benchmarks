@@ -1,0 +1,69 @@
+# Golden dataset build configuration (AgentBench-Golden v1)
+version: "1.0.0"
+seed: 20261121
+
+paths:
+  raw: .cache/raw
+  cache: .cache
+  out: dataset
+  reports: reports
+
+# Each source is pulled from the HuggingFace parquet mirror and normalised
+# into the unified GoldenTask schema (agentbench/schema.py).
+sources:
+  swebench_verified:   {hf: princeton-nlp/SWE-bench_Verified,    split: default/test/0.parquet,   human_validated: true}
+  swebench_plusplus:   {hf: TuringEnterprises/SWE-Bench-plus-plus, split: default/test/0.parquet, human_validated: false}
+  swebench_plus:       {hf: hrtxsny/SWE-bench-plus,              split: default/train/0.parquet,  human_validated: false}
+  swebench_pro:        {hf: ScaleAI/SWE-bench_Pro,               split: default/test/0.parquet,   human_validated: true}
+  swebench_multimodal: {hf: SWE-bench/SWE-bench_Multimodal,      split: default/dev/0.parquet,    human_validated: false}
+  swebench_multilingual: {hf: SWE-bench/SWE-bench_Multilingual,  split: default/test/0.parquet,   human_validated: true}
+  swe_rebench:         {hf: nebius/SWE-rebench,                  split: default/filtered/0.parquet, human_validated: false}
+  nyu_ctf:             {hf: penfever/nyuctf-harbor,              split: default/test/0.parquet,   human_validated: true}
+
+# Target number of tasks per domain in the golden set. The sampler stratifies
+# within a domain by (language, difficulty, source) to maximise coverage.
+quotas:
+  bug_fix: 110
+  feature_implementation: 60
+  refactoring: 30
+  performance: 20
+  security_fix: 30
+  frontend_visual: 25
+  test_generation: 30
+  offensive_security_ctf: 45
+
+# Per-domain minimum counts from specific sources ("anchors"). SWE-bench Verified
+# anchors keep the golden set comparable with public leaderboard submissions.
+anchors:
+  bug_fix: {swebench_verified: 45}
+  feature_implementation: {swebench_verified: 8}
+  performance: {swebench_verified: 2}
+  test_generation: {swebench_verified: 20}
+
+# Preferred source order per domain (earlier = higher priority when the
+# stratified sampler has a choice). Human-validated sources come first.
+source_priority:
+  - swebench_verified
+  - swebench_pro
+  - swebench_multilingual
+  - swebench_plusplus
+  - swebench_plus
+  - swe_rebench
+  - swebench_multimodal
+  - nyu_ctf
+
+quality_gates:
+  min_problem_chars: 120
+  max_problem_chars: 20000
+  max_patch_changed_lines: 600
+  max_patch_files: 12
+  leak_min_line_chars: 25        # SWE-bench+ solution-leak: added line of >= N chars verbatim in issue
+  leak_min_matching_lines: 2
+  near_duplicate_jaccard: 0.80
+  rebench_max_issue_text_score: 1
+  rebench_max_test_score: 1
+  contamination_cutoff: "2024-06-01"   # tasks created before this are flagged (not dropped)
+
+code_quality:
+  fetch_workers: 16
+  max_file_bytes: 400000

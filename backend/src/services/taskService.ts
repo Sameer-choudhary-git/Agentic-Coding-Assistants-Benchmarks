@@ -16,9 +16,9 @@ export interface TaskFilter {
   benchmark?: string;
 }
 
-export const BENCHMARKS = ['custom', 'swebench_verified'] as const;
+export const BENCHMARKS = ['custom', 'swebench_verified', 'golden_verified'] as const;
 
-/** Which benchmark a task belongs to: the 18-task custom suite or SWE-bench Verified. */
+/** Which benchmark a task belongs to: the 18-task custom suite, the SWE-bench Verified pilot or the golden set. */
 export function benchmarkOf(task: Pick<TaskRecord, 'kind' | 'metadata'>): string {
   return (task.metadata.benchmark as string | undefined) ?? (task.kind === 'swebench' ? 'swebench_verified' : 'custom');
 }

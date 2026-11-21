@@ -1,0 +1,69 @@
+# Published agent runs on SWE-bench Verified (github.com/SWE-bench/experiments).
+# These provide *real* per-instance outcomes and patches, letting the golden-set
+# methodology be exercised on actual agents before running new experiments.
+#
+# kind:
+#   bash_only  - per_instance_details.json (resolved) + S3 logs/<id>/patch.diff
+#   s3_preds   - results/results.json (resolved list) + S3 all_preds.jsonl
+#
+# `family` maps each run to the assistant/architecture families discussed in the
+# paper. NOTE: these are model+scaffold research runs, NOT the commercial
+# products themselves (Copilot / Cursor / Claude Code / Codex CLI); see report §6.
+experiments_raw: https://raw.githubusercontent.com/SWE-bench/experiments/main/evaluation/verified
+submissions_s3: https://swe-bench-submissions.s3.amazonaws.com
+
+agents:
+  - id: mini-claude-opus-4.6
+    dir: 20260217_mini-v2.0.0_claude-4-6-opus
+    kind: bash_only
+    family: "Claude (Claude Code model family)"
+    scaffold: mini-SWE-agent (bash only)
+    model: claude-opus-4-6
+  - id: mini-gpt-5.1-codex
+    dir: 20251124_mini-v1.16.0_gpt-5.1-codex
+    kind: bash_only
+    family: "Codex (OpenAI codex model)"
+    scaffold: mini-SWE-agent (bash only)
+    model: gpt-5.1-codex
+  - id: mini-gemini-3-pro
+    dir: 20260226_mini-v2.0.0_gemini-3-pro-high
+    kind: bash_only
+    family: "Gemini (Jules / Gemini CLI model family)"
+    scaffold: mini-SWE-agent (bash only)
+    model: gemini-3-pro
+  - id: openhands-claude-opus-4.5
+    dir: 20251127_openhands_claude-opus-4-5
+    kind: s3_preds
+    family: "Open agent platform (OpenHands)"
+    scaffold: OpenHands CodeAct
+    model: claude-opus-4-5
+  - id: sweagent-claude-4-sonnet
+    dir: 20250522_sweagent_claude-4-sonnet-20250514
+    kind: s3_preds
+    family: "Agent-computer interface (SWE-agent)"
+    scaffold: SWE-agent
+    model: claude-sonnet-4
+  - id: amazon-q-dev-agent
+    dir: 20250405_amazon-q-developer-agent-20250405-dev
+    kind: s3_preds
+    family: "Commercial IDE/cloud agent"
+    scaffold: Amazon Q Developer Agent
+    model: undisclosed
+  - id: autocoderover-v2.1
+    dir: 20250122_autocoderover-v2.1-claude-3-5-sonnet-20241022
+    kind: s3_preds
+    family: "Program-analysis agent (AutoCodeRover)"
+    scaffold: AutoCodeRover v2.1
+    model: claude-3-5-sonnet-20241022
+  - id: agentless-1.5
+    dir: 20241202_agentless-1.5_claude-3.5-sonnet-20241022
+    kind: s3_preds
+    family: "Agentless pipeline"
+    scaffold: Agentless 1.5
+    model: claude-3-5-sonnet-20241022
+  - id: google-jules-gemini-2.0
+    dir: 20241212_google_jules_gemini_2.0_flash_experimental
+    kind: s3_preds
+    family: "Commercial async agent (Jules)"
+    scaffold: Google Jules
+    model: gemini-2.0-flash-exp

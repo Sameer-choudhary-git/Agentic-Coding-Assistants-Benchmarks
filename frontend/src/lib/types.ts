@@ -55,6 +55,18 @@ export interface SwebenchMeta {
   fail_to_pass_count: number | null;
   pass_to_pass_count: number | null;
   has_dataset: boolean;
+  /** Golden-dataset labels, present when the instance is in the golden set. */
+  golden?: GoldenLabels | null;
+}
+
+export interface GoldenLabels {
+  golden_task_id: string;
+  domain: string;
+  subdomain: string | null;
+  domain_confidence: number | null;
+  tier: string;
+  gold_quality_score: number | null;
+  gate_flags: string[];
 }
 
 export interface Assistant {

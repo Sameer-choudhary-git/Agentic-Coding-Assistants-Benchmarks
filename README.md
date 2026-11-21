@@ -15,11 +15,15 @@ Dr. Pawan Singh Mehra).
 
 
 
-## Two benchmarks: custom suite and SWE-bench Verified
+## Benchmarks: custom suite, SWE-bench Verified pilot and Golden
 
-The app runs two benchmarks side by side; every page has a benchmark switch and they are never pooled.
+The app runs three benchmarks side by side; every page has a benchmark switch and they are never pooled.
 
 - **Custom suite**: 18 synthetic Python tasks (6 categories), scored by this project's evaluator. Works out of the box.
+- **Golden**: 67 SWE-bench Verified issues from the golden dataset (`golden/`), labelled by domain (bug fix, feature,
+  performance, refactoring) and calibrated difficulty. The issue text ships with the repo, so no download is needed.
+  Scored by the same harness as the pilot (Docker setup below). The other 2 golden Verified issues are already pilot
+  tasks; they stay in the pilot and show their golden domain.
 - **SWE-bench Verified**: 12 real GitHub issues, scored by the official SWE-bench harness in Docker. One-time setup:
 
 ```
@@ -43,6 +47,32 @@ The app picks the dataset name that matches the installed harness: `SWE-bench/SW
 swebench 5.x (prebuilt Docker images, faster) and `princeton-nlp/SWE-bench_Verified` for older versions.
 
 How runs are evaluated and turned into scores, plus all key links: `docs/scoring-and-key-links.md`.
+
+## Golden dataset (`golden/`)
+
+A 350-task, 8-domain golden dataset built from SWE-bench Verified, SWE-bench+, SWE-Bench++, SWE-bench Pro,
+Multimodal, Multilingual, SWE-rebench and NYU CTF Bench (the EnIGMA benchmark). It comes with automatic quality
+gates (solution leakage, weak tests, duplicates), calibrated difficulty, a code-quality module (complexity,
+maintainability, lint, bandit, stray files, patch size) and a per-task analysis of 9 published agents.
+
+| What | Where |
+|---|---|
+| Dataset (JSONL, Parquet, per-domain splits) | `golden/dataset/golden_v1.0.0.*`, `golden/dataset/by_domain/` |
+| Datasheet and build manifest | `golden/dataset/DATASHEET.md`, `golden/dataset/manifest.json` |
+| Human review sheet | `golden/dataset/review_sheet.csv` |
+| Tasks this app runs (Golden benchmark) | `golden/dataset/app_swebench_verified.json` |
+| Results, figures, research write-up | `golden/reports/RESULTS.md`, `golden/reports/figures/`, `golden/reports/RESEARCH_REPORT.md` |
+
+```
+cd golden
+pip install -r requirements.txt
+python -m agentbench export-app            # rewrite the app's task file from the dataset (offline)
+python -m agentbench build --reuse-pool    # re-sample from the cached pool (offline if golden/.cache exists)
+python -m agentbench all                   # full rebuild: download, gate, sample, evaluate, report (slow)
+python -m pytest -q tests
+```
+
+Details: `golden/README.md`. `.github/workflows/golden-refresh.yml` rebuilds the dataset weekly and opens a PR.
 
 ## Research paper (IEEE outline)
 
@@ -396,6 +426,8 @@ agentic-coding-benchmark/
   frontend/           React UI (pages, components, lib) + tests
   evaluator/          Python evaluator CLI, sandbox runner, static analysis, validation
   benchmark_tasks/    18 tasks in 6 category folders + _validation/
+  golden/             golden dataset pipeline, dataset, code-quality module, published-agent analysis
+  swebench_pilot/     12-issue SWE-bench Verified pilot (candidates, manifest, pilot.py)
   analysis/           analyze.py (descriptive + exploratory inferential statistics)
   schemas/            JSON Schemas for task.json and evaluator reports
   scripts/            setup, dev, cross-platform Python launcher

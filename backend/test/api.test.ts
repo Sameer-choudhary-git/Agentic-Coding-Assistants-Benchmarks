@@ -24,7 +24,8 @@ describe('API integration', () => {
     assert.equal(r.body.status, 'ok');
     assert.equal(r.body.benchmarks.custom, 18);
     assert.equal(r.body.benchmarks.swebench_verified, 12);
-    assert.equal(r.body.tasks, 30);
+    assert.equal(r.body.benchmarks.golden_verified, 67);
+    assert.equal(r.body.tasks, 97);
     assert.equal(r.body.database.schemaVersion, 1);
   });
 

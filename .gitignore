@@ -27,3 +27,5 @@ venv/
 # Python generated files
 __pycache__/
 *.py[cod]
+# golden dataset download cache (re-creatable)
+golden/.cache/

@@ -3,7 +3,7 @@ import { CountBars, RangeChart, SuccessChart } from '../components/charts.tsx';
 import { EmptyState, ErrorBox, Info, inputClass, Loading, PageHeader, Section, Table } from '../components/ui.tsx';
 import { api } from '../lib/api.ts';
 import { BenchmarkSwitch } from '../components/BenchmarkSwitch.tsx';
-import { ASSISTANTS, assistantName, CATEGORIES, categoryLabel, duration, num, pct } from '../lib/format.ts';
+import { ASSISTANTS, assistantName, categoriesFor, categoryLabel, duration, num, pct } from '../lib/format.ts';
 import { Link } from '../lib/router.tsx';
 import type { Experiment, Summary } from '../lib/types.ts';
 import { useAsync } from '../lib/useAsync.ts';
@@ -51,7 +51,9 @@ export function ResultsView({ summary: s, records }: { summary: Summary; records
         aside={
           s.scope.benchmark === 'swebench_verified'
             ? 'SWE-bench pilot: one category; see the per-run table for each issue'
-            : 'Exploratory: each cell has at most 3 tasks × attempts'
+            : s.scope.benchmark === 'golden_verified'
+              ? 'Golden set: categories are the dataset domains; bug fixing dominates, so read small cells with care'
+              : 'Exploratory: each cell has at most 3 tasks × attempts'
         }
       >
         <Table caption="Success by category and assistant">
@@ -66,7 +68,7 @@ export function ResultsView({ summary: s, records }: { summary: Summary; records
             </tr>
           </thead>
           <tbody className="tabular">
-            {CATEGORIES.map((c) => (
+            {categoriesFor(s.scope.benchmark).map((c) => (
               <tr key={c.id}>
                 <td>{c.label}</td>
                 {ASSISTANTS.map((x) => {

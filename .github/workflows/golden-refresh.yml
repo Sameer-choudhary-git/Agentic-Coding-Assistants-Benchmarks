@@ -1,0 +1,52 @@
+# Weekly automated refresh: re-pull upstream benchmarks, rebuild the golden set,
+# re-evaluate published agent runs, regenerate the report, and open a PR if the
+# dataset or results changed. Upstream drift (new SWE-rebench tasks, leaderboard
+# submissions) is therefore picked up without manual work.
+name: golden-refresh
+on:
+  schedule:
+    - cron: "0 3 * * 1"   # Mondays 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: golden
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12", cache: pip, cache-dependency-path: golden/requirements.txt}
+      - run: pip install -r requirements.txt
+      - name: Restore file cache
+        uses: actions/cache@v4
+        with:
+          path: golden/.cache/files
+          key: gh-files-${{ github.run_id }}
+          restore-keys: gh-files-
+      - name: Build, evaluate, report
+        run: python -m agentbench all
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-${{ github.run_id }}
+          path: |
+            golden/dataset/
+            golden/reports/
+      - name: Open PR with refreshed dataset
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: auto/golden-refresh
+          title: "chore: weekly golden-set refresh"
+          body: "Automated rebuild of AgentBench-Golden (see golden/reports/RESULTS.md and golden/dataset/DATASHEET.md)."
+          add-paths: |
+            golden/dataset/manifest.json
+            golden/dataset/DATASHEET.md
+            golden/reports/RESULTS.md
+            golden/reports/results.json
