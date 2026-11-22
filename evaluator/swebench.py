@@ -16,11 +16,14 @@ lists them. Their issue text and base commit come from the dataset, which ``sweb
 downloads into ``swebench_pilot/manifest.json`` (Hugging Face access needed, free). Until then the tasks
 show as "dataset missing" and cannot be put into an experiment.
 
-Golden tasks: ``golden/dataset/app_swebench_verified.json`` (written by ``python -m agentbench export-app`` in
-``golden/``) adds the golden dataset's SWE-bench Verified tasks as a third benchmark, ``golden_verified``. They
-carry their issue text, so no download is needed, and they are scored by the same harness. Their category is
-the golden domain (bug_fixing, feature_implementation, performance, refactoring, ...) and their difficulty is the
-golden set's calibrated tier. A task already in the pilot stays in the pilot and only gains the golden labels.
+Golden tasks: ``golden/dataset/app_tasks.json`` (written by ``python -m agentbench export-app`` in ``golden/``)
+adds the golden dataset's runnable tasks as a third benchmark, ``golden``: SWE-bench Verified, Multilingual and
+Multimodal tasks (scored by the official ``swebench`` harness with each task's own dataset) and SWE-bench Pro tasks
+(scored in the task's published Docker image with Pro's run scripts, see ``run_pro``). They carry their issue
+text, so no download is needed. Their category is the golden domain (bug fixing, feature implementation,
+refactoring, performance, security remediation, frontend/visual) and their difficulty is the golden set's
+calibrated tier. ``core`` marks a domain-balanced subset. A task already in the pilot stays in the pilot and only
+gains the golden labels.
 
 No AI service is called here. Scoring needs ``pip install swebench`` and a running Docker engine.
 """
@@ -46,7 +49,7 @@ from evaluator.paths import REPO_ROOT
 DATASET = "princeton-nlp/SWE-bench_Verified"
 BENCHMARK = "swebench_verified"
 CATEGORY = "swebench_verified"
-GOLDEN_BENCHMARK = "golden_verified"
+GOLDEN_BENCHMARK = "golden"
 # golden domain -> platform category (custom-suite names where one exists)
 GOLDEN_CATEGORY = {
     "bug_fix": "bug_fixing",
@@ -80,7 +83,7 @@ def _pilot_dir() -> Path:
 
 
 def _golden_file() -> Path:
-    return Path(os.environ.get("ACB_GOLDEN_APP_FILE", REPO_ROOT / "golden" / "dataset" / "app_swebench_verified.json"))
+    return Path(os.environ.get("ACB_GOLDEN_APP_FILE", REPO_ROOT / "golden" / "dataset" / "app_tasks.json"))
 
 
 def _sha(text: str) -> str:
@@ -116,7 +119,8 @@ def load_instances() -> List[Dict[str, Any]]:
 
 
 def _golden_labels(g: Dict[str, Any]) -> Dict[str, Any]:
-    keys = ("golden_task_id", "domain", "subdomain", "domain_confidence", "tier", "gold_quality_score", "gate_flags")
+    keys = ("golden_task_id", "source", "language", "core", "domain", "subdomain", "domain_confidence", "tier",
+            "gold_quality_score", "gate_flags")
     return {k: g.get(k) for k in keys}
 
 
@@ -161,12 +165,20 @@ def prompt_for(inst: Dict[str, Any]) -> str:
     )
 
 
+def dataset_of(inst: Dict[str, Any]) -> str:
+    return (inst.get("harness") or {}).get("dataset") or DATASET
+
+
+def harness_type(inst: Dict[str, Any]) -> str:
+    return (inst.get("harness") or {}).get("type") or "swebench"
+
+
 def task_hashes(inst: Dict[str, Any]) -> Dict[str, str]:
     prompt = prompt_for(inst)
     base = inst.get("base_commit") or "unknown"
     prompt_hash = _sha(prompt)
     starter_hash = _sha(f"{inst.get('repo') or repo_of(inst['instance_id'])}@{base}")
-    test_hash = _sha(f"{DATASET}|{inst['instance_id']}|{inst.get('fail_to_pass_count')}|{inst.get('pass_to_pass_count')}")
+    test_hash = _sha(f"{dataset_of(inst)}|{inst['instance_id']}|{inst.get('fail_to_pass_count')}|{inst.get('pass_to_pass_count')}")
     return {
         "task_hash": _sha(f"{inst['instance_id']}|{prompt_hash}|{starter_hash}|{test_hash}"),
         "prompt_hash": prompt_hash,
@@ -199,13 +211,13 @@ def public_summary(inst: Dict[str, Any]) -> Dict[str, Any]:
         rationale += f" Dataset annotators' time estimate: {inst['difficulty']}."
     return {
         "id": iid,
-        "title": f"{repo} #{number}",
+        "title": f"{repo} #{number}" if number.isdigit() else f"{repo} ({number})",  # Pro ids end in a commit hash
         "category": GOLDEN_CATEGORY.get(golden["domain"], golden["domain"]) if is_golden else CATEGORY,
         "benchmark": benchmark,
         "difficulty": tier,
         "difficulty_rationale": rationale,
         "version": "verified",
-        "test_version": DATASET.split("/")[1],
+        "test_version": dataset_of(inst).split("/")[1],
         "kind": "swebench",
         "summary": first_line or "Real GitHub issue; text appears once the dataset is downloaded.",
         "required_behavior": [
@@ -213,7 +225,9 @@ def public_summary(inst: Dict[str, Any]) -> Dict[str, Any]:
             "Keep existing behaviour working; the repository's other tests must still pass.",
         ],
         "acceptance_criteria": [
-            "Scored by the official SWE-bench harness in Docker.",
+            "Scored in the task's SWE-bench Pro Docker image with Pro's test scripts."
+            if harness_type(inst) == "swebench_pro"
+            else "Scored by the official SWE-bench harness in Docker.",
             "Resolved only if every FAIL_TO_PASS test (made to pass by the real fix) passes and every PASS_TO_PASS test still passes.",
         ],
         "acceptance_tests": [],
@@ -231,7 +245,8 @@ def public_summary(inst: Dict[str, Any]) -> Dict[str, Any]:
             "expected_acceptance_total": inst.get("fail_to_pass_count"),
         },
         "swebench": {
-            "dataset": DATASET,
+            "dataset": dataset_of(inst),
+            "harness": harness_type(inst),
             "repo": repo,
             "base_commit": inst.get("base_commit"),
             "tier": tier,
@@ -314,13 +329,18 @@ def harness_dataset() -> str:
     return "SWE-bench/SWE-bench_Verified" if major >= 5 else DATASET
 
 
-def harness_command(preds: Path, instance_id: str, run_id: str, timeout_s: int) -> List[str]:
+def harness_command(
+    preds: Path, instance_id: str, run_id: str, timeout_s: int, dataset: Optional[str] = None, split: str = "test"
+) -> List[str]:
     override = os.environ.get("ACB_SWEBENCH_HARNESS")
     if override:  # used by tests and for custom setups (e.g. a remote runner)
         return shlex.split(override) + [str(preds), instance_id, run_id]
+    # Verified keeps the version-dependent name; Multilingual/Multimodal are only published as SWE-bench/*
+    name = harness_dataset() if not dataset or dataset == DATASET else dataset
     return [
         sys.executable, "-m", "swebench.harness.run_evaluation",
-        "--dataset_name", harness_dataset(),
+        "--dataset_name", name,
+        "--split", split,
         "--predictions_path", str(preds),
         "--instance_ids", instance_id,
         "--max_workers", "1",
@@ -329,14 +349,103 @@ def harness_command(preds: Path, instance_id: str, run_id: str, timeout_s: int) 
     ]  # fmt: skip
 
 
-def harness_available() -> Optional[str]:
-    """None when scoring can run, else the reason it cannot."""
-    if os.environ.get("ACB_SWEBENCH_HARNESS"):
+# ----------------------------------------------------------------------------------- SWE-bench Pro
+PRO_SCRIPTS_HINT = (
+    "SWE-bench Pro tasks need Pro's per-task test scripts: git clone https://github.com/scaleapi/SWE-bench_Pro-os "
+    "and set ACB_SWEBENCH_PRO_SCRIPTS to its run_scripts folder."
+)
+
+
+def _docker_cmd() -> List[str]:
+    """``docker`` unless ACB_DOCKER overrides it (tests use a stand-in)."""
+    return shlex.split(os.environ.get("ACB_DOCKER", "docker"))
+
+
+def pro_scripts_dir(inst: Dict[str, Any]) -> Optional[Path]:
+    root = os.environ.get("ACB_SWEBENCH_PRO_SCRIPTS")
+    if not root:
         return None
-    try:
-        import swebench  # noqa: F401
-    except ImportError:
-        return "the swebench package is not installed (pip install swebench)"
+    d = Path(root) / (inst.get("source_instance_id") or inst["instance_id"])
+    return d if (d / "run_script.sh").exists() and (d / "parser.py").exists() else None
+
+
+PRO_ENTRY = """set +e
+cd /app
+git reset --hard {base}
+git checkout {base}
+git apply -v /workspace/patch.diff > /workspace/apply.log 2>&1
+echo $? > /workspace/apply_status
+if [ "$(cat /workspace/apply_status)" != "0" ]; then exit 0; fi
+mkdir -p /tests
+cp /workspace/test_patch.patch /tests/test_patch.patch
+{test_setup}
+bash /workspace/run_script.sh {tests} > /workspace/stdout.log 2> /workspace/stderr.log
+python /workspace/parser.py /workspace/stdout.log /workspace/stderr.log /workspace/output.json
+"""
+
+
+def run_pro(inst: Dict[str, Any], patch: str, out_dir: Path, timeout_s: int) -> Dict[str, Any]:
+    """Score a patch the way SWE-bench Pro's evaluator does: in the task's image, reset to the base commit,
+    apply the patch, apply the hidden test patch (last line of before_repo_set_cmd), run the task's run script
+    on the selected test files and parse the output. Resolved when every FAIL_TO_PASS and PASS_TO_PASS test passes.
+    Returns a dict in the official harness's report format."""
+    h = inst["harness"]
+    scripts = pro_scripts_dir(inst)
+    if scripts is None and not os.environ.get("ACB_DOCKER"):
+        raise SwebenchError(PRO_SCRIPTS_HINT)
+    work = out_dir / "pro"
+    work.mkdir(parents=True, exist_ok=True)
+    for name in ("run_script.sh", "parser.py"):
+        src = scripts / name if scripts else None
+        (work / name).write_text(src.read_text(encoding="utf-8") if src else "", encoding="utf-8", newline="\n")
+    (work / "patch.diff").write_text(patch, encoding="utf-8", newline="\n")
+    (work / "test_patch.patch").write_text(h.get("test_patch") or "", encoding="utf-8", newline="\n")
+    setup = [ln for ln in (h.get("before_repo_set_cmd") or "").strip().splitlines() if ln.strip()]
+    entry = PRO_ENTRY.format(
+        base=inst["base_commit"], test_setup=setup[-1] if setup else "", tests=",".join(h.get("selected_test_files_to_run") or [])
+    )
+    (work / "entry.sh").write_text(entry, encoding="utf-8", newline="\n")
+    cmd = _docker_cmd() + [
+        "run", "--rm", "--platform", "linux/amd64", "-v", f"{work.resolve()}:/workspace",
+        "--entrypoint", "/bin/bash", h["docker_image"], "/workspace/entry.sh",
+    ]  # fmt: skip
+    proc = subprocess.run(cmd, cwd=out_dir, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                          timeout=timeout_s + 3600)  # fmt: skip
+    (out_dir / "harness.log").write_text((proc.stdout or "") + "\n--- stderr ---\n" + (proc.stderr or ""), encoding="utf-8")
+    status_file = work / "apply_status"
+    if not status_file.exists():
+        err = (proc.stderr or proc.stdout or "no output").strip().splitlines() or ["no output"]
+        raise SwebenchError(f"Pro container exited {proc.returncode} without running the tests. Last line: {err[-1][:400]}")
+    applied = status_file.read_text(encoding="utf-8").strip() == "0"
+    passed: set = set()
+    out_json = work / "output.json"
+    if applied and out_json.exists():
+        tests = json.loads(out_json.read_text(encoding="utf-8")).get("tests", [])
+        passed = {t["name"] for t in tests if str(t.get("status", "")).upper() == "PASSED"}
+    f2p, p2p = h.get("fail_to_pass") or [], h.get("pass_to_pass") or []
+
+    def split(names: List[str]) -> Dict[str, List[str]]:
+        return {"success": [n for n in names if n in passed], "failure": [n for n in names if n not in passed]}
+
+    status = {"FAIL_TO_PASS": split(f2p), "PASS_TO_PASS": split(p2p)}
+    resolved = applied and bool(f2p) and not status["FAIL_TO_PASS"]["failure"] and not status["PASS_TO_PASS"]["failure"]
+    return {"patch_successfully_applied": applied, "resolved": resolved, "tests_status": status}
+
+
+def harness_available(inst: Optional[Dict[str, Any]] = None) -> Optional[str]:
+    """None when scoring can run, else the reason it cannot."""
+    if inst is not None and harness_type(inst) == "swebench_pro":
+        if os.environ.get("ACB_DOCKER"):
+            return None
+        if pro_scripts_dir(inst) is None:
+            return PRO_SCRIPTS_HINT
+    elif os.environ.get("ACB_SWEBENCH_HARNESS"):
+        return None
+    else:
+        try:
+            import swebench  # noqa: F401
+        except ImportError:
+            return "the swebench package is not installed (pip install swebench)"
     if not shutil.which("docker"):
         return "Docker is not installed or not on PATH" + _docker_hint()
     try:
@@ -384,7 +493,7 @@ def evaluate(
         "error": None,
         "started_at": started.isoformat(),
         "duration_s": None,
-        "task": {"id": task_id, "kind": "swebench", "dataset": DATASET},
+        "task": {"id": task_id, "kind": "swebench", "dataset": DATASET},  # dataset updated per task below
         "run_context": run_context or {},
         "workspace": {"name": workspace.name},
         "diff": None,
@@ -406,6 +515,11 @@ def evaluate(
         inst = get_instance(task_id)
         if not inst["_has_dataset"]:
             raise SwebenchError("SWE-bench dataset not downloaded; run swebench_pilot/pilot.py select first")
+        report["benchmark"] = inst.get("benchmark", BENCHMARK)
+        report["task"]["dataset"] = dataset_of(inst)
+        pro = harness_type(inst) == "swebench_pro"
+        if pro:
+            report["environment"]["execution"] = "swebench-pro image (docker)"
         hashes = task_hashes(inst)
         report["task"].update(hashes)
         if expected_task_hash and expected_task_hash != hashes["task_hash"]:
@@ -421,37 +535,47 @@ def evaluate(
             report.update(status="completed", success=False, outcome="empty_patch")
             report["swebench"] = {"resolved": False, "patch_applied": None, "harness_run": False}
             return finish()
-        reason = harness_available()
+        reason = harness_available(inst)
         if reason:
             report["error"] = {"class": "harness_unavailable", "message": reason}
             return finish()
         model = str((run_context or {}).get("assistant_id") or "acb")
         run_id = f"acb-{(run_context or {}).get('run_id') or int(time.time())}"
-        preds = out_dir / "predictions.jsonl"
-        preds.write_text(json.dumps({"instance_id": task_id, "model_name_or_path": model, "model_patch": patch}) + "\n", encoding="utf-8")
         timeout_s = int(os.environ.get("ACB_SWEBENCH_TIMEOUT_SECONDS", "1800"))
-        proc = subprocess.run(
-            harness_command(preds, task_id, run_id, timeout_s), cwd=out_dir, capture_output=True, text=True, encoding="utf-8",
-            timeout=timeout_s + 3600,  # image builds on first use can take a long time
-        )  # fmt: skip
-        (out_dir / "harness.log").write_text((proc.stdout or "") + "\n--- stderr ---\n" + (proc.stderr or ""), encoding="utf-8")
-        found = list((out_dir / "logs" / "run_evaluation" / run_id).glob(f"*/{task_id}/report.json"))
-        if not found:
-            err = proc.stderr or proc.stdout or ""
-            lines = err.strip().splitlines() or ["no output"]
-            msg = f"harness exited {proc.returncode} without a report. Last line: {lines[-1][:400]} (full log: harness.log)."
-            if "DockerException" in err or "docker.sock" in err:
-                msg += " The harness could not reach Docker." + _docker_hint()
-            report["error"] = {"class": "harness_error", "message": msg}
-            return finish()
-        per = json.loads(found[0].read_text(encoding="utf-8"))[task_id]
+        harness_report = None
+        if pro:
+            per = run_pro(inst, patch, out_dir, timeout_s)
+            (out_dir / "pro_report.json").write_text(json.dumps(per, indent=2), encoding="utf-8")
+            harness_report = "pro_report.json"
+        else:
+            # the harness looks tasks up by their dataset id, which can differ from the app id
+            hid = inst.get("source_instance_id") or task_id
+            preds = out_dir / "predictions.jsonl"
+            preds.write_text(json.dumps({"instance_id": hid, "model_name_or_path": model, "model_patch": patch}) + "\n", encoding="utf-8")
+            h = inst.get("harness") or {}
+            proc = subprocess.run(
+                harness_command(preds, hid, run_id, timeout_s, h.get("dataset"), h.get("split") or "test"), cwd=out_dir,
+                capture_output=True, text=True, encoding="utf-8", timeout=timeout_s + 3600,  # first image builds are slow
+            )  # fmt: skip
+            (out_dir / "harness.log").write_text((proc.stdout or "") + "\n--- stderr ---\n" + (proc.stderr or ""), encoding="utf-8")
+            found = list((out_dir / "logs" / "run_evaluation" / run_id).glob(f"*/{hid}/report.json"))
+            if not found:
+                err = proc.stderr or proc.stdout or ""
+                lines = err.strip().splitlines() or ["no output"]
+                msg = f"harness exited {proc.returncode} without a report. Last line: {lines[-1][:400]} (full log: harness.log)."
+                if "DockerException" in err or "docker.sock" in err:
+                    msg += " The harness could not reach Docker." + _docker_hint()
+                report["error"] = {"class": "harness_error", "message": msg}
+                return finish()
+            per = json.loads(found[0].read_text(encoding="utf-8"))[hid]
+            harness_report = str(found[0].relative_to(out_dir))
         tests = per.get("tests_status") or {}
         report["acceptance"] = _suite(tests.get("FAIL_TO_PASS", {}))
         report["regression"] = _suite(tests.get("PASS_TO_PASS", {}))
         applied = bool(per.get("patch_successfully_applied"))
         resolved = bool(per.get("resolved"))
         report["swebench"] = {"resolved": resolved, "patch_applied": applied, "harness_run": True, "harness_run_id": run_id,
-                              "harness_report": str(found[0].relative_to(out_dir))}  # fmt: skip
+                              "harness": harness_type(inst), "harness_report": harness_report}  # fmt: skip
         if not applied:
             outcome = "patch_failed"
         elif resolved:

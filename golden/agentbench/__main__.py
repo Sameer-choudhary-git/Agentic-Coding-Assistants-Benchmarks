@@ -3,7 +3,7 @@
   build      download sources, gate, classify, sample, quality-profile, export golden set
   quality    score an arbitrary patch file against repo@commit
   evaluate   evaluate predictions / published agent results on the golden set
-  export-app write dataset/app_swebench_verified.json for the main app (no download)
+  export-app write dataset/app_tasks.json (runnable tasks + balanced core) for the main app (no download)
   report     regenerate research report tables and figures
   all        build + evaluate + report
 """
@@ -65,7 +65,7 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "export-app":
         from .app_export import export_app_tasks
         out = cfg["paths"]["out"]
-        print(export_app_tasks(f"{out}/golden_v{cfg['version']}.jsonl", out, cfg["version"]))
+        print(export_app_tasks(f"{out}/golden_v{cfg['version']}.jsonl", out, cfg["version"], cfg["seed"]))
     if a.cmd in ("report", "all"):
         from .evaluation.report import make_report
         make_report(cfg)

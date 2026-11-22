@@ -60,8 +60,16 @@ export class ExperimentService {
     const evalMode = input.evalMode ?? this.cfg.ACB_EVAL_MODE;
     const warnings: string[] = [];
     const benchmarks = [...new Set(taskIds.map((id) => this.repos.tasks.get(id)).filter(Boolean).map((t) => benchmarkOf(t!)))];
-    if (benchmarks.includes('swebench_verified') || benchmarks.includes('golden_verified')) {
+    if (benchmarks.includes('swebench_verified') || benchmarks.includes('golden')) {
       warnings.push('SWE-bench tasks are scored by the official SWE-bench harness, which needs Docker and the swebench Python package.');
+    }
+    const proTasks = taskIds.filter(
+      (id) => (this.repos.tasks.get(id)?.metadata.swebench as { harness?: string } | null | undefined)?.harness === 'swebench_pro',
+    ).length;
+    if (proTasks) {
+      warnings.push(
+        `${proTasks} SWE-bench Pro task(s) are scored in Pro's Docker images with Pro's test scripts: clone https://github.com/scaleapi/SWE-bench_Pro-os and set ACB_SWEBENCH_PRO_SCRIPTS to its run_scripts folder.`,
+      );
     }
     if (evalMode === 'local') {
       warnings.push('Local evaluation mode runs submitted code on this machine without network or filesystem isolation.');

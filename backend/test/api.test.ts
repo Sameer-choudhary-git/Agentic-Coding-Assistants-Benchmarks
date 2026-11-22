@@ -24,8 +24,8 @@ describe('API integration', () => {
     assert.equal(r.body.status, 'ok');
     assert.equal(r.body.benchmarks.custom, 18);
     assert.equal(r.body.benchmarks.swebench_verified, 12);
-    assert.equal(r.body.benchmarks.golden_verified, 67);
-    assert.equal(r.body.tasks, 97);
+    assert.equal(r.body.benchmarks.golden, 247);
+    assert.equal(r.body.tasks, 277);
     assert.equal(r.body.database.schemaVersion, 1);
   });
 
@@ -36,6 +36,8 @@ describe('API integration', () => {
     assert.equal(Object.values(r.body.summary.by_domain as Record<string, number>).reduce((a, b) => a + b, 0), 350);
     assert.ok(r.body.results.agents.length > 0);
     assert.ok(r.body.figures.includes('fig1_composition.png'));
+    assert.equal(r.body.appTasks, 249);
+    assert.deepEqual(Object.values(r.body.appCoreByDomain as Record<string, number>), [5, 5, 5, 5, 5, 5]);
     assert.equal((await api(env, 'GET', '/golden/figures/..%2Fresults.json')).status, 404);
   });
 

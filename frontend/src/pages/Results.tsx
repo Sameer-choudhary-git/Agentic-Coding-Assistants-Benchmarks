@@ -44,6 +44,38 @@ export function ResultsView({ summary: s, records }: { summary: Summary; records
             n: x.completed,
           }))}
         />
+        {s.scope.benchmark === 'golden' ? (
+          <div className="mt-4">
+            <Table caption="Raw and domain-balanced success by assistant">
+              <thead>
+                <tr>
+                  <th>Assistant</th>
+                  <th className="text-right">Raw success</th>
+                  <th className="text-right">Domain-balanced success</th>
+                  <th className="text-right">Domains with runs</th>
+                </tr>
+              </thead>
+              <tbody className="tabular">
+                {a.map((x) => (
+                  <tr key={x.assistantId}>
+                    <td>{assistantName(x.assistantId)}</td>
+                    <td className="text-right">
+                      {pct(x.successRate)} <span className="text-xs text-ink-faint">({x.successes}/{x.completed})</span>
+                    </td>
+                    <td className="text-right font-medium">{pct(x.domainBalanced?.rate)}</td>
+                    <td className="text-right">
+                      {x.domainBalanced ? `${x.domainBalanced.domains} of ${x.domainBalanced.of}` : '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <p className="mt-2 text-xs text-ink-faint">
+              Domain-balanced success is the mean of the per-domain success rates, so each domain counts equally. Use it as the headline
+              score for the golden set; it is only comparable between assistants that have runs in the same domains.
+            </p>
+          </div>
+        ) : null}
       </Section>
 
       <Section
@@ -51,8 +83,8 @@ export function ResultsView({ summary: s, records }: { summary: Summary; records
         aside={
           s.scope.benchmark === 'swebench_verified'
             ? 'SWE-bench pilot: one category; see the per-run table for each issue'
-            : s.scope.benchmark === 'golden_verified'
-              ? 'Golden set: categories are the dataset domains; bug fixing dominates, so read small cells with care'
+            : s.scope.benchmark === 'golden'
+              ? 'Golden set: categories are the dataset domains; compare domains, not just the overall rate'
               : 'Exploratory: each cell has at most 3 tasks × attempts'
         }
       >

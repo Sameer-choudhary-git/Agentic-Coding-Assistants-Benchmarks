@@ -85,8 +85,9 @@ export function TasksView({ tasks, initialBenchmark = '' }: { tasks: Task[]; ini
         category, scored by hidden tests that are never shown here or given to an assistant.{' '}
         <strong className="font-medium">SWE-bench Verified</strong> has {counts.swebench_verified} real GitHub issues, chosen from
         leaderboard difficulty tertiles and scored by the official SWE-bench harness.{' '}
-        <strong className="font-medium">Golden</strong> has {counts.golden_verified ?? 0} more Verified issues from the golden dataset
-        (golden/), labelled by domain (bug fix, feature, performance, refactoring) and calibrated difficulty, scored by the same harness.
+        <strong className="font-medium">Golden</strong> has {counts.golden ?? 0} tasks from the golden dataset (golden/) in six domains (bug
+        fix, feature, refactoring, performance, security fix, frontend/visual), from SWE-bench Verified, Multilingual, Multimodal and Pro,
+        scored by hidden tests in Docker. Tasks marked <em>core</em> form a reviewed, domain-balanced set of 5 per domain.
       </PageHeader>
       {sweMissing && f.benchmark !== 'custom' ? (
         <div className="mb-4 rounded border border-pending/40 bg-pending-tint px-4 py-2.5 text-sm">
@@ -110,7 +111,10 @@ export function TasksView({ tasks, initialBenchmark = '' }: { tasks: Task[]; ini
           <select className={inputClass} value={f.category} onChange={(e) => setF({ ...f, category: e.target.value })}>
             <option value="">All categories</option>
             {f.benchmark !== 'swebench_verified'
-              ? (f.benchmark ? categoriesFor(f.benchmark) : [...CATEGORIES, { id: 'performance', label: 'Performance' }]).map((c) => (
+              ? (f.benchmark
+                  ? categoriesFor(f.benchmark)
+                  : [...CATEGORIES, ...categoriesFor('golden').filter((g) => !CATEGORIES.some((c) => c.id === g.id))]
+                ).map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.label}
                   </option>
@@ -403,7 +407,10 @@ export function SwebenchTaskDetail({ t }: { t: Task }) {
         crumbs={[{ label: 'Benchmark tasks', to: '/tasks' }, { label: t.id }]}
         actions={<ValidationBadge status={t.validationStatus} />}
       >
-        {taskBenchmark(t) === 'golden_verified' ? 'Golden set (SWE-bench Verified)' : 'SWE-bench Verified'}, {t.difficulty}.{' '}
+        {taskBenchmark(t) === 'golden'
+          ? `Golden set (${sw?.harness === 'swebench_pro' ? 'SWE-bench Pro' : (sw?.dataset ?? '').split('/').pop()?.replace(/_/g, ' ')}${sw?.golden?.core ? ', balanced core' : ''})`
+          : 'SWE-bench Verified'}
+        , {t.difficulty}.{' '}
         {t.metadata.difficultyRationale}
       </PageHeader>
       {!ready ? (

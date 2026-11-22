@@ -51,7 +51,7 @@ export function Layout({ children }: { children: ReactNode }) {
           </ul>
         </nav>
         <p className="hidden px-5 pt-6 text-xs leading-relaxed text-ink-faint md:block">
-          Three benchmarks: an 18-task custom Python suite, a 12-issue SWE-bench Verified pilot and the golden set's Verified tasks. Results are reported per benchmark.
+          Three benchmarks: an 18-task custom Python suite, a 12-issue SWE-bench Verified pilot and the golden set's runnable tasks in six domains. Results are reported per benchmark.
         </p>
       </aside>
       <main id="main" className="min-w-0 px-4 py-6 md:px-10 md:py-8">

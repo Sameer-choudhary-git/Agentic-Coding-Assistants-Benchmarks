@@ -105,11 +105,11 @@ export const DATA_DICTIONARY: { field: keyof FlatRecord; type: string; descripti
   {
     field: 'task_category',
     type: 'enum',
-    description: 'bug_fixing | feature_implementation | security_remediation | refactoring | test_writing | repository_reasoning | swebench_verified | performance (golden tasks use their dataset domain).',
+    description: 'bug_fixing | feature_implementation | security_remediation | refactoring | test_writing | repository_reasoning | swebench_verified | performance | frontend_visual (golden tasks use their dataset domain).',
   },
   { field: 'task_difficulty', type: 'enum', description: 'easy | medium | hard (criteria in docs/experimental-protocol.md).' },
   { field: 'task_kind', type: 'enum', description: 'standard (hidden acceptance tests), test_writing (coverage + mutation checks) or swebench (official SWE-bench harness).' },
-  { field: 'task_benchmark', type: 'enum', description: 'custom (the 18-task suite), swebench_verified (pilot issues) or golden_verified (golden-dataset issues); both SWE-bench benchmarks use the official harness.' },
+  { field: 'task_benchmark', type: 'enum', description: 'custom (the 18-task suite), swebench_verified (pilot issues) or golden (golden-dataset tasks from SWE-bench Verified, Multilingual, Multimodal and Pro).' },
   { field: 'task_version', type: 'semver', description: 'Task metadata version.' },
   { field: 'test_version', type: 'semver', description: 'Hidden test-suite version.' },
   {
@@ -426,6 +426,13 @@ export class ResultsService {
         ),
       })),
     );
+    // Mean of per-domain success rates: a headline number that a large bug-fix share cannot dominate.
+    const domainBalanced = (rs: FlatRecord[]) => {
+      const rates = categories
+        .map((c) => ResultsService.aggregate(rs.filter((r) => r.task_category === c), 0).successRate)
+        .filter((v): v is number => v !== null);
+      return { rate: rates.length ? rates.reduce((x, y) => x + y, 0) / rates.length : null, domains: rates.length, of: categories.length };
+    };
     const evalModes = [...new Set(rows.filter((r) => r.eligible_for_success).map((r) => r.eval_mode))];
     return {
       scope: { ...(experimentId ? { experimentId } : { experimentId: null, experiments: experiments.length }), benchmark: benchmark ?? null },
@@ -439,16 +446,19 @@ export class ResultsService {
         plannedAttempts: planned.length,
         runsRecorded: rows.length,
       },
-      overall,
-      byAssistant,
+      overall: { ...overall, domainBalanced: domainBalanced(rows) },
+      byAssistant: byAssistant.map((x) => ({ ...x, domainBalanced: domainBalanced(rows.filter((r) => r.assistant_id === x.assistantId)) })),
       byCategory,
       byAssistantCategory,
       caveats: [
         'Success rate = successful completed effective runs / completed effective runs. Runs that never completed evaluation are excluded and reported separately.',
         ...(benchmark === 'swebench_verified'
           ? ['SWE-bench success = resolved by the official harness: every FAIL_TO_PASS and PASS_TO_PASS test passes. The 12-task sample is a pilot; report exact counts.']
-          : benchmark === 'golden_verified'
-            ? ['Golden success = resolved by the official SWE-bench harness. Categories are golden-dataset domains; non-bug-fix domains have few tasks, so report exact counts.']
+          : benchmark === 'golden'
+            ? [
+                'Golden success = resolved by hidden tests (official SWE-bench harness, or the SWE-bench Pro image for Pro tasks). Categories are golden-dataset domains.',
+                'Domain-balanced success = mean of the per-domain success rates, so every domain counts equally however many tasks it has. Report it next to the raw rate; it is defined only over domains with completed runs.',
+              ]
             : ['Category-level results are exploratory: each category has only three tasks.']),
         ...(!benchmark && new Set(rows.map((r) => r.task_benchmark)).size > 1
           ? ['These figures pool several benchmarks. Filter by benchmark before comparing.']

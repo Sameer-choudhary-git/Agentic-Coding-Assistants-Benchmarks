@@ -20,10 +20,19 @@ Dr. Pawan Singh Mehra).
 The app runs three benchmarks side by side; every page has a benchmark switch and they are never pooled.
 
 - **Custom suite**: 18 synthetic Python tasks (6 categories), scored by this project's evaluator. Works out of the box.
-- **Golden**: 67 SWE-bench Verified issues from the golden dataset (`golden/`), labelled by domain (bug fix, feature,
-  performance, refactoring) and calibrated difficulty. The issue text ships with the repo, so no download is needed.
-  Scored by the same harness as the pilot (Docker setup below). The other 2 golden Verified issues are already pilot
-  tasks; they stay in the pilot and show their golden domain.
+- **Golden**: 247 tasks from the golden dataset (`golden/`) in six domains: bug fix 113, feature implementation 52,
+  security fix 26, frontend/visual 25, refactoring 17, performance 14. They come from SWE-bench Verified, Multilingual,
+  Multimodal and Pro, and the issue text ships with the repo (no download). A reviewed **balanced core** of 5 tasks
+  per domain (30 tasks, `golden/configs/core_review.yaml`) is the default selection for a Golden experiment, and the
+  Results page reports a **domain-balanced success rate** (mean of per-domain rates) so bug fixes cannot dominate the
+  headline score.
+  Two more golden Verified issues are already pilot tasks; they stay in the pilot and show their golden domain.
+  Scoring:
+  - Verified, Multilingual and Multimodal tasks use the official SWE-bench harness (Docker setup below); each task
+    passes its own dataset name and split to it.
+  - SWE-bench Pro tasks run in the task's published Docker image with Pro's test scripts. One-time setup:
+    `git clone https://github.com/scaleapi/SWE-bench_Pro-os` and set `ACB_SWEBENCH_PRO_SCRIPTS` to its
+    `run_scripts` folder (in `.env`). Pro images are large (several GB each); pull them on first use.
 - **SWE-bench Verified**: 12 real GitHub issues, scored by the official SWE-bench harness in Docker. One-time setup:
 
 ```
@@ -60,13 +69,13 @@ maintainability, lint, bandit, stray files, patch size) and a per-task analysis 
 | Dataset (JSONL, Parquet, per-domain splits) | `golden/dataset/golden_v1.0.0.*`, `golden/dataset/by_domain/` |
 | Datasheet and build manifest | `golden/dataset/DATASHEET.md`, `golden/dataset/manifest.json` |
 | Human review sheet | `golden/dataset/review_sheet.csv` |
-| Tasks this app runs (Golden benchmark) | `golden/dataset/app_swebench_verified.json` |
+| Tasks this app runs (Golden benchmark, incl. balanced core) | `golden/dataset/app_tasks.json` |
 | Results, figures, research write-up | `golden/reports/RESULTS.md`, `golden/reports/figures/`, `golden/reports/RESEARCH_REPORT.md` |
 
 ```
 cd golden
 pip install -r requirements.txt
-python -m agentbench export-app            # rewrite the app's task file from the dataset (offline)
+python -m agentbench export-app            # rewrite the app's task file and balanced core (offline)
 python -m agentbench build --reuse-pool    # re-sample from the cached pool (offline if golden/.cache exists)
 python -m agentbench all                   # full rebuild: download, gate, sample, evaluate, report (slow)
 python -m pytest -q tests

@@ -25,9 +25,10 @@ export const GOLDEN_CATEGORIES = [
   { id: 'performance', label: 'Performance' },
   { id: 'refactoring', label: 'Refactoring' },
   { id: 'security_remediation', label: 'Security remediation' },
+  { id: 'frontend_visual', label: 'Frontend / visual' },
 ];
 export const categoriesFor = (benchmark: string | null | undefined) =>
-  benchmark === 'golden_verified' ? GOLDEN_CATEGORIES : CATEGORIES;
+  benchmark === 'golden' ? GOLDEN_CATEGORIES : CATEGORIES;
 export const categoryLabel = (id: string) =>
   id === 'swebench_verified'
     ? 'SWE-bench Verified'
@@ -38,13 +39,17 @@ export const BENCHMARKS: { id: string; label: string; blurb: string }[] = [
   { id: 'custom', label: 'Custom suite', blurb: '18 synthetic Python tasks in six categories, scored by hidden tests' },
   { id: 'swebench_verified', label: 'SWE-bench Verified', blurb: 'Real GitHub issues, scored by the official SWE-bench harness' },
   {
-    id: 'golden_verified',
+    id: 'golden',
     label: 'Golden',
-    blurb: 'Golden-dataset SWE-bench Verified tasks labelled by domain and calibrated difficulty, scored by the official SWE-bench harness',
+    blurb:
+      'Golden-dataset tasks in six domains (SWE-bench Verified, Multilingual, Multimodal and Pro), scored by hidden tests in Docker. Use the balanced core for a domain-balanced study',
   },
 ];
 /** Benchmarks whose tasks are real repositories scored by the SWE-bench harness. */
-export const isHarnessBenchmark = (id: string | null | undefined) => id === 'swebench_verified' || id === 'golden_verified';
+export const isHarnessBenchmark = (id: string | null | undefined) => id === 'swebench_verified' || id === 'golden';
+/** Golden tasks in the seeded, domain-balanced core subset. */
+export const isGoldenCore = (t: { metadata: { swebench?: { golden?: { core?: boolean } | null } | null } }) =>
+  Boolean(t.metadata.swebench?.golden?.core);
 export const benchmarkLabel = (id: string | null | undefined) => BENCHMARKS.find((b) => b.id === id)?.label ?? 'All benchmarks';
 export const taskBenchmark = (t: { kind: string; metadata: { benchmark?: string } }) =>
   t.metadata.benchmark ?? (t.kind === 'swebench' ? 'swebench_verified' : 'custom');

@@ -159,3 +159,34 @@ def test_stray_scratch_files_detected():
     assert not r["smells"].get("debug_statement")  # scratch prints are not counted twice
     assert r["penalties"]["hygiene"] >= 5
 
+
+
+def _app_entry(iid, domain, **kw):
+    e = {"instance_id": iid, "domain": domain, "subdomain": "x", "tier": "easy", "repo": "a/b", "source": "s",
+         "gate_flags": [], "domain_confidence": 0.9, "gold_quality_score": 95.0, "gold_patch_applies": True,
+         "fail_to_pass_count": 1, "pass_to_pass_count": 3, "human_validated": True}
+    e.update(kw)
+    return e
+
+
+def test_core_eligibility_rules():
+    from agentbench.app_export import core_eligible
+    assert core_eligible(_app_entry("a", "bug_fix"))[0]
+    assert core_eligible(_app_entry("a", "bug_fix", pass_to_pass_count=0))[1].startswith("no PASS_TO_PASS")
+    assert not core_eligible(_app_entry("a", "bug_fix", gate_flags=["solution_hint_partial"]))[0]
+    assert not core_eligible(_app_entry("a", "bug_fix", gold_patch_applies=False))[0]
+    assert not core_eligible(_app_entry("a", "bug_fix", domain_confidence=0.5))[0]
+
+
+def test_review_relabels_and_validates_core():
+    import pytest
+    from agentbench.app_export import apply_review
+    entries = [_app_entry("p1", "performance"), _app_entry("p2", "performance"), _app_entry("b1", "bug_fix")]
+    review = {"label_corrections": {"p2": {"to": "bug_fix", "why": "not perf"}},
+              "core": {"performance": {"p1": "ok"}, "bug_fix": {"p2": "relabelled"}}}
+    core = apply_review(entries, review, per_domain=1)
+    assert core == {"p1", "p2"} and entries[1]["domain"] == "bug_fix" and entries[1]["original_domain"] == "performance"
+    with pytest.raises(ValueError, match="listed under"):
+        apply_review([_app_entry("p1", "performance")], {"core": {"bug_fix": {"p1": ""}}}, per_domain=1)
+    with pytest.raises(ValueError, match="expected 2"):
+        apply_review([_app_entry("p1", "performance")], {"core": {"performance": {"p1": ""}}}, per_domain=2)

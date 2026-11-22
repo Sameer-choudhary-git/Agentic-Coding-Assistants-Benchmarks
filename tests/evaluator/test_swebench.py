@@ -6,6 +6,7 @@ import json
 import subprocess
 import sys
 import textwrap
+from pathlib import Path
 
 import pytest
 
@@ -161,7 +162,7 @@ def test_task_hash_mismatch_and_missing_harness(ready, monkeypatch):
     rep = swebench.evaluate(IID, ws, tmp / "h", expected_task_hash="0" * 64)
     assert rep["status"] == "error" and rep["error"]["class"] == "task_changed"
     monkeypatch.delenv("ACB_SWEBENCH_HARNESS")
-    monkeypatch.setattr(swebench, "harness_available", lambda: "Docker is not installed or not on PATH")
+    monkeypatch.setattr(swebench, "harness_available", lambda inst=None: "Docker is not installed or not on PATH")
     rep = swebench.evaluate(IID, ws, tmp / "nh")
     assert rep["status"] == "error" and rep["error"]["class"] == "harness_unavailable"
 
@@ -211,6 +212,75 @@ def test_golden_tasks_become_third_benchmark(tmp_path, monkeypatch):
     # the pilot keeps its own task and only gains the golden labels
     assert by_id[IID]["benchmark"] == "swebench_verified" and by_id[IID]["swebench"]["golden"]["domain"] == "bug_fix"
     g = by_id["acme__widgets-7"]
-    assert g["benchmark"] == "golden_verified" and g["category"] == "performance" and g["difficulty"] == "hard"
+    assert g["benchmark"] == "golden" and g["category"] == "performance" and g["difficulty"] == "hard"
     assert g["validation"]["status"] == "validated" and "something is broken" in g["prompt"]
     assert swebench.is_swebench_id("acme__widgets-7")
+
+
+FAKE_DOCKER = textwrap.dedent(
+    """
+    import json, pathlib, sys
+    args = sys.argv[1:]
+    work = pathlib.Path(args[args.index("-v") + 1].rsplit(":/workspace", 1)[0])
+    entry = (work / "entry.sh").read_text()
+    assert "git apply -v /workspace/patch.diff" in entry and "acme.test.js" in entry, entry
+    assert args[-1] == "/workspace/entry.sh" and args[-2] == "img:tag"
+    (work / "apply_status").write_text("0")
+    fixed = "w * h" in (work / "patch.diff").read_text()
+    tests = [{"name": "t | area multiplies", "status": "PASSED" if fixed else "FAILED"},
+             {"name": "t | still works", "status": "PASSED"}]
+    (work / "output.json").write_text(json.dumps({"tests": tests}))
+    """
+)
+
+
+def test_pro_task_scored_in_its_image(tmp_path, monkeypatch, upstream):
+    repo, base = upstream
+    monkeypatch.setenv("ACB_SWEBENCH_DIR", str(write_pilot(tmp_path, with_manifest=False)))
+    monkeypatch.setenv("ACB_SWEBENCH_CLONE_URL", str(repo))
+    ps = "Area should multiply. ## Requirements\n- area(w, h) returns w * h"
+    long_id = "instance_acme__widgets-" + "a" * 40 + "-v" + "b" * 40
+    pro = {"instance_id": "acme__widgets-aaaaaaaaaa", "source_instance_id": long_id, "source": "swebench_pro",
+           "repo": "acme/widgets", "base_commit": base, "tier": "medium", "domain": "refactoring", "core": True,
+           "fail_to_pass_count": 1, "pass_to_pass_count": 1, "problem_statement": ps,
+           "problem_statement_sha256": hashlib.sha256(ps.encode()).hexdigest(),
+           "harness": {"type": "swebench_pro", "dataset": "ScaleAI/SWE-bench_Pro", "docker_image": "img:tag",
+                       "before_repo_set_cmd": "git reset --hard x\ngit apply /tests/test_patch.patch",
+                       "selected_test_files_to_run": ["acme.test.js"], "fail_to_pass": ["t | area multiplies"],
+                       "pass_to_pass": ["t | still works"], "test_patch": "diff --git a/t b/t\n"}}
+    gf = tmp_path / "golden.json"
+    gf.write_text(json.dumps({"instances": [pro]}))
+    monkeypatch.setenv("ACB_GOLDEN_APP_FILE", str(gf))
+    fake = tmp_path / "fake_docker.py"
+    fake.write_text(FAKE_DOCKER)
+    monkeypatch.setenv("ACB_DOCKER", f'"{sys.executable}" "{fake}"')
+
+    [s] = [x for x in swebench.list_summaries() if x["benchmark"] == "golden"]
+    assert s["category"] == "refactoring" and s["swebench"]["harness"] == "swebench_pro"
+    assert s["swebench"]["golden"]["core"] is True and "Pro Docker image" in s["acceptance_criteria"][0]
+
+    ws = swebench.create_workspace(pro["instance_id"], tmp_path / "ws")
+    rep = swebench.evaluate(pro["instance_id"], ws, tmp_path / "unresolved")
+    assert rep["status"] == "completed" and rep["success"] is False and rep["outcome"] == "empty_patch"
+    (ws / "widgets.py").write_text("def area(w, h):\n    return w * h\n")
+    rep = swebench.evaluate(pro["instance_id"], ws, tmp_path / "out")
+    assert rep["success"] is True and rep["outcome"] == "passed" and rep["benchmark"] == "golden"
+    assert rep["task"]["dataset"] == "ScaleAI/SWE-bench_Pro" and rep["swebench"]["harness"] == "swebench_pro"
+    assert rep["acceptance"]["passed"] == 1 and rep["regression"]["passed"] == 1
+    (ws / "widgets.py").write_text("def area(w, h):\n    return w - h\n")
+    rep = swebench.evaluate(pro["instance_id"], ws, tmp_path / "bad")
+    assert rep["success"] is False and rep["outcome"] == "acceptance_failed"
+
+
+def test_pro_task_without_scripts_explains_setup(monkeypatch):
+    monkeypatch.delenv("ACB_DOCKER", raising=False)
+    monkeypatch.delenv("ACB_SWEBENCH_PRO_SCRIPTS", raising=False)
+    inst = {"instance_id": "x__y-1", "harness": {"type": "swebench_pro"}}
+    assert "SWE-bench_Pro-os" in swebench.harness_available(inst)
+
+
+def test_harness_command_uses_each_tasks_dataset(monkeypatch):
+    monkeypatch.delenv("ACB_SWEBENCH_HARNESS", raising=False)
+    cmd = swebench.harness_command(Path("p.jsonl"), "a__b-1", "r", 60, "SWE-bench/SWE-bench_Multimodal", "dev")
+    assert cmd[cmd.index("--dataset_name") + 1] == "SWE-bench/SWE-bench_Multimodal"
+    assert cmd[cmd.index("--split") + 1] == "dev"

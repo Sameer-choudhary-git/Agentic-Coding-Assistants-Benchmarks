@@ -23,7 +23,11 @@ export class GoldenService {
   overview() {
     const manifest = this.readJson('dataset/manifest.json') as Record<string, unknown> | null;
     if (!manifest) throw notFound('golden dataset (golden/dataset/manifest.json)');
-    const app = this.readJson('dataset/app_swebench_verified.json') as { instances?: unknown[] } | null;
+    const app = this.readJson('dataset/app_tasks.json') as {
+      instances?: { domain: string; source: string; core?: boolean }[];
+    } | null;
+    const count = (xs: { domain: string }[]) => xs.reduce<Record<string, number>>((m, x) => ({ ...m, [x.domain]: (m[x.domain] ?? 0) + 1 }), {});
+    const appInstances = app?.instances ?? [];
     const figDir = path.join(this.root, 'reports', 'figures');
     const figures = fs.existsSync(figDir) ? fs.readdirSync(figDir).filter((f) => FIGURE.test(f)).sort() : [];
     return {
@@ -35,7 +39,10 @@ export class GoldenService {
       summary: manifest.summary,
       gateStats: manifest.gate_stats,
       difficultyCalibration: manifest.difficulty_calibration,
-      appTasks: app?.instances?.length ?? 0,
+      appTasks: appInstances.length,
+      appByDomain: count(appInstances),
+      appCoreByDomain: count(appInstances.filter((x) => x.core)),
+      appBySource: appInstances.reduce<Record<string, number>>((m, x) => ({ ...m, [x.source]: (m[x.source] ?? 0) + 1 }), {}),
       results: this.readJson('reports/results.json'),
       figures,
     };

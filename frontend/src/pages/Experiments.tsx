@@ -24,6 +24,7 @@ import {
   categoriesFor,
   dateTime,
   FAILURE_CLASS_LABEL,
+  isGoldenCore,
   isHarnessBenchmark,
   plannedAttemptCount,
   STATUS_LABEL,
@@ -64,7 +65,7 @@ export function Experiments() {
       ) : state.data.experiments.length === 0 ? (
         <EmptyState title="No experiments yet">
           Create one to generate the planned attempt matrix. Custom suite: 18 tasks × 4 assistants × 2 attempts = 144 attempts. SWE-bench
-          Verified pilot: 12 tasks × 4 assistants × 1 attempt = 48 attempts. Golden set: up to 67 tasks × 4 assistants × 1 attempt.
+          Verified pilot: 12 tasks × 4 assistants × 1 attempt = 48 attempts. Golden balanced core: 30 reviewed tasks (5 per domain) × 4 assistants × 1 attempt = 120 attempts.
           Each experiment uses one benchmark.
         </EmptyState>
       ) : (
@@ -172,9 +173,11 @@ export function NewExperiment() {
   const counts = Object.fromEntries(BENCHMARKS.map((b) => [b.id, tasks.data!.tasks.filter((t) => taskBenchmark(t) === b.id).length]));
   const chooseBenchmark = (b: string) => {
     setBenchmark(b);
-    setTaskIds(tasks.data!.tasks.filter((t) => taskBenchmark(t) === b).map((t) => t.id));
+    // Golden starts from the domain-balanced core, so a default study is not dominated by bug fixes.
+    const inBench = tasks.data!.tasks.filter((t) => taskBenchmark(t) === b);
+    setTaskIds((b === 'golden' ? inBench.filter(isGoldenCore) : inBench).map((t) => t.id));
     setAttempts(isHarnessBenchmark(b) ? 1 : 2);
-    setName(b === 'swebench_verified' ? 'SWE-bench Verified pilot' : b === 'golden_verified' ? 'Golden set study' : 'Full study');
+    setName(b === 'swebench_verified' ? 'SWE-bench Verified pilot' : b === 'golden' ? 'Golden balanced core' : 'Full study');
   };
   const groups =
     benchmark === 'swebench_verified'
@@ -221,6 +224,15 @@ export function NewExperiment() {
                 Tasks ({input.taskIds.length} of {all.length})
               </span>
               <span className="flex gap-2">
+                {benchmark === 'golden' ? (
+                  <button
+                    type="button"
+                    className="text-action hover:underline"
+                    onClick={() => setTaskIds(all.filter(isGoldenCore).map((t) => t.id))}
+                  >
+                    Balanced core ({all.filter(isGoldenCore).length})
+                  </button>
+                ) : null}
                 <button type="button" className="text-action hover:underline" onClick={() => setTaskIds(all.map((t) => t.id))}>
                   Select all
                 </button>
@@ -243,6 +255,7 @@ export function NewExperiment() {
                       />
                       <span>
                         <span className="font-mono text-xs">{t.id}</span> {t.title}
+                        {isGoldenCore(t) ? <span className="ml-1 rounded bg-action/10 px-1 text-xs text-action">core</span> : null}
                         {t.validationStatus !== 'validated' ? (
                           <span className="ml-1 text-xs text-fail">({t.validationStatus.replace(/_/g, ' ')})</span>
                         ) : null}

@@ -61,9 +61,49 @@ export function GoldenView({ g }: { g: GoldenOverview }) {
             note={`${s.pool_admitted.toLocaleString('en-US')} passed the quality gates`}
           />
           <Stat label="Repositories" value={s.repos ?? '—'} note={`${Object.keys(s.by_language).length} languages`} />
-          <Stat label="Runnable in this app" value={g.appTasks} note="Verified tasks (Golden + pilot overlap)" />
+          <Stat
+            label="Runnable in this app"
+            value={g.appTasks}
+            note={`${Object.keys(g.appByDomain).length} domains; balanced core ${Object.values(g.appCoreByDomain).reduce((x, y) => x + y, 0)}`}
+          />
           <Stat label="Reference-fix quality" value={num(s.gold_quality_mean ?? null)} note="mean QualityScore, 0–100" />
         </dl>
+      </Section>
+
+      <Section title="Runnable in this app" aside="Golden tasks the app can score with hidden tests in Docker">
+        <Table caption="Runnable golden tasks by domain">
+          <thead>
+            <tr>
+              <th scope="col">Domain</th>
+              <th scope="col" className="text-right">
+                Runnable tasks
+              </th>
+              <th scope="col" className="text-right">
+                Balanced core
+              </th>
+            </tr>
+          </thead>
+          <tbody className="tabular">
+            {sorted(g.appByDomain).map(([dom, n]) => (
+              <tr key={dom}>
+                <th scope="row" className="font-normal text-ink">
+                  {DOMAIN_LABEL[dom] ?? dom}
+                </th>
+                <td className="text-right">{n}</td>
+                <td className="text-right font-medium">{g.appCoreByDomain[dom] ?? 0}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <p className="mt-2 text-xs text-ink-faint">
+          Sources:{' '}
+          {sorted(g.appBySource)
+            .map(([src, n]) => `${SOURCE_LABEL[src] ?? src} ${n}`)
+            .join(', ')}
+          . The balanced core (seeded, spread over difficulty, source and repository) is the default selection for a Golden experiment, and
+          Results reports a domain-balanced success rate so bug fixes cannot dominate the headline score. CTF and test-generation tasks
+          need other judges and are not run in the app.
+        </p>
       </Section>
 
       <Section title="Tasks by domain and difficulty" aside="Difficulty is calibrated on patch complexity">

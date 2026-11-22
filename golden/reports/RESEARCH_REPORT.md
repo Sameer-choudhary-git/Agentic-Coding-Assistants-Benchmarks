@@ -131,6 +131,62 @@ Languages: Python 128, JavaScript 67, Go 47, Java 14, Rust 14, TypeScript 11, Ru
 PHP 7, C++ 6. CTF tasks use binary, web and mixed environments. Gold patches score a mean
 QualityScore of **96.9**, which is the human baseline for agent comparison.
 
+### 2.7 Runnable subset and balanced core (for running the four assistants)
+
+The tool study runs assistants on tasks that can be scored by hidden tests in Docker. The app
+(`golden/dataset/app_tasks.json`, written by `python -m agentbench export-app`) therefore uses the
+golden FAIL_TO_PASS tasks from sources with an executable harness:
+
+| Domain | Runnable (after review) | Reviewed core | Core sources |
+|---|---:|---:|---|
+| bug_fix | 115 | 5 | Pro 2, Multilingual 2, Verified 1 |
+| feature_implementation | 52 | 5 | Multilingual 2, Verified 2, Pro 1 |
+| security_fix | 26 | 5 | Pro 4, Multilingual 1 |
+| frontend_visual | 25 | 5 | Multimodal 5 |
+| refactoring | 17 | 5 | Pro 5 |
+| performance | 14 | 5 | Pro 4, Verified 1 |
+| **Total** | **249** | **30** | 19 repositories, 7 languages |
+
+Verified, Multilingual and Multimodal tasks are scored by the official `swebench` harness. SWE-bench
+Pro tasks are scored in their published images with Pro's run scripts, following Pro's evaluator:
+reset to the base commit, apply the patch, apply the hidden test patch, run the selected test files,
+and count the task resolved only if every FAIL_TO_PASS and PASS_TO_PASS test passes. CTF (flag match)
+and test-generation tasks need separate judges and are reported from the dataset only.
+
+**Why a balanced core.** Running all 249 tasks would weight the result by the source mix (46% bug
+fixes), and SWE-bench Verified alone is about 96% bug fixes (§4.3). The core has 5 tasks per domain
+(30 tasks; 9 easy, 8 medium, 13 hard; 16 Pro, 5 Multilingual, 5 Multimodal, 4 Verified).
+
+**How the core was selected** (`configs/core_review.yaml`, applied by `export-app`):
+
+1. *Automatic eligibility* (`core_eligible`), stricter than the dataset gates because each core task
+   carries 1/30 of the score: no solution-hint or weak-test flag; domain confidence of at least 0.7;
+   the reference fix scores at least 80 and applies cleanly to the base commit (checked by the
+   code-quality module); at least one FAIL_TO_PASS **and** one PASS_TO_PASS test, so an agent that
+   breaks other behaviour fails. This leaves 154 of 249 tasks. The PASS_TO_PASS rule removes 66
+   tasks, because SWE-bench Pro ships no regression tests for 313 of its 642 instances.
+2. *Manual label review* of all 64 eligible candidates in performance, refactoring, security_fix and
+   feature_implementation, plus the bug_fix and frontend_visual picks.
+3. *Selection* of five confirmed tasks per domain, spread over difficulty, source, repository and
+   language where the confirmed pool allows. Performance has no confirmed medium-difficulty task
+   with regression tests, so it has one easy and four hard tasks.
+
+**Label audit finding.** Of the 64 reviewed candidates, **20 (31%) had the wrong domain**. The
+errors were concentrated in labels derived from SWE-bench Pro's issue categories: 5 of 9
+"performance" and 11 of 19 "refactoring" candidates describe ordinary bugs or features. Security
+had 2 of 11 wrong and features 2 of 25. The corrections are applied to the app's tasks. Domain
+labels for the remaining (unreviewed) golden tasks should be treated as provisional, and the review
+should be confirmed by a second, human annotator (report agreement, e.g. Cohen's κ).
+
+**Headline metric.** Report the **domain-balanced success rate**, the unweighted mean of the
+per-domain success rates, next to the raw rate and the per-domain table. Each domain then counts
+equally. Precision is limited. At n=5 a per-domain rate has a Wilson 95% CI of about ±33 points,
+so per-domain differences between tools are descriptive only. The balanced mean over 30 tasks has
+a CI of about ±17 points. Because every tool solves the same tasks, compare tools with paired tests
+(McNemar or a paired bootstrap over tasks). These are much more sensitive than comparing two
+independent intervals. Run more attempts per task, or more core tasks, if differences under about
+15 points matter.
+
 ## 3. Code Quality Module (paper §V: post-merge quality; §VI: technical debt)
 
 For a patch at `repo@base_commit`, the module fetches only the touched files, applies the
@@ -276,9 +332,11 @@ Findings:
   background agent, Claude Code (headless `claude -p`) and Codex CLI on the golden set. Export
   each tool's diffs as SWE-bench-format predictions and score them with
   `evaluate --predictions --run-harness`. The pipeline needs no other changes.
-* **Execution coverage.** In this study outcomes came from published harness results.
-  Running Pro, SWE-Bench++, CTF and test-generation tasks requires their own Docker harnesses.
-  The adapters and judges are implemented (`harness.py`) but were not run here.
+* **Execution coverage.** The published-agent outcomes in §4 come from published harness results
+  on Verified. The app scores Verified, Multilingual, Multimodal and Pro tasks (§2.7); the Pro scorer
+  follows Pro's evaluator and has been tested end to end with a stand-in container, but should be
+  checked on one real Pro task before the full study. SWE-Bench++, SWE-rebench, CTF and
+  test-generation tasks need their own judges and are not run in the app.
 * **Domain labels** for non-curated sources are heuristic, with confidence of at least 0.5
   required. Human adjudication through `review_sheet.csv` is recommended before publication.
 * **Quality-module scope.** Lint and security analysis is deepest for Python. Other languages

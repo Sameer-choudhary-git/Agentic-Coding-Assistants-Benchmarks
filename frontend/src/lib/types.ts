@@ -55,6 +55,8 @@ export interface SwebenchMeta {
   fail_to_pass_count: number | null;
   pass_to_pass_count: number | null;
   has_dataset: boolean;
+  /** 'swebench' (official harness) or 'swebench_pro' (Pro image and run scripts). */
+  harness?: string;
   /** Golden-dataset labels, present when the instance is in the golden set. */
   golden?: GoldenLabels | null;
 }
@@ -67,6 +69,9 @@ export interface GoldenLabels {
   tier: string;
   gold_quality_score: number | null;
   gate_flags: string[];
+  source?: string;
+  language?: string | null;
+  core?: boolean;
 }
 
 export interface Assistant {
@@ -272,8 +277,8 @@ export interface Summary {
   hasData: boolean;
   generatedAt: string;
   totals: { tasks: number; validatedTasks: number; assistants: number; experiments: number; plannedAttempts: number; runsRecorded: number };
-  overall: Aggregate;
-  byAssistant: (Aggregate & { assistantId: string; name: string })[];
+  overall: Aggregate & { domainBalanced?: DomainBalanced };
+  byAssistant: (Aggregate & { assistantId: string; name: string; domainBalanced?: DomainBalanced })[];
   byCategory: (Aggregate & { category: string })[];
   byAssistantCategory: (Aggregate & { assistantId: string; category: string; exploratory: boolean })[];
   caveats: string[];
@@ -361,6 +366,13 @@ export interface GoldenResults {
   top2_diff: { a: string; b: string; diff: number; lo: number; hi: number } | null;
 }
 
+/** Mean of per-domain success rates over the domains that have completed runs. */
+export interface DomainBalanced {
+  rate: number | null;
+  domains: number;
+  of: number;
+}
+
 export interface GoldenOverview {
   name: string;
   version: string;
@@ -381,6 +393,9 @@ export interface GoldenOverview {
   gateStats: Record<string, Record<string, number>>;
   difficultyCalibration: { n: number; balanced_accuracy: number; spearman_rho: number; within_one: number } | null;
   appTasks: number;
+  appByDomain: Record<string, number>;
+  appCoreByDomain: Record<string, number>;
+  appBySource: Record<string, number>;
   results: GoldenResults | null;
   figures: string[];
 }

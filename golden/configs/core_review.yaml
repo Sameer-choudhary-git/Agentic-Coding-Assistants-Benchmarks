@@ -1,0 +1,82 @@
+# Reviewed balanced core for the tool study (read by `python -m agentbench export-app`).
+#
+# How it was made:
+#   1. Automatic eligibility (agentbench/app_export.py: core_eligible): no solution-hint or weak-test flag,
+#      domain confidence >= 0.7, reference-fix QualityScore >= 80 and the reference fix applies to the base
+#      commit, at least one FAIL_TO_PASS and one PASS_TO_PASS test.
+#   2. Manual review of every eligible candidate's issue text in performance, refactoring, security_fix and
+#      feature_implementation, and of the bug_fix / frontend_visual picks: is the task really of that
+#      domain? Wrong labels are corrected below (label_corrections), which also changes the domain the app
+#      shows and scores for that task.
+#   3. Five confirmed tasks per domain, spread over difficulty, source, repository and language where the
+#      confirmed pool allows it (performance has no confirmed medium task with regression tests).
+#
+# The review was done by the AI assistant that built the dataset (2026-11-22). Before publication, a
+# second human reviewer should confirm each entry (agreement can be reported as a kappa).
+reviewer: "AI-assisted review, pending human confirmation"
+reviewed_on: 2026-11-22
+
+# Candidates whose automatic label was wrong (instance ids as in dataset/app_tasks.json).
+label_corrections:
+  # performance -> other: no runtime/memory problem in the issue
+  protonmail__webclients-fc9d535e9b: {to: bug_fix, why: "folder reordering logic, no performance aspect"}
+  qutebrowser__qutebrowser-77c3557995: {to: bug_fix, why: "inconsistent config value representation"}
+  qutebrowser__qutebrowser-9ed748effa: {to: bug_fix, why: "unclear error feedback for invalid input"}
+  protonmail__webclients-863d524b57: {to: feature_implementation, why: "poll events after adding a payment method"}
+  NodeBB__NodeBB-bad1564301: {to: feature_implementation, why: "API accepts an array of slugs"}
+  # refactoring -> other: the issue reports wrong behaviour, not structure
+  element-hq__element-web-dae13ac852: {to: bug_fix, why: "unread indicators wrong for threads"}
+  qutebrowser__qutebrowser-0b621cb0ce: {to: bug_fix, why: "error message omits the command"}
+  qutebrowser__qutebrowser-479aa075ac: {to: bug_fix, why: "version detection fails on Qt 6.4+ binaries"}
+  NodeBB__NodeBB-9c576a0758: {to: bug_fix, why: "email confirmation expiry/resend broken"}
+  gravitational__teleport-dd3977957a: {to: bug_fix, why: "certificate missing loopback principals"}
+  ansible__ansible-164881d871: {to: bug_fix, why: "wrap_var does not mark bytes unsafe"}
+  internetarchive__openlibrary-00bec1e7c8: {to: bug_fix, why: "import API wrongly rejects records"}
+  internetarchive__openlibrary-c12943be1d: {to: bug_fix, why: "LCCNs handled inconsistently"}
+  sympy__sympy-13647: {to: bug_fix, why: "Matrix.col_insert returns wrong result"}
+  element-hq__element-web-f3534b42df: {to: feature_implementation, why: "new combined membership-change message"}
+  NodeBB__NodeBB-767973717b: {to: performance, why: "bulk increments to avoid per-field, per-object round trips"}
+  # security_fix -> other
+  NodeBB__NodeBB-84dfda59e6: {to: bug_fix, why: "orphaned uploads after purge, no security impact stated"}
+  element-hq__element-web-a692fe2181: {to: feature_implementation, why: "new config option to disable encryption"}
+  # feature_implementation -> bug_fix
+  php-cs-fixer__php-cs-fixer-8075: {to: bug_fix, why: "fixer misses repeated groups"}
+  pydata__xarray-6744: {to: bug_fix, why: "center kwarg ignored when iterating"}
+
+core:
+  bug_fix:
+    element-hq__element-web-ce554276db: "pre-recording view does not validate the Go live control (Pro, JS, easy)"
+    faker-ruby__faker-2970: "generates invalid email addresses (Multilingual, Ruby, easy)"
+    NodeBB__NodeBB-84e065752f: "system tags lost when a regular user edits a post (Pro, JS, medium)"
+    vuejs__core-11739: "SSR hydration error with v-bind in CSS (Multilingual, TS, medium)"
+    sympy__sympy-14248: "MatrixSymbol differences print with (-1) coefficient (Verified, Python, hard)"
+  feature_implementation:
+    tokio-rs__tokio-6724: "vectored IO for write_all_buf (Multilingual, Rust, easy)"
+    sphinx-doc__sphinx-8035: "accept specific names in :private-members: (Verified, Python, medium)"
+    NodeBB__NodeBB-05f2236193: "ascending sort by last post time (Pro, JS, medium)"
+    scikit-learn__scikit-learn-25102: "preserve dtypes in DataFrame output (Verified, Python, hard)"
+    micropython__micropython-12158: "return thread id from _thread.start_new_thread (Multilingual, C, hard)"
+  refactoring:
+    qutebrowser__qutebrowser-44e64199ed: "refactor PyQtWebEngine version detection (Pro, Python, easy)"
+    element-hq__element-web-27139ca68e: "extract selection restoration into a reusable utility (Pro, TS/JS, medium)"
+    ansible__ansible-379058e10f: "remove inconsistent use of the collections ABC shim (Pro, Python, hard)"
+    element-hq__element-web-d06cf09bf0: "move pills/tooltips off legacy ReactDOM.render (Pro, JS, hard)"
+    internetarchive__openlibrary-3aeec6afed: "unify the access paths for author profile links (Pro, Python, hard)"
+  performance:
+    django__django-16801: "ImageField adds an unnecessary post_init handler (Verified, Python, easy)"
+    NodeBB__NodeBB-767973717b: "bulk field increments across objects (Pro, JS, hard; relabelled)"
+    ansible__ansible-3b823d908e: "vars-file read regression causing slowdowns (Pro, Python, hard)"
+    flipt-io__flipt-15b76cada1: "cache evaluation rollouts (Pro, Go, hard)"
+    qutebrowser__qutebrowser-c09e1439f1: "process data kept in memory indefinitely (Pro, Python, hard)"
+  security_fix:
+    caddyserver__caddy-6115: "sticky cookie should be Secure and SameSite=None (Multilingual, Go, easy)"
+    NodeBB__NodeBB-97c8569a79: "user API leaks private fields (Pro, JS, easy)"
+    ansible__ansible-a20a527014: "path traversal in ansible-galaxy tar install (Pro, Python, medium)"
+    ansible__ansible-5260527c4a: "atomic_move creates world-readable files, CVE-2020-1736 (Pro, Python, hard)"
+    protonmail__webclients-5174262583: "Punycode-encode URLs against IDN phishing (Pro, TS/JS, hard)"
+  frontend_visual:
+    diegomura__react-pdf-1280: "flexBasis no longer applied (Multimodal, JS, easy)"
+    processing__p5-js-3709: "tint() not supported in WebGL mode (Multimodal, JS, easy)"
+    Automattic__wp-calypso-35531: "hide the upgrade nudge for editor/author roles (Multimodal, JS, medium)"
+    diegomura__react-pdf-2400: "fixed + minPresenceAhead renders wrongly (Multimodal, JS, medium)"
+    Automattic__wp-calypso-21977: "show the success banner after Stripe Connect (Multimodal, JS, hard)"

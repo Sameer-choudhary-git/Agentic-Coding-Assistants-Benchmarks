@@ -114,7 +114,7 @@ def export(golden: list[GoldenTask], pool: list[GoldenTask], meta: dict, cfg: di
 
     # tasks the main app can run (evaluator/swebench.py reads this file)
     from .app_export import export_app_tasks
-    app_file = export_app_tasks(jl, out, ver)
+    app_file = export_app_tasks(jl, out, ver, cfg["seed"])
 
     stats = summarise(golden, pool, meta)
     manifest = {
