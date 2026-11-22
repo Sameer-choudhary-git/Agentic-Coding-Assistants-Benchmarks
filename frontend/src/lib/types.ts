@@ -192,6 +192,10 @@ export interface Evaluation {
   ruffStatus: string | null;
   ruffCount: number | null;
   ruffNew: number | null;
+  qualityStatus: string | null;
+  qualityScore: number | null;
+  qualityGoldScore: number | null;
+  quality: Record<string, any> | null;
   semgrepStatus: string | null;
   semgrepCount: number | null;
   semgrepNew: number | null;
@@ -270,6 +274,23 @@ export interface Aggregate {
   semgrep: { n: number; unavailable: number; newTotal: number; runsWithNewFindings: number; resolvedTotal: number };
   testWriting: { n: number; meanCoverage: number | null; meanMutationScore: number | null };
   outOfScopeRuns: number;
+  /** Code quality of the assistant's patch (SWE-bench / golden tasks), golden Code Quality Module, 0-100. */
+  quality: QualityAggregate;
+}
+
+export type QualityDimension = 'reliability' | 'complexity' | 'maintainability' | 'security' | 'hygiene' | 'size';
+
+export interface QualityAggregate {
+  n: number;
+  unavailable: number;
+  meanScore: number | null;
+  medianScore: number | null;
+  nResolved: number;
+  meanScoreResolved: number | null;
+  nWithGold: number;
+  meanGoldScore: number | null;
+  meanDeltaVsGold: number | null;
+  subscores: Record<QualityDimension, number | null>;
 }
 
 export interface Summary {

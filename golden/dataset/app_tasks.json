@@ -23,6 +23,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 339,
       "harness": {
@@ -54,6 +55,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 9,
       "harness": {
@@ -85,6 +87,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 170,
       "harness": {
@@ -116,6 +119,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 6,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 24,
       "harness": {
@@ -147,6 +151,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 5,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 323,
       "harness": {
@@ -178,6 +183,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 1,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 242,
       "harness": {
@@ -209,6 +215,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 10,
       "harness": {
@@ -238,6 +245,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 22,
       "fail_to_pass_count": 7,
       "pass_to_pass_count": 29,
       "harness": {
@@ -319,6 +327,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 33,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 107,
       "harness": {
@@ -483,6 +492,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 45,
       "fail_to_pass_count": 19,
       "pass_to_pass_count": 30,
       "harness": {
@@ -583,6 +593,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 10,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 34,
       "harness": {
@@ -614,6 +625,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 8,
       "harness": {
@@ -644,6 +656,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 22,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -686,6 +699,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 34,
       "harness": {
@@ -718,6 +732,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 1,
       "harness": {
@@ -750,6 +765,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 4,
       "harness": {
@@ -779,6 +795,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 41,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 0,
       "harness": {
@@ -822,6 +839,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 14,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 27,
       "harness": {
@@ -851,6 +869,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 18,
       "harness": {
@@ -882,6 +901,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": false,
+      "gold_changed_source_lines": 6,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 21,
       "harness": {
@@ -912,6 +932,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 22,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 50,
       "harness": {
@@ -941,6 +962,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 9,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 71,
       "harness": {
@@ -975,6 +997,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 15,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 7,
       "harness": {
@@ -1006,6 +1029,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 3,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 77,
       "harness": {
@@ -1035,6 +1059,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 23,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 20,
       "harness": {
@@ -1097,6 +1122,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 41,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 10,
       "harness": {
@@ -1151,6 +1177,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 38,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 979,
       "harness": {
@@ -2179,6 +2206,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 5,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 56,
       "harness": {
@@ -2208,6 +2236,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 17,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 67,
       "harness": {
@@ -2237,6 +2266,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 27,
       "harness": {
@@ -2268,6 +2298,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 33,
       "harness": {
@@ -2300,6 +2331,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 3,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 1,
       "harness": {
@@ -2332,6 +2364,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 12,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 30,
       "harness": {
@@ -2364,6 +2397,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 12,
       "harness": {
@@ -2395,6 +2429,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -2427,6 +2462,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 8,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 9,
       "harness": {
@@ -2459,6 +2495,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 43,
       "harness": {
@@ -2491,6 +2528,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 5,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 8,
       "harness": {
@@ -2522,6 +2560,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 9,
       "harness": {
@@ -2554,6 +2593,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 141,
       "harness": {
@@ -2584,6 +2624,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 3,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 16,
       "harness": {
@@ -2613,6 +2654,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 24,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 0,
       "harness": {
@@ -2654,6 +2696,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 135,
       "fail_to_pass_count": 7,
       "pass_to_pass_count": 246,
       "harness": {
@@ -2952,6 +2995,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 40,
       "harness": {
@@ -2984,6 +3028,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 65,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 732,
       "harness": {
@@ -3015,6 +3060,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 102,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 34,
       "harness": {
@@ -3046,6 +3092,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 11,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 23,
       "harness": {
@@ -3077,6 +3124,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 130,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 43,
       "harness": {
@@ -3108,6 +3156,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 8,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 201,
       "harness": {
@@ -3139,6 +3188,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 43,
       "fail_to_pass_count": 7,
       "pass_to_pass_count": 134,
       "harness": {
@@ -3170,6 +3220,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 85,
       "fail_to_pass_count": 8,
       "pass_to_pass_count": 66,
       "harness": {
@@ -3199,6 +3250,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 134,
       "fail_to_pass_count": 53,
       "pass_to_pass_count": 39,
       "harness": {
@@ -3350,6 +3402,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 238,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 212,
       "harness": {
@@ -3621,6 +3674,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 129,
       "fail_to_pass_count": 9,
       "pass_to_pass_count": 0,
       "harness": {
@@ -3669,6 +3723,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 243,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -3772,6 +3827,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 118,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 6,
       "harness": {
@@ -3824,6 +3880,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 224,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 1,
       "harness": {
@@ -3855,6 +3912,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 64,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 0,
       "harness": {
@@ -3887,6 +3945,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 93,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 2,
       "harness": {
@@ -3918,6 +3977,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 49,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 328,
       "harness": {
@@ -3947,6 +4007,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 102,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 6,
       "harness": {
@@ -3999,6 +4060,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 32,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 18,
       "harness": {
@@ -4030,6 +4092,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 232,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 123,
       "harness": {
@@ -4059,6 +4122,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 58,
       "fail_to_pass_count": 4,
       "pass_to_pass_count": 24,
       "harness": {
@@ -4091,6 +4155,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 36,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 7,
       "harness": {
@@ -4123,6 +4188,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 50,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 5,
       "harness": {
@@ -4154,6 +4220,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 17,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 13,
       "harness": {
@@ -4186,6 +4253,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 52,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 59,
       "harness": {
@@ -4217,6 +4285,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 84,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 8,
       "harness": {
@@ -4248,6 +4317,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 65,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 433,
       "harness": {
@@ -4281,6 +4351,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 70,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 74,
       "harness": {
@@ -4312,6 +4383,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 50,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 113,
       "harness": {
@@ -4345,6 +4417,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 64,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 15,
       "harness": {
@@ -4374,6 +4447,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 219,
       "fail_to_pass_count": 4,
       "pass_to_pass_count": 0,
       "harness": {
@@ -4418,6 +4492,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 139,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 64,
       "harness": {
@@ -4447,6 +4522,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 43,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 18,
       "harness": {
@@ -4512,6 +4588,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 27,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 173,
       "harness": {
@@ -4725,6 +4802,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 38,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 14,
       "harness": {
@@ -4783,6 +4861,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 70,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 2,
       "harness": {
@@ -4815,6 +4894,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 17,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -4848,6 +4928,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 46,
       "harness": {
@@ -4879,6 +4960,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 64,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 3,
       "harness": {
@@ -4910,6 +4992,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 70,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -4942,6 +5025,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 77,
       "harness": {
@@ -4973,6 +5057,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 12,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 11,
       "harness": {
@@ -5004,6 +5089,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 12,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 41,
       "harness": {
@@ -5035,6 +5121,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 11,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 26,
       "harness": {
@@ -5067,6 +5154,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 13,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 42,
       "harness": {
@@ -5096,6 +5184,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 39,
       "fail_to_pass_count": 8,
       "pass_to_pass_count": 190,
       "harness": {
@@ -5350,6 +5439,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 32,
       "fail_to_pass_count": 10,
       "pass_to_pass_count": 49,
       "harness": {
@@ -5461,6 +5551,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 36,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 0,
       "harness": {
@@ -5504,6 +5595,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 43,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 0,
       "harness": {
@@ -5548,6 +5640,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 69,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 119,
       "harness": {
@@ -5577,6 +5670,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 69,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 15,
       "harness": {
@@ -5638,6 +5732,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 42,
       "fail_to_pass_count": 17,
       "pass_to_pass_count": 1,
       "harness": {
@@ -5700,6 +5795,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 7,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 81,
       "harness": {
@@ -5731,6 +5827,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 20,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 100,
       "harness": {
@@ -5762,6 +5859,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 110,
       "fail_to_pass_count": 8,
       "pass_to_pass_count": 68,
       "harness": {
@@ -5793,6 +5891,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 17,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 1815,
       "harness": {
@@ -5828,6 +5927,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 10,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 59,
       "harness": {
@@ -5857,6 +5957,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 45,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 26,
       "harness": {
@@ -5929,6 +6030,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 5,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 16,
       "harness": {
@@ -5960,6 +6062,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 10,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 32,
       "harness": {
@@ -5991,6 +6094,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 13,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 186,
       "harness": {
@@ -6022,6 +6126,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 188,
       "harness": {
@@ -6053,6 +6158,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 13,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 40,
       "harness": {
@@ -6085,6 +6191,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 18,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 22,
       "harness": {
@@ -6117,6 +6224,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 3,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 32,
       "harness": {
@@ -6149,6 +6257,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 24,
       "harness": {
@@ -6180,6 +6289,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 76,
       "harness": {
@@ -6214,6 +6324,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 23,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 27,
       "harness": {
@@ -6245,6 +6356,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 47,
       "fail_to_pass_count": 4,
       "pass_to_pass_count": 17,
       "harness": {
@@ -6276,6 +6388,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 123,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 22,
       "harness": {
@@ -6305,6 +6418,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 66,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 4,
       "harness": {
@@ -6334,6 +6448,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 32,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 26,
       "harness": {
@@ -6364,6 +6479,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 28,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 259,
       "harness": {
@@ -6667,6 +6783,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 12,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 5,
       "harness": {
@@ -6698,6 +6815,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 76,
       "harness": {
@@ -6729,6 +6847,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 5,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 54,
       "harness": {
@@ -6758,6 +6877,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 22,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 102,
       "harness": {
@@ -6912,6 +7032,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 24,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -6953,6 +7074,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 12,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 2,
       "harness": {
@@ -6984,6 +7106,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 5,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 2,
       "harness": {
@@ -7013,6 +7136,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 30,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 6,
       "harness": {
@@ -7063,6 +7187,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 8,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 20,
       "harness": {
@@ -7096,6 +7221,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 5,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 28,
       "harness": {
@@ -7125,6 +7251,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 46,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -7164,6 +7291,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 20,
       "fail_to_pass_count": 10,
       "pass_to_pass_count": 0,
       "harness": {
@@ -7215,6 +7343,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 6,
       "fail_to_pass_count": 8,
       "pass_to_pass_count": 604,
       "harness": {
@@ -7246,6 +7375,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 16,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 25,
       "harness": {
@@ -7277,6 +7407,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 14,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 50,
       "harness": {
@@ -7310,6 +7441,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 45,
       "harness": {
@@ -7339,6 +7471,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 12,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 2,
       "harness": {
@@ -7369,6 +7502,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 188,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 3511,
       "harness": {
@@ -10923,6 +11057,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 50,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 66,
       "harness": {
@@ -11034,6 +11169,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 328,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 0,
       "harness": {
@@ -11077,6 +11213,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 102,
       "fail_to_pass_count": 18,
       "pass_to_pass_count": 15,
       "harness": {
@@ -11148,6 +11285,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 110,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 0,
       "harness": {
@@ -11192,6 +11330,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 112,
       "fail_to_pass_count": 14,
       "pass_to_pass_count": 103,
       "harness": {
@@ -11361,6 +11500,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 110,
       "fail_to_pass_count": 4,
       "pass_to_pass_count": 0,
       "harness": {
@@ -11409,6 +11549,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 63,
       "fail_to_pass_count": 7,
       "pass_to_pass_count": 0,
       "harness": {
@@ -11460,6 +11601,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 473,
       "fail_to_pass_count": 18,
       "pass_to_pass_count": 0,
       "harness": {
@@ -11760,6 +11902,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 226,
       "fail_to_pass_count": 28,
       "pass_to_pass_count": 0,
       "harness": {
@@ -11829,6 +11972,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 65,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 18,
       "harness": {
@@ -11859,6 +12003,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 82,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -11898,6 +12043,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 78,
       "fail_to_pass_count": 10,
       "pass_to_pass_count": 0,
       "harness": {
@@ -11947,6 +12093,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 241,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 1,
       "harness": {
@@ -11992,6 +12139,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 114,
       "fail_to_pass_count": 7,
       "pass_to_pass_count": 1,
       "harness": {
@@ -12045,6 +12193,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 29,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 59,
       "harness": {
@@ -12077,6 +12226,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 107,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 24,
       "harness": {
@@ -12108,6 +12258,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 79,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 3,
       "harness": {
@@ -12137,6 +12288,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 263,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 0,
       "harness": {
@@ -12180,6 +12332,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 35,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 172,
       "harness": {
@@ -12392,6 +12545,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 29,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 262,
       "harness": {
@@ -12696,6 +12850,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 35,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 23,
       "harness": {
@@ -12762,6 +12917,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 14,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 24,
       "harness": {
@@ -12791,6 +12947,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 52,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 169,
       "harness": {
@@ -13024,6 +13181,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 56,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13063,6 +13221,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 30,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13102,6 +13261,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 35,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13154,6 +13314,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 80,
       "fail_to_pass_count": 19,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13229,6 +13390,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 51,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13261,6 +13423,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 37,
       "fail_to_pass_count": 4,
       "pass_to_pass_count": 105,
       "harness": {
@@ -13293,6 +13456,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 26,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 9,
       "harness": {
@@ -13324,6 +13488,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 90,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 12,
       "harness": {
@@ -13356,6 +13521,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 46,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 2,
       "harness": {
@@ -13389,6 +13555,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 23,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 102,
       "harness": {
@@ -13421,6 +13588,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13454,6 +13622,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13486,6 +13655,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13518,6 +13688,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 6,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 210,
       "harness": {
@@ -13550,6 +13721,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 39,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 213,
       "harness": {
@@ -13581,6 +13753,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13613,6 +13786,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 14,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13645,6 +13819,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 11,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13677,6 +13852,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 10,
       "fail_to_pass_count": 12,
       "pass_to_pass_count": 1535,
       "harness": {
@@ -13709,6 +13885,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 13,
       "pass_to_pass_count": 2421,
       "harness": {
@@ -13740,6 +13917,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 97,
       "fail_to_pass_count": 8,
       "pass_to_pass_count": 64,
       "harness": {
@@ -13772,6 +13950,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 150,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 202,
       "harness": {
@@ -13803,6 +13982,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 53,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 218,
       "harness": {
@@ -13834,6 +14014,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 160,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13866,6 +14047,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 502,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 1432,
       "harness": {
@@ -13897,6 +14079,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 249,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13929,6 +14112,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 231,
       "fail_to_pass_count": 12,
       "pass_to_pass_count": 2386,
       "harness": {
@@ -13961,6 +14145,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 28,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 0,
       "harness": {
@@ -13994,6 +14179,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 66,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 14,
       "harness": {
@@ -14026,6 +14212,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 40,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 6,
       "harness": {
@@ -14058,6 +14245,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 52,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -14091,6 +14279,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 95,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -14123,6 +14312,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 59,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 210,
       "harness": {
@@ -14155,6 +14345,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 82,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 206,
       "harness": {
@@ -14187,6 +14378,7 @@
       ],
       "human_validated": false,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 23,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 0,
       "harness": {
@@ -14219,6 +14411,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 9,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 17,
       "harness": {
@@ -14249,6 +14442,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 324,
       "fail_to_pass_count": 7,
       "pass_to_pass_count": 268,
       "harness": {
@@ -14567,6 +14761,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 45,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 30,
       "harness": {
@@ -14639,6 +14834,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 132,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 0,
       "harness": {
@@ -14680,6 +14876,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 63,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 1,
       "harness": {
@@ -14722,6 +14919,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 212,
       "fail_to_pass_count": 10,
       "pass_to_pass_count": 0,
       "harness": {
@@ -14779,6 +14977,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 169,
       "fail_to_pass_count": 16,
       "pass_to_pass_count": 0,
       "harness": {
@@ -14848,6 +15047,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 45,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 100,
       "harness": {
@@ -14993,6 +15193,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 29,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15037,6 +15238,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 2,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 52,
       "harness": {
@@ -15067,6 +15269,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 82,
       "fail_to_pass_count": 7,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15112,6 +15315,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 44,
       "fail_to_pass_count": 4,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15157,6 +15361,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 40,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15200,6 +15405,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 51,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15239,6 +15445,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 49,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 51,
       "harness": {
@@ -15332,6 +15539,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 81,
       "fail_to_pass_count": 4,
       "pass_to_pass_count": 66,
       "harness": {
@@ -15448,6 +15656,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 78,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15493,6 +15702,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 209,
       "fail_to_pass_count": 8,
       "pass_to_pass_count": 183,
       "harness": {
@@ -15738,6 +15948,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 435,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15777,6 +15988,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 443,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15826,6 +16038,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 483,
       "fail_to_pass_count": 11,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15875,6 +16088,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 104,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 7,
       "harness": {
@@ -15924,6 +16138,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 86,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -15963,6 +16178,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 49,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 0,
       "harness": {
@@ -16009,6 +16225,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 164,
       "fail_to_pass_count": 18,
       "pass_to_pass_count": 260,
       "harness": {
@@ -16327,6 +16544,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 40,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 149,
       "harness": {
@@ -16533,6 +16751,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 37,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 0,
       "harness": {
@@ -16582,6 +16801,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 47,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -16621,6 +16841,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 51,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -16660,6 +16881,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 86,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 3,
       "harness": {
@@ -16703,6 +16925,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 30,
       "fail_to_pass_count": 9,
       "pass_to_pass_count": 0,
       "harness": {
@@ -16751,6 +16974,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 25,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 197,
       "harness": {
@@ -16988,6 +17212,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 4,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -17020,6 +17245,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 14,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 16,
       "harness": {
@@ -17050,6 +17276,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 38,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 1,
       "harness": {
@@ -17091,6 +17318,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 62,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 12,
       "harness": {
@@ -17146,6 +17374,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 137,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 34,
       "harness": {
@@ -17224,6 +17453,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 106,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 8,
       "harness": {
@@ -17274,6 +17504,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 163,
       "fail_to_pass_count": 10,
       "pass_to_pass_count": 0,
       "harness": {
@@ -17322,6 +17553,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 132,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -17361,6 +17593,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 115,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 0,
       "harness": {
@@ -17409,6 +17642,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 52,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -17448,6 +17682,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 339,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 0,
       "harness": {
@@ -17503,6 +17738,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 147,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -17542,6 +17778,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 128,
       "fail_to_pass_count": 8,
       "pass_to_pass_count": 11,
       "harness": {
@@ -17601,6 +17838,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 94,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 0,
       "harness": {
@@ -17645,6 +17883,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 128,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 1,
       "harness": {
@@ -17686,6 +17925,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 50,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 56,
       "harness": {
@@ -17783,6 +18023,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 28,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 1,
       "harness": {
@@ -17826,6 +18067,7 @@
       ],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 90,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 161,
       "harness": {
@@ -18043,6 +18285,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 80,
       "fail_to_pass_count": 5,
       "pass_to_pass_count": 0,
       "harness": {
@@ -18089,6 +18332,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 52,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 0,
       "harness": {
@@ -18132,6 +18376,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 38,
       "fail_to_pass_count": 3,
       "pass_to_pass_count": 0,
       "harness": {
@@ -18175,6 +18420,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 43,
       "fail_to_pass_count": 2,
       "pass_to_pass_count": 0,
       "harness": {
@@ -18257,6 +18503,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 62,
       "fail_to_pass_count": 6,
       "pass_to_pass_count": 0,
       "harness": {
@@ -18310,6 +18557,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 43,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {
@@ -18349,6 +18597,7 @@
       "gate_flags": [],
       "human_validated": true,
       "gold_patch_applies": true,
+      "gold_changed_source_lines": 62,
       "fail_to_pass_count": 1,
       "pass_to_pass_count": 0,
       "harness": {

@@ -168,6 +168,13 @@ export interface EvaluationRecord {
   linesAdded: number | null;
   linesRemoved: number | null;
   outOfScopeCount: number | null;
+  /** Code quality of the assistant's patch (SWE-bench / golden tasks): ran | unavailable | error | not_applicable. */
+  qualityStatus: string | null;
+  /** 0-100, golden Code Quality Module; 100 = the patch adds no detectable problem. */
+  qualityScore: number | null;
+  /** The reference fix's score on the same scale. */
+  qualityGoldScore: number | null;
+  quality: Record<string, unknown> | null;
   durationSeconds: number | null;
   artifactDir: string | null;
   toolVersions: Record<string, unknown>;

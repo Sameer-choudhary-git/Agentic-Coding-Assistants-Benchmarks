@@ -53,6 +53,18 @@ function agg(over: Partial<Aggregate> = {}): Aggregate {
     semgrep: { n: 0, unavailable: 0, newTotal: 0, runsWithNewFindings: 0, resolvedTotal: 0 },
     testWriting: { n: 0, meanCoverage: null, meanMutationScore: null },
     outOfScopeRuns: 0,
+    quality: {
+      n: 0,
+      unavailable: 0,
+      meanScore: null,
+      medianScore: null,
+      nResolved: 0,
+      meanScoreResolved: null,
+      nWithGold: 0,
+      meanGoldScore: null,
+      meanDeltaVsGold: null,
+      subscores: { reliability: null, complexity: null, maintainability: null, security: null, hygiene: null, size: null },
+    },
     ...over,
   };
 }
@@ -123,6 +135,27 @@ describe('dashboard', () => {
 });
 
 describe('results comparison', () => {
+  it('shows patch code quality for harness benchmarks only, with resolved-only and reference columns', () => {
+    const quality = {
+      n: 4,
+      unavailable: 0,
+      meanScore: 88.5,
+      medianScore: 90,
+      nResolved: 3,
+      meanScoreResolved: 91.2,
+      nWithGold: 4,
+      meanGoldScore: 95,
+      meanDeltaVsGold: -6.5,
+      subscores: { reliability: 90, complexity: 100, maintainability: 100, security: 100, hygiene: 70, size: 100 },
+    };
+    const golden = { ...summary(true, { completed: 4, successes: 3, successRate: 0.75, quality }), scope: { experimentId: null, benchmark: 'golden' } };
+    const t = text(render(<ResultsView summary={golden} records={[]} />));
+    assert.match(t, /Code quality of the patches/);
+    assert.match(t, /91\.2 \(n=3\)/);
+    assert.match(t, /-6\.5 \(ref 95\)/);
+    const custom = text(render(<ResultsView summary={summary(true, { completed: 4, successes: 3, successRate: 0.75 })} records={[]} />));
+    assert.doesNotMatch(custom, /Code quality of the patches/);
+  });
   it('renders an empty state instead of charts when there is no data', () => {
     const t = text(render(<ResultsView summary={summary(false)} records={[]} />));
     assert.match(t, /No experimental data yet/);

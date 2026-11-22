@@ -203,6 +203,17 @@ not blamed on the agent.
 | Hygiene (10) | debug prints, TODOs, commented-out code, **lint suppressions**, broad excepts, **stray scratch files** |
 | Size (5) | patch bloat over 2× the gold patch |
 
+**Use in the tool study.** The main app runs the same module on each assistant's patch
+(`evaluator/patch_quality.py`). Touched files are read at the base commit from the task workspace's git
+history instead of GitHub. The patch-bloat check uses the reference fix's size (`gold_changed_source_lines`
+in `dataset/app_tasks.json`), so the reference fix itself never ships with the task. Each run therefore has
+QualityScore, the six sub-scores and the reference fix's score on the same scale. The Results page reports
+the mean over resolved patches separately from the mean over all patches, because a failed attempt is often
+a small patch that scores well. A paired comparison per task (assistant vs reference fix, or assistant vs
+assistant) is the recommended analysis. Caveat: radon's maintainability index is noisy on very small files
+(a 2-line edit to a 3-line file can lose ~6 points). This affects reference and assistant patches alike,
+but it is one reason to compare within a task rather than across tasks.
+
 The module is validated by unit tests on synthetic good and bad patches. On real gold patches
 it is conservative: 8 of 275 gold patches score below 80.
 

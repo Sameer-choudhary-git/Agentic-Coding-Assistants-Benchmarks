@@ -44,6 +44,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from evaluator import EVALUATOR_VERSION, REPORT_SCHEMA_VERSION
+from evaluator.patch_quality import assess_patch
 from evaluator.paths import REPO_ROOT
 
 DATASET = "princeton-nlp/SWE-bench_Verified"
@@ -120,7 +121,7 @@ def load_instances() -> List[Dict[str, Any]]:
 
 def _golden_labels(g: Dict[str, Any]) -> Dict[str, Any]:
     keys = ("golden_task_id", "source", "language", "core", "domain", "subdomain", "domain_confidence", "tier",
-            "gold_quality_score", "gate_flags")
+            "gold_quality_score", "gold_changed_source_lines", "gate_flags")
     return {k: g.get(k) for k in keys}
 
 
@@ -502,6 +503,7 @@ def evaluate(
         "test_quality": None,
         "ruff": {"status": "not_applicable"},
         "semgrep": {"status": "not_applicable"},
+        "code_quality": {"status": "not_applicable"},
         "environment": {"host_python": sys.version.split()[0], "execution": "swebench-harness (docker)"},
         "swebench": None,
     }
@@ -535,6 +537,12 @@ def evaluate(
             report.update(status="completed", success=False, outcome="empty_patch")
             report["swebench"] = {"resolved": False, "patch_applied": None, "harness_run": False}
             return finish()
+        # static, host-side and read-only: scored even when Docker is missing, so quality is never lost to setup
+        labels = inst.get("golden") or {}
+        report["code_quality"] = assess_patch(
+            workspace, inst["base_commit"], patch, inst.get("repo") or "",
+            reference_lines=labels.get("gold_changed_source_lines"), gold_quality_score=labels.get("gold_quality_score"),
+        )  # fmt: skip
         reason = harness_available(inst)
         if reason:
             report["error"] = {"class": "harness_unavailable", "message": reason}

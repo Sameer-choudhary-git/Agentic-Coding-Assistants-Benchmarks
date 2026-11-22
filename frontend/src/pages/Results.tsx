@@ -163,6 +163,58 @@ export function ResultsView({ summary: s, records }: { summary: Summary; records
         </Section>
       </div>
 
+      {s.scope.benchmark && s.scope.benchmark !== 'custom' && (
+        <Section title="Code quality of the patches" aside="QualityScore 0–100; only problems the patch introduces count">
+          <p className="mb-3 text-sm text-slate-600">
+            Each submitted patch is scored with the golden Code Quality Module, the same scorer that rated every reference
+            fix. Each problem it adds costs points: new lint findings, over-complex functions, a maintainability drop,
+            security findings, debug or scratch leftovers, and bloat compared with the reference fix. 100 means
+            nothing was found. The <em>resolved</em> column is the fairer comparison, because failed attempts are
+            often small and look clean.
+          </p>
+          <Table caption="Patch code quality">
+            <thead>
+              <tr>
+                <th>Assistant</th>
+                <th className="text-right">Scored patches</th>
+                <th className="text-right">Mean (all)</th>
+                <th className="text-right">Mean (resolved)</th>
+                <th className="text-right">vs reference fix</th>
+                <th className="text-right">Reliability</th>
+                <th className="text-right">Complexity</th>
+                <th className="text-right">Maintainability</th>
+                <th className="text-right">Security</th>
+                <th className="text-right">Hygiene</th>
+                <th className="text-right">Size</th>
+              </tr>
+            </thead>
+            <tbody className="tabular">
+              {a.map((x) => {
+                const q = x.quality;
+                return (
+                  <tr key={x.assistantId}>
+                    <td>{assistantName(x.assistantId)}</td>
+                    <td className="text-right">{q.n || (q.unavailable ? `unavailable (${q.unavailable})` : '—')}</td>
+                    <td className="text-right">{q.n ? num(q.meanScore, 1) : '—'}</td>
+                    <td className="text-right">{q.nResolved ? `${num(q.meanScoreResolved, 1)} (n=${q.nResolved})` : '—'}</td>
+                    <td className="text-right">
+                      {q.nWithGold && q.meanDeltaVsGold !== null
+                        ? `${q.meanDeltaVsGold >= 0 ? '+' : ''}${num(q.meanDeltaVsGold, 1)} (ref ${num(q.meanGoldScore, 1)})`
+                        : '—'}
+                    </td>
+                    {(['reliability', 'complexity', 'maintainability', 'security', 'hygiene', 'size'] as const).map((d) => (
+                      <td key={d} className="text-right">
+                        {q.n ? num(q.subscores[d], 0) : '—'}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Section>
+      )}
+
       <Section title="Quality, security and regressions" aside="Counts over completed runs where the tool ran">
         <Table caption="Quality and security">
           <thead>

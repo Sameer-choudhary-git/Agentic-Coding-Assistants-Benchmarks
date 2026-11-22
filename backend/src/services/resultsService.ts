@@ -72,6 +72,15 @@ export interface FlatRecord {
   lines_added: number | null;
   lines_removed: number | null;
   out_of_scope_count: number | null;
+  quality_status: string | null;
+  quality_score: number | null;
+  quality_gold_score: number | null;
+  quality_reliability: number | null;
+  quality_complexity: number | null;
+  quality_maintainability: number | null;
+  quality_security: number | null;
+  quality_hygiene: number | null;
+  quality_size: number | null;
   evaluation_id: string | null;
   evaluator_version: string | null;
   evaluation_duration_seconds: number | null;
@@ -210,6 +219,29 @@ export const DATA_DICTIONARY: { field: keyof FlatRecord; type: string; descripti
   { field: 'lines_added', type: 'int|null', description: 'Added lines in the submission diff.' },
   { field: 'lines_removed', type: 'int|null', description: 'Removed lines in the submission diff.' },
   { field: 'out_of_scope_count', type: 'int|null', description: 'Changed files outside the task scope (allowed_paths).' },
+  {
+    field: 'quality_status',
+    type: 'enum|null',
+    description:
+      "SWE-bench / golden tasks: code quality of the assistant's patch. ran | unavailable | error | not_applicable (empty patch). Unavailable is never treated as a score.",
+  },
+  {
+    field: 'quality_score',
+    type: 'float|null',
+    description:
+      'QualityScore 0–100 of the patch (golden Code Quality Module: 100 minus capped penalties for new lint findings, complexity, maintainability drop, security findings, hygiene and size). Only problems the patch introduces count.',
+  },
+  { field: 'quality_gold_score', type: 'float|null', description: "The reference fix's QualityScore on the same scale (golden tasks)." },
+  {
+    field: 'quality_reliability',
+    type: 'float|null',
+    description: 'Sub-score 0–100 (also quality_complexity, quality_maintainability, quality_security, quality_hygiene, quality_size).',
+  },
+  { field: 'quality_complexity', type: 'float|null', description: 'Sub-score 0–100: new over-complex functions, complexity growth.' },
+  { field: 'quality_maintainability', type: 'float|null', description: 'Sub-score 0–100: maintainability-index drop (Python).' },
+  { field: 'quality_security', type: 'float|null', description: 'Sub-score 0–100: new bandit findings and insecure patterns.' },
+  { field: 'quality_hygiene', type: 'float|null', description: 'Sub-score 0–100: debug prints, TODOs, commented-out code, suppressions, stray files.' },
+  { field: 'quality_size', type: 'float|null', description: 'Sub-score 0–100: patch bloat relative to the reference fix.' },
   { field: 'evaluation_id', type: 'uuid|null', description: 'Latest evaluation of the run.' },
   { field: 'evaluator_version', type: 'string|null', description: 'Evaluator version that produced the result.' },
   { field: 'evaluation_duration_seconds', type: 'float|null', description: 'Evaluator runtime.' },
@@ -218,6 +250,51 @@ export const DATA_DICTIONARY: { field: keyof FlatRecord; type: string; descripti
   { field: 'invalidation_reason', type: 'string|null', description: 'Why the run was invalidated (protocol violation etc.).' },
   { field: 'notes', type: 'string', description: 'Operator notes.' },
 ];
+
+const QUALITY_DIMENSIONS = ['reliability', 'complexity', 'maintainability', 'security', 'hygiene', 'size'] as const;
+
+function qualitySubscores(q: Record<string, unknown> | null) {
+  const sub = (q?.subscores ?? {}) as Record<string, unknown>;
+  const v = (k: string) => (typeof sub[k] === 'number' ? (sub[k] as number) : null);
+  return {
+    quality_reliability: v('reliability'),
+    quality_complexity: v('complexity'),
+    quality_maintainability: v('maintainability'),
+    quality_security: v('security'),
+    quality_hygiene: v('hygiene'),
+    quality_size: v('size'),
+  };
+}
+
+/**
+ * Patch code quality over runs whose patch was scored. Reported both over all scored patches and over resolved
+ * ones only: an assistant that fails more often may submit smaller (and so "cleaner") patches, so the
+ * resolved-only mean is the fairer comparison of the code that actually works.
+ */
+function qualityAggregate(rows: FlatRecord[]) {
+  const ran = rows.filter((r) => r.quality_status === 'ran' && typeof r.quality_score === 'number');
+  const resolved = ran.filter((r) => r.success === true);
+  const withGold = ran.filter((r) => typeof r.quality_gold_score === 'number');
+  const scores = (rs: FlatRecord[]) => rs.map((r) => r.quality_score as number);
+  const subscores = Object.fromEntries(
+    QUALITY_DIMENSIONS.map((d) => [
+      d,
+      mean(ran.map((r) => r[`quality_${d}` as keyof FlatRecord]).filter((v): v is number => typeof v === 'number')),
+    ]),
+  ) as Record<(typeof QUALITY_DIMENSIONS)[number], number | null>;
+  return {
+    n: ran.length,
+    unavailable: rows.filter((r) => r.quality_status === 'unavailable' || r.quality_status === 'error').length,
+    meanScore: mean(scores(ran)),
+    medianScore: median(scores(ran)),
+    nResolved: resolved.length,
+    meanScoreResolved: mean(scores(resolved)),
+    nWithGold: withGold.length,
+    meanGoldScore: mean(withGold.map((r) => r.quality_gold_score as number)),
+    meanDeltaVsGold: mean(withGold.map((r) => (r.quality_score as number) - (r.quality_gold_score as number))),
+    subscores,
+  };
+}
 
 function effective(runs: RunRecord[]): Set<string> {
   const latest = new Map<string, RunRecord>();
@@ -316,6 +393,10 @@ export class ResultsService {
           lines_added: ev?.linesAdded ?? null,
           lines_removed: ev?.linesRemoved ?? null,
           out_of_scope_count: ev?.outOfScopeCount ?? null,
+          quality_status: ev?.qualityStatus ?? null,
+          quality_score: ev?.qualityScore ?? null,
+          quality_gold_score: ev?.qualityGoldScore ?? null,
+          ...qualitySubscores(ev?.quality ?? null),
           evaluation_id: ev?.id ?? null,
           evaluator_version: ev?.evaluatorVersion ?? null,
           evaluation_duration_seconds: ev?.durationSeconds ?? null,
@@ -386,6 +467,7 @@ export class ResultsService {
       },
       testWriting: { n: coverage.length, meanCoverage: mean(coverage), meanMutationScore: mean(mutation) },
       outOfScopeRuns: eligible.filter((r) => (r.out_of_scope_count ?? 0) > 0).length,
+      quality: qualityAggregate(eligible),
     };
   }
 

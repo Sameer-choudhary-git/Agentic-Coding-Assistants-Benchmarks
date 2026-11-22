@@ -140,6 +140,12 @@ export class ExportService {
       'semgrep_new_total',
       'semgrep_runs_with_new',
       'semgrep_unavailable',
+      'quality_n',
+      'quality_mean',
+      'quality_mean_resolved',
+      'quality_n_resolved',
+      'quality_mean_delta_vs_gold',
+      'quality_unavailable',
       'exploratory',
     ];
     const row = (
@@ -181,6 +187,12 @@ export class ExportService {
       semgrep_new_total: a.semgrep.newTotal,
       semgrep_runs_with_new: a.semgrep.runsWithNewFindings,
       semgrep_unavailable: a.semgrep.unavailable,
+      quality_n: a.quality.n,
+      quality_mean: a.quality.meanScore,
+      quality_mean_resolved: a.quality.meanScoreResolved,
+      quality_n_resolved: a.quality.nResolved,
+      quality_mean_delta_vs_gold: a.quality.meanDeltaVsGold,
+      quality_unavailable: a.quality.unavailable,
       exploratory,
     });
     const rows = [

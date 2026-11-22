@@ -84,9 +84,9 @@ describe('database migrations', () => {
   it('are idempotent and enforce constraints', () => {
     const dir = tempDir();
     const db = new Database(path.join(dir, 'x.sqlite'));
-    assert.deepEqual(db.migrate(), [1]);
+    assert.deepEqual(db.migrate(), [1, 2]);
     assert.deepEqual(db.migrate(), []);
-    assert.equal(db.schemaVersion(), 1);
+    assert.equal(db.schemaVersion(), 2);
     assert.throws(() => db.run(`INSERT INTO assistants (id, name, vendor, interface, capability_status) VALUES ('x','x','x','x','bogus')`));
     db.close();
   });
@@ -145,6 +145,28 @@ describe('aggregation', () => {
     assert.equal(a.duration.median, 200);
     assert.equal(a.semgrep.n, 0, 'unavailable semgrep must not count as zero findings');
     assert.equal(a.semgrep.unavailable, 2);
+  });
+
+  it('averages patch quality over scored patches, resolved ones and against the reference fix', () => {
+    const q = (score: number, success: boolean, gold: number | null) =>
+      base({ success, quality_status: 'ran', quality_score: score, quality_gold_score: gold, quality_hygiene: score });
+    const rows = [
+      q(80, true, 90),
+      q(100, true, 100),
+      q(60, false, null),
+      base({ quality_status: 'unavailable', quality_score: null }),
+      base({ quality_status: 'not_applicable', quality_score: null }),
+    ];
+    const a = ResultsService.aggregate(rows, 5);
+    assert.equal(a.quality.n, 3);
+    assert.equal(a.quality.unavailable, 1, 'missing tools are counted, never scored');
+    assert.equal(a.quality.meanScore, 80);
+    assert.equal(a.quality.nResolved, 2);
+    assert.equal(a.quality.meanScoreResolved, 90);
+    assert.equal(a.quality.nWithGold, 2);
+    assert.equal(a.quality.meanDeltaVsGold, -5);
+    assert.equal(a.quality.subscores.hygiene, 80);
+    assert.equal(a.quality.subscores.security, null);
   });
 
   it('returns nulls, not zeros, when there is no data', () => {

@@ -260,4 +260,16 @@ CREATE INDEX idx_events_run ON events(run_id);
 CREATE INDEX idx_events_time ON events(created_at);
 `,
   },
+  {
+    version: 2,
+    name: 'patch code quality',
+    // Code quality of the assistant's patch on SWE-bench / golden tasks (evaluator/patch_quality.py):
+    // the golden Code Quality Module's score, its per-dimension sub-scores, and the reference fix's score.
+    sql: `
+ALTER TABLE evaluations ADD COLUMN quality_status TEXT;
+ALTER TABLE evaluations ADD COLUMN quality_score REAL;
+ALTER TABLE evaluations ADD COLUMN quality_gold_score REAL;
+ALTER TABLE evaluations ADD COLUMN quality_json TEXT;
+`,
+  },
 ];

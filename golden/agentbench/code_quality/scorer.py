@@ -61,6 +61,11 @@ class FileReport:
     security_patterns: dict = field(default_factory=dict)
 
 
+def changed_source_lines(patch: str) -> int:
+    """Added + removed lines outside test files (the size measure used for patch bloat)."""
+    return sum(len(f.added) + len(f.removed) for f in parse_diff(patch) if not f.is_binary and not is_test_path(f.path))
+
+
 def _new_findings(before: Counter, after: Counter) -> dict:
     return {k: after[k] - before.get(k, 0) for k in after if after[k] > before.get(k, 0)}
 
@@ -69,7 +74,10 @@ class QualityAssessor:
     def __init__(self, fetcher: FileFetcher):
         self.fetcher = fetcher
 
-    def assess(self, repo: str, base_commit: str, patch: str, reference_patch: str | None = None) -> dict:
+    def assess(self, repo: str, base_commit: str, patch: str, reference_patch: str | None = None,
+               reference_lines: int | None = None) -> dict:
+        """``reference_lines`` (changed non-test lines of the reference fix) can stand in for
+        ``reference_patch`` when only the size of the reference is known."""
         diffs = [f for f in parse_diff(patch) if not f.is_binary]
         stray = [f for f in diffs if is_stray_file(f)]
         diffs = [f for f in diffs if f not in stray]
@@ -117,8 +125,7 @@ class QualityAssessor:
                     rep.security_patterns = {k: v for k, v in rep.security_patterns.items()
                                              if k in ("dom_xss_sink", "hardcoded_secret")}
 
-        result = self._score(reports, diffs, tests_touched, reference_patch, stray)
-        return result
+        return self._score(reports, diffs, tests_touched, reference_patch, stray, reference_lines)
 
     @staticmethod
     def _complexity(rep: FileReport, path: str, before: str, after: str) -> None:
@@ -141,7 +148,8 @@ class QualityAssessor:
 
     @staticmethod
     def _score(reports: list[FileReport], diffs: list[FileDiff], tests_touched: list[FileDiff],
-               reference_patch: str | None, stray: list[FileDiff] | None = None) -> dict:
+               reference_patch: str | None, stray: list[FileDiff] | None = None,
+               reference_lines: int | None = None) -> dict:
         stray = stray or []
         P: dict[str, float] = {}
         lint_total = Counter()
@@ -173,11 +181,10 @@ class QualityAssessor:
                         + 5 * len(stray))
         changed = sum(len(f.added) + len(f.removed) for f in diffs if not is_test_path(f.path))
         size_ratio = None
-        if reference_patch:
-            ref = sum(len(f.added) + len(f.removed) for f in parse_diff(reference_patch) if not is_test_path(f.path))
-            if ref:
-                size_ratio = round(changed / ref, 3)
-                P["size"] = 2.5 * math.log2(size_ratio) if size_ratio > 2 else 0.0
+        ref = changed_source_lines(reference_patch) if reference_patch else reference_lines
+        if ref:
+            size_ratio = round(changed / ref, 3)
+            P["size"] = 2.5 * math.log2(size_ratio) if size_ratio > 2 else 0.0
         P.setdefault("size", 0.0)
         P = {k: round(min(v, CAPS[k]), 2) for k, v in P.items()}
         sub = {k: round(100 * (1 - P[k] / CAPS[k]), 1) for k in CAPS}

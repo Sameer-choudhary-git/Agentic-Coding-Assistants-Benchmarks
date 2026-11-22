@@ -24,6 +24,8 @@ import random
 import re
 from collections import defaultdict
 
+from .code_quality.scorer import changed_source_lines
+
 APP_FILE = "app_tasks.json"
 CORE_PER_DOMAIN = 5
 # advisory gate flags that disqualify a task from the core: the issue hints at the fix, or one test decides it
@@ -230,6 +232,8 @@ def export_app_tasks(golden_jsonl: str, out_dir: str, version: str, seed: int = 
             "human_validated": bool(r.get("human_validated")),
             # the code-quality module fetched every touched file at base_commit and applied the reference fix
             "gold_patch_applies": _gold_applies(cq),
+            # size of the reference fix, for the patch-bloat check on the assistant's patch (the fix itself stays hidden)
+            "gold_changed_source_lines": changed_source_lines(r.get("gold_patch") or "") or None,
             "fail_to_pass_count": len(_as_list(r.get("fail_to_pass"))),
             "pass_to_pass_count": len(_as_list(r.get("pass_to_pass"))),
             "harness": harness,

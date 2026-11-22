@@ -26,7 +26,7 @@ describe('API integration', () => {
     assert.equal(r.body.benchmarks.swebench_verified, 12);
     assert.equal(r.body.benchmarks.golden, 247);
     assert.equal(r.body.tasks, 277);
-    assert.equal(r.body.database.schemaVersion, 1);
+    assert.equal(r.body.database.schemaVersion, 2);
   });
 
   it('serves the golden dataset overview and only whitelisted figures', async () => {
@@ -50,7 +50,7 @@ describe('API integration', () => {
     for (const t of r.body.tasks) counts[t.category] = (counts[t.category] ?? 0) + 1;
     assert.deepEqual(Object.values(counts), [3, 3, 3, 3, 3, 3]);
     assert.ok(r.body.tasks.every((t: { validationStatus: string }) => t.validationStatus === 'validated'));
-    const filtered = await api(env, 'GET', '/tasks?category=security_remediation&difficulty=medium');
+    const filtered = await api(env, 'GET', '/tasks?benchmark=custom&category=security_remediation&difficulty=medium');
     assert.deepEqual(
       filtered.body.tasks.map((t: { id: string }) => t.id),
       ['SR-02', 'SR-03'],

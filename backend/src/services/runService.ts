@@ -405,6 +405,7 @@ export class RunService {
     const sem = report.semgrep ?? {};
     const diff = report.diff ?? {};
     const tq = report.test_quality ?? null;
+    const cq = report.code_quality ?? {};
     const completed = report.status === 'completed';
     const evalSuccess: boolean | null = completed ? Boolean(report.success) : null;
     const env = report.environment ?? {};
@@ -445,6 +446,28 @@ export class RunService {
         files_changed: num(diff.files_changed),
         lines_added: num(diff.lines_added),
         lines_removed: num(diff.lines_removed),
+        quality_status: cq.status ?? null,
+        quality_score: num(cq.quality_score),
+        quality_gold_score: num(cq.gold_quality_score),
+        quality_json:
+          cq.status === 'ran'
+            ? JSON.stringify({
+                subscores: cq.subscores ?? {},
+                penalties: cq.penalties ?? {},
+                size_ratio_vs_reference: cq.size_ratio_vs_reference ?? null,
+                tests_included: cq.tests_included ?? null,
+                stray_files: cq.stray_files ?? [],
+                lint_new: cq.lint_new ?? {},
+                bandit_new: cq.bandit_new ?? {},
+                security_patterns: cq.security_patterns ?? {},
+                smells: cq.smells ?? {},
+                new_complex_functions: cq.new_complex_functions ?? [],
+                coverage: cq.coverage ?? {},
+                note: cq.note ?? null,
+              })
+            : cq.error
+              ? JSON.stringify({ error: String(cq.error).slice(0, 1000) })
+              : null,
         out_of_scope_count: Array.isArray(diff.out_of_scope_files) ? diff.out_of_scope_files.length : null,
         duration_seconds: num(report.duration_s),
         tool_versions_json: JSON.stringify(toolVersions),

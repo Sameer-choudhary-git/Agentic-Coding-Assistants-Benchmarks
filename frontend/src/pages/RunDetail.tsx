@@ -31,7 +31,7 @@ import {
   STATUS_LABEL,
 } from '../lib/format.ts';
 import { Link } from '../lib/router.tsx';
-import type { Run, RunDetail as Detail } from '../lib/types.ts';
+import type { Evaluation, Run, RunDetail as Detail } from '../lib/types.ts';
 import { useAsync } from '../lib/useAsync.ts';
 
 function Elapsed({ since, limit }: { since: string; limit: number }) {
@@ -380,6 +380,7 @@ function Results({ d }: { d: Detail }) {
             ) : null}
           </dl>
         )}
+        {e && e.qualityStatus && e.qualityStatus !== 'not_applicable' ? <PatchQuality e={e} /> : null}
       </Section>
       {tests.length ? (
         <Section title="Test outcomes">
@@ -769,5 +770,68 @@ export function RunDetail({ id }: { id: string }) {
         }}
       />
     </>
+  );
+}
+
+const QUALITY_DIMS = ['reliability', 'complexity', 'maintainability', 'security', 'hygiene', 'size'] as const;
+
+/** Code quality of the submitted patch (evaluator/patch_quality.py, golden Code Quality Module). */
+function PatchQuality({ e }: { e: Evaluation }) {
+  const q = e.quality ?? {};
+  if (e.qualityStatus !== 'ran') {
+    return (
+      <p className="mt-4 text-sm text-ink-soft">
+        Patch code quality: {e.qualityStatus}
+        {q.error ? ` (${String(q.error)})` : ''}
+      </p>
+    );
+  }
+  const issues: string[] = [];
+  const list = (label: string, m: Record<string, number> | undefined) => {
+    const parts = Object.entries(m ?? {}).map(([k, v]) => `${k}×${v}`);
+    if (parts.length) issues.push(`${label}: ${parts.join(', ')}`);
+  };
+  list('new lint findings', q.lint_new);
+  list('new security findings', q.bandit_new);
+  list('insecure patterns', q.security_patterns);
+  list('hygiene', q.smells);
+  if (q.new_complex_functions?.length) issues.push(`new over-complex functions: ${q.new_complex_functions.join(', ')}`);
+  if (q.stray_files?.length) issues.push(`stray scratch files: ${q.stray_files.join(', ')}`);
+  const delta = e.qualityGoldScore !== null && e.qualityScore !== null ? e.qualityScore - e.qualityGoldScore : null;
+  return (
+    <div className="mt-6 border-t border-slate-200 pt-4">
+      <h3 className="mb-2 text-sm font-semibold">Patch code quality</h3>
+      <dl className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm sm:grid-cols-4">
+        <div>
+          <dt className="text-ink-soft">QualityScore</dt>
+          <dd className="tabular text-xl font-semibold">{num(e.qualityScore, 1)} / 100</dd>
+        </div>
+        <div>
+          <dt className="text-ink-soft">Reference fix</dt>
+          <dd className="tabular text-xl font-semibold">
+            {e.qualityGoldScore !== null ? num(e.qualityGoldScore, 1) : '—'}
+            {delta !== null ? <span className="ml-2 text-sm font-normal">({delta >= 0 ? '+' : ''}{num(delta, 1)})</span> : null}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-ink-soft">Size vs reference</dt>
+          <dd className="tabular">{q.size_ratio_vs_reference != null ? `${num(q.size_ratio_vs_reference, 2)}×` : '—'}</dd>
+        </div>
+        <div>
+          <dt className="text-ink-soft">Tests added</dt>
+          <dd>{q.tests_included ? 'yes' : 'no'}</dd>
+        </div>
+        {QUALITY_DIMS.map((d) => (
+          <div key={d}>
+            <dt className="capitalize text-ink-soft">{d}</dt>
+            <dd className="tabular">{num(q.subscores?.[d], 0)}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-3 text-sm text-ink-soft">
+        {issues.length ? issues.join(' · ') : 'No new problems detected in the patch.'}
+        {q.note ? ` (${q.note})` : ''}
+      </p>
+    </div>
   );
 }

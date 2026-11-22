@@ -27,6 +27,17 @@ The app runs three benchmarks side by side; every page has a benchmark switch an
   Results page reports a **domain-balanced success rate** (mean of per-domain rates) so bug fixes cannot dominate the
   headline score.
   Two more golden Verified issues are already pilot tasks; they stay in the pilot and show their golden domain.
+  **Code quality of the patch.** Passing the hidden tests shows a patch works, but not that it is good code. Every
+  SWE-bench and Golden patch is therefore also scored by `evaluator/patch_quality.py`, which uses the golden Code
+  Quality Module (the same scorer that rated each reference fix). It measures new lint findings, complexity,
+  maintainability drop, security findings, hygiene (debug prints, TODOs, suppressions, stray scratch files) and bloat
+  compared with the reference fix. The touched files are read at the base commit from the workspace's git history,
+  so only problems the patch *introduces* count. Nothing is executed and no network is used, so the score is
+  recorded even when Docker is unavailable.
+  The run page shows the score, the reference fix's score and each finding. The Results page reports the mean
+  over all patches, the mean over **resolved** patches (the fairer comparison) and the difference from the
+  reference fix. Needs `pip install lizard radon bandit ruff`; without these tools the status is `unavailable`,
+  never a score.
   Scoring:
   - Verified, Multilingual and Multimodal tasks use the official SWE-bench harness (Docker setup below); each task
     passes its own dataset name and split to it.
