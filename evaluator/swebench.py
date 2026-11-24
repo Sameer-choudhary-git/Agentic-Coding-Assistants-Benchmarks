@@ -67,7 +67,8 @@ PROMPT_TEMPLATE = """You are working in a checkout of the {repo} repository at c
 
 Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
 the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
-the working tree. The issue text is also saved in ISSUE.md in the repository root.
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
 
 <issue>
 {problem_statement}

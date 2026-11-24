@@ -79,8 +79,14 @@ export const ADAPTERS: AdapterDefinition[] = [
       '{prompt}',
       '--permission-mode',
       'acceptEdits',
+      // Same capability as the other adapters' headless modes (Copilot --allow-all-tools, Cursor --force,
+      // Codex workspace-write): read, search, edit and run commands in the workspace. Without Glob/Grep and
+      // general Bash the agent could not explore a real repository or run its Go/JS/Rust tests. The web
+      // tools are off: the upstream fix of a public issue is one search away (see docs/assistant-integrations.md).
       '--allowedTools',
-      'Read,Edit,Write,Bash(python *),Bash(pytest *)',
+      'Read,Edit,Write,Glob,Grep,Bash',
+      '--disallowedTools',
+      'WebFetch,WebSearch',
       '--output-format',
       'json',
     ],

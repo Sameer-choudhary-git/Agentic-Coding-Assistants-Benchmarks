@@ -27,7 +27,7 @@ assistants report *Requires manual execution*.
 |---|---|---|---|
 | GitHub Copilot | Yes (VS Code agent mode) | `copilot -p … --allow-all-tools -s` (Copilot CLI) | No |
 | Cursor | Yes (Cursor agent chat) | `cursor-agent -p --force …` (Cursor CLI; binary may be named `agent`) | No |
-| Claude Code | Yes (`claude` in a terminal) | `claude -p … --permission-mode acceptEdits --allowedTools … --output-format json` | No |
+| Claude Code | Yes (`claude` in a terminal) | `claude -p … --permission-mode acceptEdits --allowedTools Read,Edit,Write,Glob,Grep,Bash --disallowedTools WebFetch,WebSearch --output-format json` | No |
 | OpenAI Codex | Yes (`codex` in a terminal) | `codex exec --sandbox workspace-write --skip-git-repo-check …` | No |
 
 Flags were taken from vendor documentation at build time (Claude Code headless docs, GitHub Copilot
@@ -61,6 +61,20 @@ the shim to its JavaScript entry point and runs it with Node. If that fails, set
 (`executeHeadless` with the frozen prompt), output collection (stdout/stderr artifacts, workspace
 snapshot), timeout handling (process killed at the time limit, run marked `timed_out`) and error
 reporting (`adapter_error` with exit code and stderr tail).
+
+## Tool parity
+
+Every headless adapter gets the same capability: read, search and edit files and run shell commands in the
+workspace without asking. That is what `--allow-all-tools` (Copilot), `--force` (Cursor) and
+`--sandbox workspace-write` (Codex) give. Claude Code's allow-list was widened to match, because the earlier
+list (Read/Edit/Write plus `python`/`pytest` only) could not search a real repository or run Go/JS/Rust tests
+on Golden and SWE-bench tasks.
+
+**Web access.** Golden and SWE-bench issues are public, and their upstream fixes are one search away. The frozen
+prompt tells every assistant to work offline, and Claude Code's web tools are disabled. Codex's
+`workspace-write` sandbox blocks network by default. Copilot and Cursor have no equivalent switch in the flags
+used here. Report this in the paper. For a strict study, also run all four with the network blocked at the OS
+or container level (except their own API endpoint), or check transcripts for web use and invalidate those runs.
 
 ## Fairness caveat
 
