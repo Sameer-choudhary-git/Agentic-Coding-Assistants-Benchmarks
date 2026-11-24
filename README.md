@@ -15,6 +15,9 @@ Dr. Pawan Singh Mehra).
 
 
 
+> **Running the agent study?** Start with [docs/EVALUATION_GUIDE.md](docs/EVALUATION_GUIDE.md): setup, protocol,
+> scoring, the final score table (`golden/scripts/score_table.py`) and how every part works.
+
 ## Benchmarks: custom suite, SWE-bench Verified pilot and Golden
 
 The app runs three benchmarks side by side; every page has a benchmark switch and they are never pooled.
