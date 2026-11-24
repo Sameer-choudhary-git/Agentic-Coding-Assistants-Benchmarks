@@ -2,7 +2,8 @@
 
     python golden/scripts/score_table.py --input artifacts/exports/<stamp>/results-<id>.csv --out analysis/score_table
 
-Input: the normalised results CSV (Exports page or ``npm run export -- <experiment-id>``). Only effective runs that
+Input: one or more normalised results CSVs (Exports page or ``npm run export -- <experiment-id>``). Several files
+(e.g. one export per laptop) are combined; a run id that appears twice is counted once. Only effective runs that
 completed evaluation count (``is_effective_run`` and ``eligible_for_success``), the same denominator as the app.
 With several attempts per task, each attempt is one observation.
 
@@ -109,8 +110,9 @@ def num(x, d: int = 1) -> str:
     return "—" if x is None or (isinstance(x, float) and math.isnan(x)) else f"{x:.{d}f}"
 
 
-def load(path: Path) -> pd.DataFrame:
-    df = pd.read_csv(path, dtype=str, keep_default_na=False)
+def load(paths: list[Path]) -> pd.DataFrame:
+    df = pd.concat([pd.read_csv(p, dtype=str, keep_default_na=False) for p in paths], ignore_index=True)
+    df = df.drop_duplicates(subset=["run_id"])
     for col in ("is_effective_run", "eligible_for_success", "success", "regression_failure"):
         if col in df:
             df[col] = df[col].map(to_bool)
@@ -220,11 +222,14 @@ def markdown(t: dict[str, pd.DataFrame], source: str) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input", type=Path, required=True)
+    ap.add_argument("--input", type=Path, nargs="+", required=True, help="results CSV(s); several are combined")
     ap.add_argument("--out", type=Path, default=Path("analysis/score_table"))
     ap.add_argument("--benchmark", default="golden", help="task_benchmark to keep (default golden; 'all' keeps every row)")
     a = ap.parse_args()
     df = load(a.input)
+    dup = df.groupby(["task_id", "assistant_id", "attempt_number"]).size() if "attempt_number" in df else None
+    if dup is not None and (dup > 1).any():
+        print(f"warning: {(dup > 1).sum()} (task, assistant, attempt) combinations appear more than once across the inputs")
     if a.benchmark != "all" and "task_benchmark" in df:
         df = df[df["task_benchmark"] == a.benchmark]
     a.out.mkdir(parents=True, exist_ok=True)
@@ -235,7 +240,7 @@ def main() -> None:
     tables = build(df)
     for name, t in tables.items():
         t.to_csv(a.out / f"{name}.csv", index=False)
-    (a.out / "score_table.md").write_text(markdown(tables, a.input.name), encoding="utf-8")
+    (a.out / "score_table.md").write_text(markdown(tables, ", ".join(p.name for p in a.input)), encoding="utf-8")
     print(a.out / "score_table.md")
 
 
