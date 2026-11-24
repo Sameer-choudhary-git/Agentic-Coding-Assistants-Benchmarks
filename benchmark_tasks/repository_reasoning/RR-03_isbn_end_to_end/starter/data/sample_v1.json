@@ -1,0 +1,8 @@
+{
+  "books": [
+    {"author": "Ursula K. Le Guin", "id": 1, "title": "The Dispossessed", "year": 1974},
+    {"author": "Octavia E. Butler", "id": 2, "title": "Kindred", "year": 1979}
+  ],
+  "next_id": 3,
+  "schema_version": 1
+}
