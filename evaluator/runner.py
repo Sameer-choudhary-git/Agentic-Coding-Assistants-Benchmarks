@@ -26,6 +26,12 @@ DEFAULT_IMAGE = os.environ.get("ACB_DOCKER_IMAGE", "acb-evaluator:1.0")
 MODES = ("docker", "local")
 
 
+
+# ``-p acb_coverage`` is imported before pytest applies the ini ``pythonpath`` option, and ``python -I`` ignores
+# PYTHONPATH and the current directory, so the support directory is put on sys.path before pytest starts.
+# Paths are relative to the evaluation directory (the working directory locally and /work in Docker).
+PYTEST_BOOTSTRAP = "import sys; sys.path.insert(0, '_acb/support'); import pytest; sys.exit(pytest.main(sys.argv[1:]))"
+
 class ExecutionUnavailable(Exception):
     """The requested execution backend cannot be used on this machine."""
 
@@ -94,8 +100,8 @@ class Executor:
     ) -> PytestOutcome:
         junit_rel = f"_acb/out/{junit_name}"
         args = [
-            "-m",
-            "pytest",
+            "-c",
+            PYTEST_BOOTSTRAP,
             *targets,
             "-c",
             "_acb/pytest.ini",

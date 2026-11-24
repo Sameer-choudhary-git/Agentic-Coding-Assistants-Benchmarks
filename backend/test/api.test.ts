@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { after, before, describe, it } from 'node:test';
 import { REPO_ROOT } from '../src/config.ts';
@@ -12,6 +13,11 @@ describe('API integration', () => {
   let allTaskIds: string[];
 
   before(async () => {
+    // The repository ships the downloaded pilot manifest; these tests cover the "not downloaded yet" state,
+    // so the evaluator gets a pilot folder holding only the candidate list.
+    const pilot = fs.mkdtempSync(path.join(os.tmpdir(), 'acb-pilot-'));
+    fs.copyFileSync(path.join(REPO_ROOT, 'swebench_pilot', 'candidates.json'), path.join(pilot, 'candidates.json'));
+    process.env.ACB_SWEBENCH_DIR = pilot;
     env = await startEnv();
   });
   after(async () => {
