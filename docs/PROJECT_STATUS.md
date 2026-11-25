@@ -78,7 +78,16 @@ Steps: `docs/EVALUATION_GUIDE.md` section A2.
 | Experiment | Where | Result |
 |---|---|---|
 | **Codex core-12** (`18cbed12-…`), 2026-11-25 | laptop 1 (WINTER) | 6/12 resolved (50%, CI 25–75%), quality 98.6. Report: `docs/reports/codex-core12-report.md` |
+| **Copilot core-12** (`56546823-…`), 2026-11-25 | laptop 1 (WINTER) | 7/12 resolved (58.3%, CI 32–81%), quality 99.3; Copilot CLI 1.0.115, model `auto` (Copilot Fusion), web_fetch removed + network shell commands denied |
 | Claude Code core-12 | laptop 2 | in progress; import its bundle to compare |
+| Cursor core-12 | — | not started |
+
+Combined report (Codex vs Copilot): `docs/reports/core12-final-report.md`. Codex vs Copilot is not significant
+(McNemar p = 1.0). Copilot tried to build/test in 8/12 runs, Codex in 1/12.
+
+**Copilot setup that works (CLI 1.0.115):** `--model auto` (no `--reasoning-effort` with auto), `--no-ask-user`,
+`--excluded-tools web_fetch` (`--deny-tool web_fetch` did NOT block it), `--deny-tool "shell(curl:*)"` etc.,
+`--disable-builtin-mcps`, and `COPILOT_GITHUB_TOKEN` in `.env` so the app reports it as Supported.
 
 The 12 tasks (2 per domain) are listed in `docs/codex-runs-for-teammate.md`. Setup-check experiments ("Codex test",
 "Codex test 2", "test") are not study data.
