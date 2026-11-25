@@ -63,6 +63,7 @@ def main() -> None:
     ap.add_argument("--assistant", default="claude_code")
     ap.add_argument("--tasks", nargs="*")
     ap.add_argument("--attempts", type=int, default=1)
+    ap.add_argument("--max-runs", type=int, help="run at most this many agent runs now; resume later with --experiment")
     ap.add_argument("--log", type=Path, default=Path("artifacts/batch_run.log"))
     a = ap.parse_args()
     LOG = a.log
@@ -92,7 +93,10 @@ def main() -> None:
 
     # Runs come back in the experiment's planned order.
     todo = [r for r in runs_of(base, exp) if r["status"] in ("planned", "ready")]
-    log(f"{len(todo)} run(s) to execute")
+    left = len(todo)
+    if a.max_runs is not None:
+        todo = todo[: max(a.max_runs, 0)]
+    log(f"{len(todo)} run(s) to execute now, {left - len(todo)} left after this (resume: --experiment {exp})")
     for i, r in enumerate(todo, 1):
         rid, task = r["id"], r["taskId"]
         if r["status"] == "planned":
@@ -107,8 +111,9 @@ def main() -> None:
         st = (d.get("run") or {}).get("status")
         log(f"[{i}/{len(todo)}] {task}: agent done in {time.time() - t0:.0f}s -> {code} {st} {str(d.get('error') or '')[:200]}")
 
-    # Wait for scoring; re-score tooling failures once.
-    rescored: set[str] = set()
+    # Wait for scoring; re-score tooling failures once, only for runs executed now (older failures were
+    # already re-scored by an earlier invocation; re-score those from the run page after fixing the cause).
+    rescored: set[str] = {r["id"] for r in runs_of(base, exp) if r["id"] not in {t["id"] for t in todo}}
     while True:
         runs = runs_of(base, exp)
         busy = [r for r in runs if r["status"] in ("submitted", "evaluating", "running")]

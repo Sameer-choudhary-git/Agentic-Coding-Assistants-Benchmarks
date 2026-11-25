@@ -45,11 +45,18 @@ Claude Code is being run on laptop 2 on the 12 tasks below. To compare Codex fai
      `ACB_ENABLE_AUTOMATION=1` in `.env`, restart the app, then on each run click
      **Run headless CLI instead**. Or run all of them with
      `python scripts/batch_run.py --name "Codex core-12" --assistant codex --tasks <the 12 IDs>`.
+     To stay within usage limits, add `--max-runs 1` and continue later with
+     `python scripts/batch_run.py --experiment <id> --max-runs 1` until it reports 0 left.
+   - Codex model: put the model **id** in `.env`, e.g.
+     `ACB_CODEX_CMD=["codex","exec","-m","<id>","-c","model_reasoning_effort=medium","--sandbox","workspace-write","--skip-git-repo-check","{prompt}"]`
+     (`grep ^model ~/.codex/config.toml` shows the id). Install `bubblewrap` (`sudo apt install -y bubblewrap`).
    - Leave changes uncommitted. Do not edit the code yourself.
-5. **Check** the Results page: every run is scored (resolved / not resolved). If scoring failed because of
+5. If a SWE-bench Pro run fails with `error getting credentials`, remove `credsStore` from `~/.docker/config.json`,
+   `docker pull` the task's image, then **Re-evaluate submission** (the agent is not rerun).
+6. **Check** the Results page: every run is scored (resolved / not resolved). If scoring failed because of
    Docker or tooling, press **Re-evaluate submission**.
-6. **Export:** Exports page → choose your experiment → **Team exchange bundle (JSON)** → download.
-7. **Send** that `.json` file. It is imported on laptop 2 with Exports → Import (or
+7. **Export:** Exports page → choose your experiment → **Team exchange bundle (JSON)** → download.
+8. **Send** that `.json` file. It is imported on laptop 2 with Exports → Import (or
    `npm run import-bundle --workspace backend -- <file>`). Identical records are skipped; nothing is overwritten.
 
 After the import, the Results page and the score tables show Claude Code and Codex side by side.

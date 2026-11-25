@@ -73,14 +73,40 @@ Steps: `docs/EVALUATION_GUIDE.md` section A2.
   `python golden/scripts/score_table.py --input <laptop1 results.csv> <laptop2 results.csv>`
 - Never run the same (task, agent, attempt) on both laptops.
 
+## 5b. Study runs so far
+
+| Experiment | Where | Result |
+|---|---|---|
+| **Codex core-12** (`18cbed12-…`), 2026-11-25 | laptop 1 (WINTER) | 6/12 resolved (50%, CI 25–75%), quality 98.6. Report: `docs/reports/codex-core12-report.md` |
+| Claude Code core-12 | laptop 2 | in progress; import its bundle to compare |
+
+The 12 tasks (2 per domain) are listed in `docs/codex-runs-for-teammate.md`. Setup-check experiments ("Codex test",
+"Codex test 2", "test") are not study data.
+
+**Key finding:** Codex ran no build or test command in 11 of 12 runs, and said it was following the prompt ("did
+not run tests, as requested"). It read "Do not modify or add tests" as "do not run tests". The prompt must stay
+identical for all agents; report the effect, or reword it and rerun every agent.
+
+**Pitfalls hit during the Codex runs:**
+- The Codex CLI needs the model **id** (`gpt-6-luna`) plus `-c model_reasoning_effort=medium`, not the app's
+  display name ("GPT 6 Luna (medium)"). Install `bubblewrap` for its sandbox.
+- SWE-bench Pro images failed to download (`error getting credentials`). Fix: remove `credsStore` from
+  `~/.docker/config.json` in Ubuntu, then re-score the saved patches with **Re-evaluate submission** (never
+  rerun the agent).
+- WSL hung (`Wsl/Service/0x8007274c`) while multi-GB images downloaded with the app running. Fix: `wsl --shutdown`
+  and restart Docker Desktop; pull images one at a time with the app stopped.
+- The app does not store the model name (`model` column empty); write it in the experiment notes.
+- SWE-bench reports a patch that applies but does not compile as `patch_failed`; call it a compile failure.
+
 ## 6. Still to do
 
 1. A second person confirms `golden/configs/core_review.yaml`; report the agreement (kappa).
 2. Set up the app in WSL on the laptop(s) that will run the study (Node 22, `.env`).
-3. Run the 30-task core × 4 agents (× attempts) with one fixed protocol; export; build the score table.
-4. Optional, not started (the owner said "not now"):
+3. Finish the core-12 comparison: Claude Code (laptop 2) + Codex (done); import bundles; score table.
+4. Run the 30-task core × 4 agents (× attempts) with one fixed protocol; export; build the score table.
+5. Optional, not started (the owner said "not now"):
    - record cost per run
    - a code-duplication quality check
    - time and cost in the score table
    - a scorer for the 30 Golden test-generation tasks
-5. Merge `feat/golden-dataset` into `main` when ready (not done; `main` has only the first commit).
+6. Merge `feat/golden-dataset` into `main` when ready (not done; `main` has only the first commit).

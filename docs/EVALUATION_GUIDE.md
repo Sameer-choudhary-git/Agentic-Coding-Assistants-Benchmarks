@@ -122,6 +122,19 @@ Click **Open next run in order**, then:
 Each run page shows the test outcomes and a **Patch code quality** panel with the score, the reference fix's score,
 the sub-scores and each finding.
 
+### Automated (headless) runs from the command line
+
+With `ACB_ENABLE_AUTOMATION=1` and the app running from Ubuntu, `scripts/batch_run.py` creates the experiment and
+runs every attempt headless: prepare the workspace, run the agent, score.
+```bash
+python3 scripts/batch_run.py --name "Codex core-12" --assistant codex --max-runs 1 --tasks <task ids>
+python3 scripts/batch_run.py --experiment <id> --max-runs 1      # next run; repeat until "0 left"
+```
+`--max-runs` keeps each session within the agent's usage limits. If scoring fails because of the environment, fix
+the cause, then use **Re-evaluate submission** on the run page; the agent's saved patch is re-scored, and the agent
+is not rerun. Pin each agent's model in its `ACB_*_CMD` override (e.g. Codex needs the model id, not the app's
+display name). Known pitfalls are listed in `docs/PROJECT_STATUS.md`.
+
 ## A6. Watch progress
 
 The **Results** page with **Golden** selected shows:
@@ -426,5 +439,8 @@ press *Synchronise tasks* in the app.
 - **Web access:** blocked for Claude Code and Codex by flags. Copilot and Cursor rely on the prompt instruction
   unless the network is blocked at the system level.
 - **Headless and IDE modes are different products:** report the mode, and never mix modes within the study.
+- **Prompt wording:** in the Codex pilot, the agent read "Do not modify or add tests" as "do not run tests" and
+  verified none of its patches. The prompt is identical for every agent, so the comparison is fair, but report
+  this effect.
 - **Harness coverage:** each source's scorer was checked with a reference fix and a negative control, not on every
   task. Tasks whose environment fails are `evaluator_error`, not agent failures.
