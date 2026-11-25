@@ -1,0 +1,20 @@
+diff --git a/modules/caddyhttp/reverseproxy/selectionpolicies.go b/modules/caddyhttp/reverseproxy/selectionpolicies.go
+index b56c8074..a75c12aa 100644
+--- a/modules/caddyhttp/reverseproxy/selectionpolicies.go
++++ b/modules/caddyhttp/reverseproxy/selectionpolicies.go
+@@ -656,10 +656,11 @@ func (s CookieHashSelection) Select(pool UpstreamPool, req *http.Request, w http
+ 			return upstream
+ 		}
+ 		http.SetCookie(w, &http.Cookie{
+-			Name:   s.Name,
+-			Value:  sha,
+-			Path:   "/",
+-			Secure: false,
++			Name:     s.Name,
++			Value:    sha,
++			Path:     "/",
++			Secure:   true,
++			SameSite: http.SameSiteNoneMode,
+ 		})
+ 		return upstream
+ 	}

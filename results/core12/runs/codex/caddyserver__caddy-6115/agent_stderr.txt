@@ -1,0 +1,283 @@
+Reading additional input from stdin...
+OpenAI Codex v0.172.0
+--------
+workdir: /home/sanjuoxn/acb-workspaces/18cbed12/caddyserver__caddy-6115_a3d32b07_r1
+model: gpt-6-luna
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a21290-8797-71b1-858e-213ae709aaa3
+--------
+user
+You are working in a checkout of the caddyserver/caddy repository at commit 4512be49a9fa.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+Sticky cookie should be Secure and SameSite=None by default
+A common legacy-app routing setup looks like this:
+
+```
+reverse_proxy tomcat_serverA:8080 tomcat_serverB:8080 {
+    lb_policy cookie
+}
+```
+
+The result might be:
+
+```
+$ curl -I https://demo.example/portal/
+HTTP/2 200
+cache-control: no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0
+content-type: text/html;charset=UTF-8
+date: Fri, 16 Feb 2024 21:54:13 GMT
+pragma: no-cache
+server: Caddy
+set-cookie: lb=b4b924ab173004e449881468ab25c0aa4197efd974ae8c007a7164869c261a69; Path=/
+```
+
+The problem for a Chrome user is that if they arrive from a third-party link, the lb cookie will not be sent to Caddy as the cookie was not set with SameSite=None property.
+
+While setting SameSite=None is a fun debate for applications and their CSRF protections, Caddy doesn't have a potential CSRF vulnerability so SameSite=None as the default makes sense. We want the "sticky" user to always end up on the same upstream if they come from a third-party website, from a bookmark, or from a same-site link.
+</issue>
+
+codex
+I’ll trace the cookie load-balancing implementation and its config defaults, then make the smallest source change so generated sticky cookies carry `Secure` and `SameSite=None`. I’ll leave tests untouched as requested.
+exec
+/bin/bash -lc "rg -n \"SameSite|SetCookie|lb_policy cookie|Cookie\" --glob '*.go'" in /home/sanjuoxn/acb-workspaces/18cbed12/caddyserver__caddy-6115_a3d32b07_r1
+ succeeded in 0ms:
+caddytest/integration/caddyfile_test.go:75:func TestReadCookie(t *testing.T) {
+caddytest/integration/caddyfile_test.go:77:	cookie := http.Cookie{
+caddytest/integration/caddyfile_test.go:84:	tester.Client.Jar.SetCookies(localhost, []*http.Cookie{&cookie})
+caddytest/integration/caddyfile_test.go:105:	tester.AssertGetResponse("http://localhost:9080/cookie.html", 200, "<h2>Cookie.ClientName caddytest</h2>")
+modules/logging/filters_test.go:155:func TestCookieFilter(t *testing.T) {
+modules/logging/filters_test.go:156:	f := CookieFilter{[]cookieFilterAction{
+modules/logging/filters_test.go:174:func TestValidateCookieFilter(t *testing.T) {
+modules/logging/filters_test.go:175:	f := CookieFilter{[]cookieFilterAction{
+modules/logging/filters_test.go:182:	f = CookieFilter{[]cookieFilterAction{
+modules/logging/filters.go:41:	caddy.RegisterModule(CookieFilter{})
+modules/logging/filters.go:446:// CookieFilter is a Caddy log field filter that filters
+modules/logging/filters.go:455:type CookieFilter struct {
+modules/logging/filters.go:461:func (f *CookieFilter) Validate() error {
+modules/logging/filters.go:472:func (CookieFilter) CaddyModule() caddy.ModuleInfo {
+modules/logging/filters.go:475:		New: func() caddy.Module { return new(CookieFilter) },
+modules/logging/filters.go:480:func (m *CookieFilter) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
+modules/logging/filters.go:524:func (m CookieFilter) Filter(in zapcore.Field) zapcore.Field {
+modules/logging/filters.go:530:	// using a dummy Request to make use of the Cookies() function to parse it
+modules/logging/filters.go:531:	originRequest := http.Request{Header: http.Header{"Cookie": cookiesSlice}}
+modules/logging/filters.go:532:	cookies := originRequest.Cookies()
+modules/logging/filters.go:545:				transformedRequest.AddCookie(c)
+modules/logging/filters.go:550:				transformedRequest.AddCookie(c)
+modules/logging/filters.go:558:		transformedRequest.AddCookie(c)
+modules/logging/filters.go:561:	in.Interface = caddyhttp.LoggableStringArray(transformedRequest.Header["Cookie"])
+modules/logging/filters.go:664:	_ LogFieldFilter = (*CookieFilter)(nil)
+modules/logging/filters.go:673:	_ caddyfile.Unmarshaler = (*CookieFilter)(nil)
+modules/caddyhttp/marshalers.go:61:// Headers with potentially sensitive information (Cookie, Set-Cookie,
+modules/caddyhttp/logging.go:55:	// and this includes some request and response headers, i.e `Cookie`,
+modules/caddyhttp/logging.go:56:	// `Set-Cookie`, `Authorization`, and `Proxy-Authorization`.
+modules/caddyhttp/templates/tplcontext.go:260:// Cookie gets the value of a cookie with name name.
+modules/caddyhttp/templates/tplcontext.go:261:func (c TemplateContext) Cookie(name string) string {
+modules/caddyhttp/templates/tplcontext.go:262:	cookies := c.Req.Cookies()
+modules/caddyhttp/templates/tplcontext_test.go:93:func TestCookie(t *testing.T) {
+modules/caddyhttp/templates/tplcontext_test.go:95:		cookie     *http.Cookie
+modules/caddyhttp/templates/tplcontext_test.go:101:			cookie:     &http.Cookie{Name: "cookieName", Value: "cookieValue"},
+modules/caddyhttp/templates/tplcontext_test.go:107:			cookie:     &http.Cookie{Name: "cookieName", Value: "cookieValue"},
+modules/caddyhttp/templates/tplcontext_test.go:113:			cookie:     &http.Cookie{Name: "cookie", Value: "cookieValue"},
+modules/caddyhttp/templates/tplcontext_test.go:119:			cookie:     &http.Cookie{Name: "cookie", Value: "cookieValue", Path: "/path", Domain: "https://localhost", Expires: time.Now().Add(10 * time.Minute), MaxAge: 120},
+modules/caddyhttp/templates/tplcontext_test.go:125:		tplContext.Req.AddCookie(test.cookie)
+modules/caddyhttp/templates/tplcontext_test.go:126:		actual := tplContext.Cookie(test.cookieName)
+modules/caddyhttp/templates/tplcontext_test.go:354:func TestCookieMultipleCookies(t *testing.T) {
+modules/caddyhttp/templates/tplcontext_test.go:360:		tplContext.Req.AddCookie(&http.Cookie{
+modules/caddyhttp/templates/tplcontext_test.go:367:		expectedCookieVal := fmt.Sprintf("%s%d", cookieValueBase, i)
+modules/caddyhttp/templates/tplcontext_test.go:368:		actualCookieVal := tplContext.Cookie(fmt.Sprintf("%s%d", cookieNameBase, i))
+modules/caddyhttp/templates/tplcontext_test.go:369:		if actualCookieVal != expectedCookieVal {
+modules/caddyhttp/templates/tplcontext_test.go:370:			t.Errorf("Expected cookie value %s, found %s", expectedCookieVal, actualCookieVal)
+modules/caddyhttp/fileserver/browse.go:182:		if sortCookie, sortErr := r.Cookie("sort"); sortErr == nil {
+modules/caddyhttp/fileserver/browse.go:183:			sortParam = sortCookie.Value
+modules/caddyhttp/fileserver/browse.go:186:		http.SetCookie(w, &http.Cookie{Name: "sort", Value: sortParam, Secure: r.TLS != nil})
+modules/caddyhttp/fileserver/browse.go:193:		if orderCookie, orderErr := r.Cookie("order"); orderErr == nil {
+modules/caddyhttp/fileserver/browse.go:194:			orderParam = orderCookie.Value
+modules/caddyhttp/fileserver/browse.go:197:		http.SetCookie(w, &http.Cookie{Name: "order", Value: orderParam, Secure: r.TLS != nil})
+modules/caddyhttp/templates/templates.go:58:// ##### `.Cookie`
+modules/caddyhttp/templates/templates.go:63:// {{.Cookie "cookiename"}}
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:634:func TestCookieHashPolicy(t *testing.T) {
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:637:	cookieHashPolicy := CookieHashSelection{}
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:654:	cookieServer1 := w.Result().Cookies()[0]
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:668:	request.AddCookie(cookieServer1)
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:673:	s := w.Result().Cookies()
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:680:	request.AddCookie(cookieServer1)
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:685:	if w.Result().Cookies() == nil {
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:690:func TestCookieHashPolicyWithFirstFallback(t *testing.T) {
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:693:	cookieHashPolicy := CookieHashSelection{
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:712:	cookieServer1 := w.Result().Cookies()[0]
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:724:	request.AddCookie(cookieServer1)
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:729:	s := w.Result().Cookies()
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:736:	request.AddCookie(cookieServer1)
+modules/caddyhttp/reverseproxy/selectionpolicies_test.go:741:	if w.Result().Cookies() == nil {
+modules/caddyhttp/reverseproxy/selectionpolicies.go:49:	caddy.RegisterModule(CookieHashSelection{})
+modules/caddyhttp/reverseproxy/selectionpolicies.go:608:// CookieHashSelection is a policy that selects
+modules/caddyhttp/reverseproxy/selectionpolicies.go:610:type CookieHashSelection struct {
+modules/caddyhttp/reverseproxy/selectionpolicies.go:622:func (CookieHashSelection) CaddyModule() caddy.ModuleInfo {
+modules/caddyhttp/reverseproxy/selectionpolicies.go:625:		New: func() caddy.Module { return new(CookieHashSelection) },
+modules/caddyhttp/reverseproxy/selectionpolicies.go:630:func (s *CookieHashSelection) Provision(ctx caddy.Context) error {
+modules/caddyhttp/reverseproxy/selectionpolicies.go:646:func (s CookieHashSelection) Select(pool UpstreamPool, req *http.Request, w http.ResponseWriter) *Upstream {
+modules/caddyhttp/reverseproxy/selectionpolicies.go:654:		sha, err := hashCookie(s.Secret, upstream.Dial)
+modules/caddyhttp/reverseproxy/selectionpolicies.go:658:		http.SetCookie(w, &http.Cookie{
+modules/caddyhttp/reverseproxy/selectionpolicies.go:667:	cookie, err := req.Cookie(s.Name)
+modules/caddyhttp/reverseproxy/selectionpolicies.go:678:		sha, err := hashCookie(s.Secret, upstream.Dial)
+modules/caddyhttp/reverseproxy/selectionpolicies.go:689://	lb_policy cookie [<name> [<secret>]] {
+modules/caddyhttp/reverseproxy/selectionpolicies.go:694:func (s *CookieHashSelection) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
+modules/caddyhttp/reverseproxy/selectionpolicies.go:727:// hashCookie hashes (HMAC 256) some data with the secret
+modules/caddyhttp/reverseproxy/selectionpolicies.go:728:func hashCookie(secret string, data string) (string, error) {
+modules/caddyhttp/reverseproxy/selectionpolicies.go:849:	_ Selector = (*CookieHashSelection)(nil)
+modules/caddyhttp/replacer.go:82:			if strings.HasPrefix(key, reqCookieReplPrefix) {
+modules/caddyhttp/replacer.go:83:				name := key[len(reqCookieReplPrefix):]
+modules/caddyhttp/replacer.go:84:				for _, cookie := range req.Cookies() {
+modules/caddyhttp/replacer.go:507:	reqCookieReplPrefix      = "http.request.cookie."
+
+exec
+/bin/bash -lc "sed -n '600,730p' modules/caddyhttp/reverseproxy/selectionpolicies.go" in /home/sanjuoxn/acb-workspaces/18cbed12/caddyserver__caddy-6115_a3d32b07_r1
+ succeeded in 0ms:
+			s.FallbackRaw = mod
+		default:
+			return d.Errf("unrecognized option '%s'", d.Val())
+		}
+	}
+	return nil
+}
+
+// CookieHashSelection is a policy that selects
+// a host based on a given cookie name.
+type CookieHashSelection struct {
+	// The HTTP cookie name whose value is to be hashed and used for upstream selection.
+	Name string `json:"name,omitempty"`
+	// Secret to hash (Hmac256) chosen upstream in cookie
+	Secret string `json:"secret,omitempty"`
+
+	// The fallback policy to use if the cookie is not present. Defaults to `random`.
+	FallbackRaw json.RawMessage `json:"fallback,omitempty" caddy:"namespace=http.reverse_proxy.selection_policies inline_key=policy"`
+	fallback    Selector
+}
+
+// CaddyModule returns the Caddy module information.
+func (CookieHashSelection) CaddyModule() caddy.ModuleInfo {
+	return caddy.ModuleInfo{
+		ID:  "http.reverse_proxy.selection_policies.cookie",
+		New: func() caddy.Module { return new(CookieHashSelection) },
+	}
+}
+
+// Provision sets up the module.
+func (s *CookieHashSelection) Provision(ctx caddy.Context) error {
+	if s.Name == "" {
+		s.Name = "lb"
+	}
+	if s.FallbackRaw == nil {
+		s.FallbackRaw = caddyconfig.JSONModuleObject(RandomSelection{}, "policy", "random", nil)
+	}
+	mod, err := ctx.LoadModule(s, "FallbackRaw")
+	if err != nil {
+		return fmt.Errorf("loading fallback selection policy: %s", err)
+	}
+	s.fallback = mod.(Selector)
+	return nil
+}
+
+// Select returns an available host, if any.
+func (s CookieHashSelection) Select(pool UpstreamPool, req *http.Request, w http.ResponseWriter) *Upstream {
+	// selects a new Host using the fallback policy (typically random)
+	// and write a sticky session cookie to the response.
+	selectNewHost := func() *Upstream {
+		upstream := s.fallback.Select(pool, req, w)
+		if upstream == nil {
+			return nil
+		}
+		sha, err := hashCookie(s.Secret, upstream.Dial)
+		if err != nil {
+			return upstream
+		}
+		http.SetCookie(w, &http.Cookie{
+			Name:   s.Name,
+			Value:  sha,
+			Path:   "/",
+			Secure: false,
+		})
+		return upstream
+	}
+
+	cookie, err := req.Cookie(s.Name)
+	// If there's no cookie, select a host using the fallback policy
+	if err != nil || cookie == nil {
+		return selectNewHost()
+	}
+	// If the cookie is present, loop over the available upstreams until we find a match
+	cookieValue := cookie.Value
+	for _, upstream := range pool {
+		if !upstream.Available() {
+			continue
+		}
+		sha, err := hashCookie(s.Secret, upstream.Dial)
+		if err == nil && sha == cookieValue {
+			return upstream
+		}
+	}
+	// If there is no matching host, select a host using the fallback policy
+	return selectNewHost()
+}
+
+// UnmarshalCaddyfile sets up the module from Caddyfile tokens. Syntax:
+//
+//	lb_policy cookie [<name> [<secret>]] {
+//		fallback <policy>
+//	}
+//
+// By default name is `lb`
+func (s *CookieHashSelection) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
+	args := d.RemainingArgs()
+	switch len(args) {
+	case 1:
+	case 2:
+		s.Name = args[1]
+	case 3:
+		s.Name = args[1]
+		s.Secret = args[2]
+	default:
+		return d.ArgErr()
+	}
+	for d.NextBlock(0) {
+		switch d.Val() {
+		case "fallback":
+			if !d.NextArg() {
+				return d.ArgErr()
+			}
+			if s.FallbackRaw != nil {
+				return d.Err("fallback selection policy already specified")
+			}
+			mod, err := loadFallbackPolicy(d)
+			if err != nil {
+				return err
+			}
+			s.FallbackRaw = mod
+		default:
+			return d.Errf("unrecognized option '%s'", d.Val())
+		}
+	}
+	return nil
+}
+
+// hashCookie hashes (HMAC 256) some data with the secret
+func hashCookie(secret string, data string) (string, error) {
+	h := hmac.New(sha256.New, []byte(secret))
+	_, err := h.Write([]byte(data))
+
+codex
+Updated [selectionpolicies.go](/home/sanjuoxn/acb-workspaces/18cbed12/caddyserver__caddy-6115_a3d32b07_r1/modules/caddyhttp/reverseproxy/selectionpolicies.go:658) so newly generated sticky load-balancing cookies set `Secure` and `SameSite=None` by default.
+
+I left tests unchanged and did not run them.
+tokens used
+13,767

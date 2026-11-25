@@ -1,0 +1,1 @@
+Updated [files.py](/home/sanjuoxn/acb-workspaces/18cbed12/django__django-16801_c19b96c0_r1/django/db/models/fields/files.py:445) so `ImageField` connects its `post_init` handler only for non-abstract models with a `width_field` or `height_field`. No tests were run.

@@ -1,0 +1,110 @@
+ ● Disabled tools: web_fetch
+
+ MD Read ISSUE.md 20 lines read
+
+ / Search "private-members|private_members" (sphinx, doc) 14 lines found
+
+ $ Shell Check worktree and revision 1 line…
+   git status --short && git rev-parse --short HEAD
+
+ PY Read sphinx/ext/autodoc/directive.py L1:80 (80 lines read)
+
+ PY Read sphinx/ext/autodoc/__init__.py L530:680 (151 lines read)
+
+ ● Read doc/usage/extensions/autodoc.rst L115:195 (81 lines read)
+
+ PY Read sphinx/ext/autodoc/__init__.py L830:880 (51 lines read)
+
+ PY Read sphinx/ext/autodoc/__init__.py L1250:1300 (51 lines read)
+
+ PY Read sphinx/ext/autodoc/directive.py L70:155 (86 lines read)
+
+ / Search "autodoc_default_options|no-private-members|private-members" (tests, doc) 32 lines found
+
+ / Search "def members_option|members_option\s*=|def merge_special_members_option|pri… 4 lines found
+
+ PY Read tests/test_ext_autodoc_private_members.py 62 lines read
+
+ PY Read tests/test_ext_autodoc_configs.py L640:790 (148 lines read)
+
+ PY Read sphinx/ext/autodoc/__init__.py L55:145 (90 lines read)
+
+ PY Read sphinx/ext/autodoc/__init__.py L400:470 (71 lines read)
+
+ PY Read sphinx/ext/autodoc/__init__.py L725:830 (106 lines read)
+
+ PY Read sphinx/ext/autodoc/__init__.py L880:960 (81 lines read)
+
+ / Search "def document_members|want_all|options\.members" (sphinx/ext/autodoc/__ini… 26 lines found
+
+ / Search "process_documenter_options\(|private-members.*members_option|private_membe… 6 lines found
+
+ PY Read sphinx/ext/autodoc/__init__.py L680:730 (51 lines read)
+
+ ● Read doc/usage/extensions/autodoc.rst L400:450 (50 lines read)
+
+ PY Read sphinx/ext/autodoc/__init__.py L1140:1195 (56 lines read)
+
+ / Search "merge_special_members_option" (sphinx/ext/autodoc/__init__.py) 3 lines found
+
+I’ll make `:private-members:` use the existing member-list option parser, include explicitly listed private names even without `:members:`, and update the option documentation.
+
+ ● Edit  Edit sphinx/ext/autodoc/__init__.py (+17 -11)
+
+ ● Edit  Edit doc/usage/extensions/autodoc.rst (+10 -1)
+
+ / Search "versionchanged:: 8\.2|release.*8\.2|versionadded:: 8\.2" (doc, sphinx) 1 line found
+
+ $ Shell Review patch and whitespace 116 lines…
+   git diff --check && git diff -- sphinx/ext/autodoc/__init__.py doc/usage/extensions/autodoc.rst
+
+ ✗ Shell Run autodoc private… /bin/bash: line 1: pytest: command not found Failed with exit code 127
+   pytest -q tests/test_ext_autodoc_private_members.py
+
+ / Search "version\s*=|release\s*=|__version__" (pyproject.toml, setup.py, sphinx) 97 lines found
+
+ $ Shell Check modified files 2 lines…
+   git status --short
+
+ ✗ Shell Run autodoc private… /bin/bash: line 1: python: command not found Failed with exit code 127
+   python -m pytest -q tests/test_ext_autodoc_private_members.py
+
+ PY Read sphinx/__init__.py L1:70 (64 lines read)
+
+ ✗ Shell Run autodoc private-membe… /usr/bin/python3: No module named pytest Failed with exit code 1
+   python3 -m pytest -q tests/test_ext_autodoc_private_members.py
+
+ $ Shell Locate available Python test environment 1 line…
+   command -v python3; command -v tox; command -v uv; ls -d .venv venv 2>/dev/null || true
+
+ ● Edit  Edit doc/usage/extensions/autodoc.rst (+1 -1)
+
+ $ Shell Summarize final worktree changes 5 lines…
+   git diff --stat && git status --short
+
+ $ Shell Compile autodoc code and check patch formatting No Content
+   python3 -m compileall -q sphinx/ext/autodoc/__init__.py && git diff --check
+
+ ✗ Shell Check installed documentation dependencies Failed with exit code 1  Traceback (most recent…
+   python3 -c "import docutils; print(docutils.__version__)"
+   Traceback (most recent call last):
+     File "<string>", line 1, in <module>
+   ModuleNotFoundError: No module named 'docutils'
+   Failed with exit code 1
+
+ ● Read doc/usage/extensions/autodoc.rst L65:155 (90 lines read)
+
+ ● Edit  Edit doc/usage/extensions/autodoc.rst (+3 -2)
+
+ / Search "merge_special_members_option|private-members': bool_option" (sphinx/ext… No matches found
+
+ $ Shell Confirm final changed files 5 lines…
+   git diff --stat && git status --short
+
+ $ Shell Run final formatting and syntax checks No Content
+   git diff --check && python3 -m compileall -q sphinx/ext/autodoc/__init__.py
+
+`:private-members:` now accepts comma-separated member names, works without `:members:`, and limits private-member inclusion when `:members:` selects all. Updated the autodoc documentation.
+
+Syntax and whitespace checks passed. The targeted pytest suite could not run because pytest and docutils are unavailable in the environment.
+

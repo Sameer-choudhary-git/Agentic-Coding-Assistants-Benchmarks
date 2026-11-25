@@ -82,7 +82,7 @@ Steps: `docs/EVALUATION_GUIDE.md` section A2.
 | Claude Code core-12 | laptop 2 | in progress; import its bundle to compare |
 | Cursor core-12 | — | not started |
 
-Combined report (Codex vs Copilot): `docs/reports/core12-final-report.md`. Codex vs Copilot is not significant
+Combined report (Codex vs Copilot): `docs/reports/core12-final-report.md`. **Shared data** (bundles, CSVs, score table, per-run patches, transcripts and scoring reports): `results/core12/` (see its README to import). Codex vs Copilot is not significant
 (McNemar p = 1.0). Copilot tried to build/test in 8/12 runs, Codex in 1/12.
 
 **Copilot setup that works (CLI 1.0.115):** `--model auto` (no `--reasoning-effort` with auto), `--no-ask-user`,

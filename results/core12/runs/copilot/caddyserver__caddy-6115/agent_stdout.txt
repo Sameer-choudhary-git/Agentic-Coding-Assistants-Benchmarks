@@ -1,0 +1,32 @@
+ ● Disabled tools: web_fetch
+
+I’ll locate the cookie load-balancing implementation and check the existing worktree before making the default-attribute change.
+
+ / Search "SameSite|Set-Cookie|lb_policy cookie|Cookie" in **/*.{go,md} 92 lines found
+
+ $ Shell Check worktree and issue details 34 lines…
+   git status --short && sed -n '1,160p' ISSUE.md
+
+ GO Read modules/caddyhttp/reverseproxy/selectionpolicies.go L1:220 (220 lines read)
+
+ GO Read modules/caddyhttp/reverseproxy/selectionpolicies_test.go L1:180 (180 lines read)
+
+ / Search "CookieHashSelection|lb_policy cookie|SameSiteNoneMode|Secure:" in *.go (m… 13 lines found
+
+ GO Read modules/caddyhttp/reverseproxy/selectionpolicies.go L470:650 (181 lines read)
+
+ GO Read modules/caddyhttp/reverseproxy/selectionpolicies.go L650:735 (86 lines read)
+
+The sticky cookie is created in `CookieHashSelection.Select`; I’ll set the requested attributes at that creation point, without changing unrelated cookie behavior.
+
+ ● Edit  Edit modules/caddyhttp/reverseproxy/selectionpolicies.go (+5 -4)
+
+ $ Shell Check and inspect source diff 20 lines…
+   git --no-pager diff --check && git --no-pager diff --
+   modules/caddyhttp/reverseproxy/selectionpolicies.go
+
+ ✗ Shell Run reverse proxy packa… /bin/bash: line 1: go: command not found Failed with exit code 127
+   go test ./modules/caddyhttp/reverseproxy
+
+Sticky load-balancing cookies now include `Secure` and `SameSite=None` by default. `git diff --check` passed; package tests couldn’t run because Go isn’t installed in the environment.
+

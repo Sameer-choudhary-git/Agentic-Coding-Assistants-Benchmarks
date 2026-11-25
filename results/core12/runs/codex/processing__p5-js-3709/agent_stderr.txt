@@ -1,0 +1,1132 @@
+Reading additional input from stdin...
+OpenAI Codex v0.172.0
+--------
+workdir: /home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1
+model: gpt-6-luna
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a212b4-5580-74d1-80ca-3b31bb2766b0
+--------
+user
+You are working in a checkout of the processing/p5.js repository at commit 5561fd0b2c37.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+Tint() is not supported in WebGL
+#### Nature of issue?
+
+- [ ] Found a bug
+- [ ] Existing feature enhancement
+- [x] New feature request
+
+#### Most appropriate sub-area of p5.js?
+
+- [ ] Color
+- [ ] Core
+- [ ] Data
+- [ ] Events
+- [ ] Image
+- [ ] IO
+- [ ] Math
+- [ ] Typography
+- [ ] Utilities
+- [x] WebGL
+- [ ] Other (specify if possible)
+
+#### Which platform were you using when you encountered this?
+
+- [x] Mobile/Tablet (touch devices)
+- [x] Desktop/Laptop
+- [x] Others (specify if possible)
+
+#### New feature details:
+Tint() is supported in processing with OPENGL render, could p5js also support it in WEBGL?
+- p5.js version: p5.js v0.5.16 
+- Example Code:
+```
+var img;
+function preload() {
+    img = loadImage("https://processing.org/img/processing-web.png");
+}
+
+function setup() {
+    createCanvas(700,700, WEBGL);
+}
+
+function draw() {
+    background(200);
+    beginShape();
+    tint(255,0,0,122);
+    texture(img);
+    vertex(0, 0, 0,0,0);
+    vertex(0, 250, 0,1);
+    vertex(250, 250, 0,1,1);
+    vertex(250, 0, 0,1,0);
+    endShape(CLOSE);
+}
+```
+</issue>
+
+codex
+I’ll trace the current WebGL texture and tint paths, then implement tint support in the renderer while keeping the existing 2D behavior intact.
+exec
+/bin/bash -lc "rg -n \"tint|texture\\(|textureMode|textureImage\" src" in /home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1
+ succeeded in 0ms:
+src/color/color_conversion.js:61:    var tint1 = val * (1 - sat);
+src/color/color_conversion.js:62:    var tint2 = val * (1 - sat * (hue - sector));
+src/color/color_conversion.js:63:    var tint3 = val * (1 - sat * (1 + sector - hue));
+src/color/color_conversion.js:67:      red = tint2;
+src/color/color_conversion.js:69:      blue = tint1;
+src/color/color_conversion.js:72:      red = tint1;
+src/color/color_conversion.js:74:      blue = tint3;
+src/color/color_conversion.js:77:      red = tint1;
+src/color/color_conversion.js:78:      green = tint2;
+src/color/color_conversion.js:82:      red = tint3;
+src/color/color_conversion.js:83:      green = tint1;
+src/color/color_conversion.js:88:      green = tint1;
+src/color/color_conversion.js:89:      blue = tint2;
+src/color/color_conversion.js:93:      green = tint3;
+src/color/color_conversion.js:94:      blue = tint1;
+src/image/loading_displaying.js:294:  // tint the image if there is a tint
+src/image/loading_displaying.js:299: * Sets the fill value for displaying images. Images can be tinted to
+src/image/loading_displaying.js:303: * white as the tint color and specify an alpha value. For instance,
+src/image/loading_displaying.js:304: * tint(255, 128) will make an image 50% transparent (assuming the default
+src/image/loading_displaying.js:312: * @method tint
+src/image/loading_displaying.js:330: *   tint(0, 153, 204); // Tint blue
+src/image/loading_displaying.js:344: *   tint(0, 153, 204, 126); // Tint blue and set transparency
+src/image/loading_displaying.js:358: *   tint(255, 126); // Apply transparency without changing color
+src/image/loading_displaying.js:365: * 2 side by side images of umbrella and ceiling, one image with blue tint
+src/image/loading_displaying.js:366: * Images of umbrella and ceiling, one half of image with blue tint
+src/image/loading_displaying.js:372: * @method tint
+src/image/loading_displaying.js:377: * @method tint
+src/image/loading_displaying.js:383: * @method tint
+src/image/loading_displaying.js:389: * @method tint
+src/image/loading_displaying.js:390: * @param  {p5.Color}      color   the tint color
+src/image/loading_displaying.js:392:p5.prototype.tint = function() {
+src/image/loading_displaying.js:393:  p5._validateParameters('tint', arguments);
+src/image/loading_displaying.js:395:  this._renderer._tint = c.levels;
+src/image/loading_displaying.js:411: *   tint(0, 153, 204); // Tint blue
+src/image/loading_displaying.js:413: *   noTint(); // Disable tint
+src/image/loading_displaying.js:420: * 2 side by side images of bricks, left image with blue tint
+src/image/loading_displaying.js:424:  this._renderer._tint = null;
+src/image/loading_displaying.js:428: * Apply the current tint color to the input image, return the resulting
+src/image/loading_displaying.js:432: * @param {p5.Image} The image to be tinted
+src/image/loading_displaying.js:433: * @return {canvas} The resulting tinted canvas
+src/image/loading_displaying.js:454:    newPixels[i] = r * this._renderer._tint[0] / 255;
+src/image/loading_displaying.js:455:    newPixels[i + 1] = g * this._renderer._tint[1] / 255;
+src/image/loading_displaying.js:456:    newPixels[i + 2] = b * this._renderer._tint[2] / 255;
+src/image/loading_displaying.js:457:    newPixels[i + 3] = a * this._renderer._tint[3] / 255;
+src/core/p5.Renderer2D.js:103:    if (this._tint) {
+src/core/p5.Renderer2D.js:154:    newPixels[i] = r * this._tint[0] / 255;
+src/core/p5.Renderer2D.js:155:    newPixels[i + 1] = g * this._tint[1] / 255;
+src/core/p5.Renderer2D.js:156:    newPixels[i + 2] = b * this._tint[2] / 255;
+src/core/p5.Renderer2D.js:157:    newPixels[i + 3] = a * this._tint[3] / 255;
+src/core/structure.js:133: * <a href="#/p5/stroke">stroke()</a>, <a href="#/p5/tint">tint()</a>, <a href="#/p5/strokeWeight">strokeWeight()</a>, <a href="#/p5/strokeCap">strokeCap()</a>, <a href="#/p5/strokeJoin">strokeJoin()</a>,
+src/core/structure.js:138: * <a href="#/p5/pointLight">pointLight()</a>, <a href="#/p5/texture">texture()</a>, <a href="#/p5/specularMaterial">specularMaterial()</a>, <a href="#/p5/shininess">shininess()</a>, <a href="#/p5/normalMaterial">normalMaterial()</a>
+src/core/structure.js:202: * <a href="#/p5/stroke">stroke()</a>, <a href="#/p5/tint">tint()</a>, <a href="#/p5/strokeWeight">strokeWeight()</a>, <a href="#/p5/strokeCap">strokeCap()</a>, <a href="#/p5/strokeJoin">strokeJoin()</a>,
+src/core/structure.js:207: * <a href="#/p5/pointLight">pointLight()</a>, <a href="#/p5/texture">texture()</a>, <a href="#/p5/specularMaterial">specularMaterial()</a>, <a href="#/p5/shininess">shininess()</a>, <a href="#/p5/normalMaterial">normalMaterial()</a>
+src/webgl/p5.RendererGL.Immediate.js:112:  if (this.textureMode === constants.IMAGE) {
+src/webgl/p5.RendererGL.Immediate.js:121:        'You must first call texture() before using' +
+src/webgl/material.js:347: *   texture(img);
+src/webgl/material.js:368: *   texture(pg);
+src/webgl/material.js:390: *   texture(vid);
+src/webgl/material.js:428: * @method  textureMode
+src/webgl/material.js:444: *   texture(img);
+src/webgl/material.js:445: *   textureMode(NORMAL);
+src/webgl/material.js:472: *   texture(img);
+src/webgl/material.js:473: *   textureMode(NORMAL);
+src/webgl/material.js:488:p5.prototype.textureMode = function(mode) {
+src/webgl/material.js:491:      'You tried to set ' + mode + ' textureMode only supports IMAGE & NORMAL '
+src/webgl/material.js:494:    this._renderer.textureMode = mode;
+src/webgl/material.js:542: *   texture(img);
+src/webgl/3d_primitives.js:1555:  this._pInst.texture(img);
+src/webgl/3d_primitives.js:1556:  this._pInst.textureMode(constants.NORMAL);
+src/core/p5.Renderer.js:55:  this._tint = null;
+src/core/p5.Renderer.js:73:      _tint: this._tint,
+src/webgl/p5.RendererGL.js:128:  this.textureMode = constants.IMAGE;
+
+exec
+/bin/bash -lc "sed -n '1,220p' src/webgl/p5.RendererGL.Immediate.js && rg -n \"texture|sampler|fragColor|u.*Color\" src/webgl" in /home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1
+ succeeded in 0ms:
+/**
+ * Welcome to RendererGL Immediate Mode.
+ * Immediate mode is used for drawing custom shapes
+ * from a set of vertices.  Immediate Mode is activated
+ * when you call <a href="#/p5/beginShape">beginShape()</a> & de-activated when you call <a href="#/p5/endShape">endShape()</a>.
+ * Immediate mode is a style of programming borrowed
+ * from OpenGL's (now-deprecated) immediate mode.
+ * It differs from p5.js' default, Retained Mode, which caches
+ * geometries and buffers on the CPU to reduce the number of webgl
+ * draw calls. Retained mode is more efficient & performative,
+ * however, Immediate Mode is useful for sketching quick
+ * geometric ideas.
+ */
+'use strict';
+
+var p5 = require('../core/main');
+var constants = require('../core/constants');
+
+/**
+ * Begin shape drawing.  This is a helpful way of generating
+ * custom shapes quickly.  However in WEBGL mode, application
+ * performance will likely drop as a result of too many calls to
+ * <a href="#/p5/beginShape">beginShape()</a> / <a href="#/p5/endShape">endShape()</a>.  As a high performance alternative,
+ * please use p5.js geometry primitives.
+ * @private
+ * @method beginShape
+ * @param  {Number} mode webgl primitives mode.  beginShape supports the
+ *                       following modes:
+ *                       POINTS,LINES,LINE_STRIP,LINE_LOOP,TRIANGLES,
+ *                       TRIANGLE_STRIP,and TRIANGLE_FAN.
+ * @chainable
+ */
+p5.RendererGL.prototype.beginShape = function(mode) {
+  //default shape mode is line_strip
+  this.immediateMode.shapeMode =
+    mode !== undefined ? mode : constants.LINE_STRIP;
+  //if we haven't yet initialized our
+  //immediateMode vertices & buffers, create them now!
+  if (this.immediateMode.vertices === undefined) {
+    this.immediateMode.vertices = [];
+    this.immediateMode.edges = [];
+    this.immediateMode.lineVertices = [];
+    this.immediateMode.vertexColors = [];
+    this.immediateMode.lineNormals = [];
+    this.immediateMode.uvCoords = [];
+    this.immediateMode.vertexBuffer = this.GL.createBuffer();
+    this.immediateMode.colorBuffer = this.GL.createBuffer();
+    this.immediateMode.uvBuffer = this.GL.createBuffer();
+    this.immediateMode.lineVertexBuffer = this.GL.createBuffer();
+    this.immediateMode.lineNormalBuffer = this.GL.createBuffer();
+    this.immediateMode.pointVertexBuffer = this.GL.createBuffer();
+    this.immediateMode._bezierVertex = [];
+    this.immediateMode._quadraticVertex = [];
+    this.immediateMode._curveVertex = [];
+    this.immediateMode._isCoplanar = true;
+    this.immediateMode._testIfCoplanar = null;
+  } else {
+    this.immediateMode.vertices.length = 0;
+    this.immediateMode.edges.length = 0;
+    this.immediateMode.lineVertices.length = 0;
+    this.immediateMode.lineNormals.length = 0;
+    this.immediateMode.vertexColors.length = 0;
+    this.immediateMode.uvCoords.length = 0;
+  }
+  this.isImmediateDrawing = true;
+  return this;
+};
+/**
+ * adds a vertex to be drawn in a custom Shape.
+ * @private
+ * @method vertex
+ * @param  {Number} x x-coordinate of vertex
+ * @param  {Number} y y-coordinate of vertex
+ * @param  {Number} z z-coordinate of vertex
+ * @chainable
+ * @TODO implement handling of <a href="#/p5.Vector">p5.Vector</a> args
+ */
+p5.RendererGL.prototype.vertex = function(x, y) {
+  var z, u, v;
+
+  // default to (x, y) mode: all other arugments assumed to be 0.
+  z = u = v = 0;
+
+  if (arguments.length === 3) {
+    // (x, y, z) mode: (u, v) assumed to be 0.
+    z = arguments[2];
+  } else if (arguments.length === 4) {
+    // (x, y, u, v) mode: z assumed to be 0.
+    u = arguments[2];
+    v = arguments[3];
+  } else if (arguments.length === 5) {
+    // (x, y, z, u, v) mode
+    z = arguments[2];
+    u = arguments[3];
+    v = arguments[4];
+  }
+  if (this.immediateMode._testIfCoplanar == null) {
+    this.immediateMode._testIfCoplanar = z;
+  } else if (this.immediateMode._testIfCoplanar !== z) {
+    this.immediateMode._isCoplanar = false;
+  }
+  var vert = new p5.Vector(x, y, z);
+  this.immediateMode.vertices.push(vert);
+  var vertexColor = this.curFillColor || [0.5, 0.5, 0.5, 1.0];
+  this.immediateMode.vertexColors.push(
+    vertexColor[0],
+    vertexColor[1],
+    vertexColor[2],
+    vertexColor[3]
+  );
+
+  if (this.textureMode === constants.IMAGE) {
+    if (this._tex !== null) {
+      if (this._tex.width > 0 && this._tex.height > 0) {
+        u /= this._tex.width;
+        v /= this._tex.height;
+      }
+    } else if (this._tex === null && arguments.length >= 4) {
+      // Only throw this warning if custom uv's have  been provided
+      console.warn(
+        'You must first call texture() before using' +
+          ' vertex() with image based u and v coordinates'
+      );
+    }
+  }
+
+  this.immediateMode.uvCoords.push(u, v);
+
+  this.immediateMode._bezierVertex[0] = x;
+  this.immediateMode._bezierVertex[1] = y;
+  this.immediateMode._bezierVertex[2] = z;
+
+  this.immediateMode._quadraticVertex[0] = x;
+  this.immediateMode._quadraticVertex[1] = y;
+  this.immediateMode._quadraticVertex[2] = z;
+
+  return this;
+};
+
+/**
+ * End shape drawing and render vertices to screen.
+ * @chainable
+ */
+p5.RendererGL.prototype.endShape = function(
+  mode,
+  isCurve,
+  isBezier,
+  isQuadratic,
+  isContour,
+  shapeKind
+) {
+  if (this.immediateMode.shapeMode === constants.POINTS) {
+    this._drawPoints(
+      this.immediateMode.vertices,
+      this.immediateMode.pointVertexBuffer
+    );
+  } else if (this.immediateMode.vertices.length > 1) {
+    if (this._doStroke && this.drawMode !== constants.TEXTURE) {
+      if (this.immediateMode.shapeMode === constants.TRIANGLE_STRIP) {
+        var i;
+        for (i = 0; i < this.immediateMode.vertices.length - 2; i++) {
+          this.immediateMode.edges.push([i, i + 1]);
+          this.immediateMode.edges.push([i, i + 2]);
+        }
+        this.immediateMode.edges.push([i, i + 1]);
+      } else if (this.immediateMode.shapeMode === constants.TRIANGLES) {
+        for (i = 0; i < this.immediateMode.vertices.length - 2; i = i + 3) {
+          this.immediateMode.edges.push([i, i + 1]);
+          this.immediateMode.edges.push([i + 1, i + 2]);
+          this.immediateMode.edges.push([i + 2, i]);
+        }
+      } else if (this.immediateMode.shapeMode === constants.LINES) {
+        for (i = 0; i < this.immediateMode.vertices.length - 1; i = i + 2) {
+          this.immediateMode.edges.push([i, i + 1]);
+        }
+      } else {
+        for (i = 0; i < this.immediateMode.vertices.length - 1; i++) {
+          this.immediateMode.edges.push([i, i + 1]);
+        }
+      }
+      if (mode === constants.CLOSE) {
+        this.immediateMode.edges.push([
+          this.immediateMode.vertices.length - 1,
+          0
+        ]);
+      }
+
+      p5.Geometry.prototype._edgesToVertices.call(this.immediateMode);
+      this._drawStrokeImmediateMode();
+    }
+
+    if (this._doFill && this.immediateMode.shapeMode !== constants.LINES) {
+      if (
+        this.isBezier ||
+        this.isQuadratic ||
+        this.isCurve ||
+        (this.immediateMode.shapeMode === constants.LINE_STRIP &&
+          this.drawMode === constants.FILL &&
+          this.immediateMode._isCoplanar === true)
+      ) {
+        var contours = [
+          new Float32Array(this._vToNArray(this.immediateMode.vertices))
+        ];
+        var polyTriangles = this._triangulate(contours);
+        this.immediateMode.vertices = [];
+        for (
+          var j = 0, polyTriLength = polyTriangles.length;
+          j < polyTriLength;
+          j = j + 3
+        ) {
+          this.vertex(
+            polyTriangles[j],
+            polyTriangles[j + 1],
+            polyTriangles[j + 2]
+          );
+        }
+      }
+      if (this.immediateMode.vertices.length > 0) {
+        this._drawFillImmediateMode(
+          mode,
+src/webgl/3d_primitives.js:1555:  this._pInst.texture(img);
+src/webgl/3d_primitives.js:1556:  this._pInst.textureMode(constants.NORMAL);
+src/webgl/light.js:121: * @param  {Number[]|String|p5.Color} color   color Array, CSS color string,
+src/webgl/light.js:131: * @param  {Number[]|String|p5.Color} color
+src/webgl/light.js:237: * @param  {Number[]|String|p5.Color} color   color Array, CSS color string,
+src/webgl/light.js:247: * @param  {Number[]|String|p5.Color} color
+src/webgl/p5.Shader.js:36:  this.samplers = [];
+src/webgl/p5.Shader.js:154:  var samplerIndex = 0;
+src/webgl/p5.Shader.js:171:      uniform.samplerIndex = samplerIndex;
+src/webgl/p5.Shader.js:172:      samplerIndex++;
+src/webgl/p5.Shader.js:173:      this.samplers.push(uniform);
+src/webgl/p5.Shader.js:217:  for (var i = 0; i < this.samplers.length; i++) {
+src/webgl/p5.Shader.js:218:    var uniform = this.samplers[i];
+src/webgl/p5.Shader.js:219:    var tex = uniform.texture;
+src/webgl/p5.Shader.js:221:      // user hasn't yet supplied a texture for this slot.
+src/webgl/p5.Shader.js:223:      // so we supply a default texture instead.
+src/webgl/p5.Shader.js:226:    gl.activeTexture(gl.TEXTURE0 + uniform.samplerIndex);
+src/webgl/p5.Shader.js:229:    gl.uniform1i(uniform.location, uniform.samplerIndex);
+src/webgl/p5.Shader.js:234:  for (var i = 0; i < this.samplers.length; i++) {
+src/webgl/p5.Shader.js:235:    var uniform = this.samplers[i];
+src/webgl/p5.Shader.js:236:    var tex = uniform.texture;
+src/webgl/p5.Shader.js:280: * matrix, or texture / sampler reference)
+src/webgl/p5.Shader.js:415:      gl.activeTexture(gl.TEXTURE0 + uniform.samplerIndex);
+src/webgl/p5.Shader.js:416:      uniform.texture = this._renderer.getTexture(data);
+src/webgl/p5.Shader.js:417:      gl.uniform1i(uniform.location, uniform.samplerIndex);
+src/webgl/p5.Shader.js:441:    this.uniforms.uAmbientColor !== undefined ||
+src/webgl/p5.Shader.js:442:    this.uniforms.uDirectionalColor !== undefined ||
+src/webgl/p5.Shader.js:444:    this.uniforms.uPointLightColor !== undefined ||
+src/webgl/p5.Shader.js:451:  return this.samplerIndex > 0;
+src/webgl/p5.Shader.js:456:    this.attributes.aVertexColor !== undefined ||
+src/webgl/p5.Shader.js:457:    this.uniforms.uMaterialColor !== undefined
+src/webgl/p5.RendererGL.Retained.js:28:  new BufferDef(4, 'vertexColors', 'colorBuffer', 'aMaterialColor'),
+src/webgl/p5.RendererGL.Retained.js:29:  new BufferDef(3, 'vertexAmbients', 'ambientBuffer', 'aAmbientColor'),
+src/webgl/p5.RendererGL.Retained.js:30:  //new BufferDef(3, 'vertexSpeculars', 'specularBuffer', 'aSpecularColor'),
+src/webgl/p5.RendererGL.Retained.js:196:    this._applyColorBlend(this.curStrokeColor);
+src/webgl/p5.RendererGL.Retained.js:209:    this._applyColorBlend(this.curFillColor);
+src/webgl/material.js:316:  this._renderer.curFillColor = [1, 1, 1, 1];
+src/webgl/material.js:325: * @method texture
+src/webgl/material.js:327: *                    to render as texture
+src/webgl/material.js:346: *   //pass image as texture
+src/webgl/material.js:347: *   texture(img);
+src/webgl/material.js:367: *   //pass image as texture
+src/webgl/material.js:368: *   texture(pg);
+src/webgl/material.js:389: *   //pass video frame as texture
+src/webgl/material.js:390: *   texture(vid);
+src/webgl/material.js:406:p5.prototype.texture = function(tex) {
+src/webgl/material.js:407:  this._assert3d('texture');
+src/webgl/material.js:408:  p5._validateParameters('texture', arguments);
+src/webgl/material.js:420: * Sets the coordinate space for texture mapping. The default mode is IMAGE
+src/webgl/material.js:428: * @method  textureMode
+src/webgl/material.js:444: *   texture(img);
+src/webgl/material.js:445: *   textureMode(NORMAL);
+src/webgl/material.js:472: *   texture(img);
+src/webgl/material.js:473: *   textureMode(NORMAL);
+src/webgl/material.js:488:p5.prototype.textureMode = function(mode) {
+src/webgl/material.js:491:      'You tried to set ' + mode + ' textureMode only supports IMAGE & NORMAL '
+src/webgl/material.js:494:    this._renderer.textureMode = mode;
+src/webgl/material.js:499: * Sets the global texture wrapping mode. This controls how textures behave
+src/webgl/material.js:503: * CLAMP causes the pixels at the edge of the texture to extend to the bounds
+src/webgl/material.js:504: * REPEAT causes the texture to tile repeatedly until reaching the bounds
+src/webgl/material.js:505: * MIRROR works similarly to REPEAT but it flips the texture with every new tile
+src/webgl/material.js:507: * REPEAT & MIRROR are only available if the texture
+src/webgl/material.js:510: * This method will affect all textures in your sketch until a subsequent
+src/webgl/material.js:511: * textureWrap call is made.
+src/webgl/material.js:515: * @method textureWrap
+src/webgl/material.js:528: *   textureWrap(MIRROR);
+src/webgl/material.js:542: *   texture(img);
+src/webgl/material.js:561:p5.prototype.textureWrap = function(wrapX, wrapY) {
+src/webgl/material.js:564:  this._renderer.textureWrapX = wrapX;
+src/webgl/material.js:565:  this._renderer.textureWrapY = wrapY;
+src/webgl/material.js:567:  var textures = this._renderer.textures;
+src/webgl/material.js:568:  for (var i = 0; i < textures.length; i++) {
+src/webgl/material.js:569:    textures[i].setWrapMode(wrapX, wrapY);
+src/webgl/material.js:606: * @param  {Number[]|String|p5.Color} color  color, color Array, or CSS color string
+src/webgl/material.js:614:  this._renderer.curFillColor = color._array;
+src/webgl/material.js:657: * @param  {Number[]|String|p5.Color} color color Array, or CSS color string
+src/webgl/material.js:665:  this._renderer.curFillColor = color._array;
+src/webgl/interaction.js:459:      this._renderer.curStrokeColor[0] * 255,
+src/webgl/interaction.js:460:      this._renderer.curStrokeColor[1] * 255,
+src/webgl/interaction.js:461:      this._renderer.curStrokeColor[2] * 255
+src/webgl/text.js:166:   * row & column stripes compiled into textures.
+src/webgl/text.js:662:  this._applyColorBlend(this.curFillColor);
+src/webgl/text.js:684:  sh.setUniform('uMaterialColor', this.curFillColor);
+src/webgl/text.js:709:        sh.bindTextures(); // afterwards, only textures need updating
+src/webgl/shaders/point.frag:3:uniform vec4 uMaterialColor;
+src/webgl/shaders/point.frag:27:  	gl_FragColor = vec4(uMaterialColor.rgb * (1.0 - mask), uMaterialColor.a) ;
+src/webgl/loading.js:180:        // Check if this line describes a texture coordinate.
+src/webgl/p5.RendererGL.js:37:    __dirname + '/shaders/light_texture.frag',
+src/webgl/p5.RendererGL.js:80:  this.curFillColor = [1, 1, 1, 1];
+src/webgl/p5.RendererGL.js:81:  this.curStrokeColor = [0, 0, 0, 1];
+src/webgl/p5.RendererGL.js:108:  this._defaultColorShader = undefined;
+src/webgl/p5.RendererGL.js:125:  // array of textures created in this gl context via this.getTexture(src)
+src/webgl/p5.RendererGL.js:126:  this.textures = [];
+src/webgl/p5.RendererGL.js:128:  this.textureMode = constants.IMAGE;
+src/webgl/p5.RendererGL.js:130:  this.textureWrapX = constants.CLAMP;
+src/webgl/p5.RendererGL.js:131:  this.textureWrapY = constants.CLAMP;
+src/webgl/p5.RendererGL.js:486: * @param  {Number|Number[]|String|p5.Color} v1  gray value,
+src/webgl/p5.RendererGL.js:518:  this.curFillColor = color._array;
+src/webgl/p5.RendererGL.js:527: * @param  {Number|Number[]|String|p5.Color} v1  gray value,
+src/webgl/p5.RendererGL.js:560:  this.curStrokeColor = color._array;
+src/webgl/p5.RendererGL.js:863:  properties.curStrokeColor = this.curStrokeColor;
+src/webgl/p5.RendererGL.js:864:  properties.curFillColor = this.curFillColor;
+src/webgl/p5.RendererGL.js:947:    return this._getColorShader();
+src/webgl/p5.RendererGL.js:989:      defaultShaders.vertexColorFrag
+src/webgl/p5.RendererGL.js:1009:  if (!this._defaultColorShader) {
+src/webgl/p5.RendererGL.js:1010:    this._defaultColorShader = new p5.Shader(
+src/webgl/p5.RendererGL.js:1017:  return this._defaultColorShader;
+src/webgl/p5.RendererGL.js:1057:    // a plain white texture RGBA, full alpha, single pixel.
+src/webgl/p5.RendererGL.js:1066:  var textures = this.textures;
+src/webgl/p5.RendererGL.js:1067:  for (var it = 0; it < textures.length; ++it) {
+src/webgl/p5.RendererGL.js:1068:    var texture = textures[it];
+src/webgl/p5.RendererGL.js:1069:    if (texture.src === img) return texture;
+src/webgl/p5.RendererGL.js:1073:  textures.push(tex);
+src/webgl/p5.RendererGL.js:1081:  strokeShader.setUniform('uMaterialColor', this.curStrokeColor);
+src/webgl/p5.RendererGL.js:1089:  fillShader.setUniform('uMaterialColor', this.curFillColor);
+src/webgl/p5.RendererGL.js:1099:  var pointLightCount = this.pointLightColors.length / 3;
+src/webgl/p5.RendererGL.js:1102:  fillShader.setUniform('uPointLightColor', this.pointLightColors);
+src/webgl/p5.RendererGL.js:1104:  var directionalLightCount = this.directionalLightColors.length / 3;
+src/webgl/p5.RendererGL.js:1107:  fillShader.setUniform('uDirectionalColor', this.directionalLightColors);
+src/webgl/p5.RendererGL.js:1110:  var ambientLightCount = this.ambientLightColors.length / 3;
+src/webgl/p5.RendererGL.js:1112:  fillShader.setUniform('uAmbientColor', this.ambientLightColors);
+src/webgl/p5.RendererGL.js:1120:  pointShader.setUniform('uMaterialColor', this.curStrokeColor);
+src/webgl/p5.Texture.js:21: * object containing the image data to store in the texture.
+src/webgl/p5.Texture.js:38:  // used to determine if this texture might need constant updating
+src/webgl/p5.Texture.js:52:  var textureData = this._getTextureDataFromSource();
+src/webgl/p5.Texture.js:53:  this.width = textureData.width;
+src/webgl/p5.Texture.js:54:  this.height = textureData.height;
+src/webgl/p5.Texture.js:56:  this.init(textureData);
+src/webgl/p5.Texture.js:61:  var textureData;
+src/webgl/p5.Texture.js:64:    textureData = this.src.canvas;
+src/webgl/p5.Texture.js:71:    textureData = this.src.elt;
+src/webgl/p5.Texture.js:73:    textureData = this.src;
+src/webgl/p5.Texture.js:75:  return textureData;
+src/webgl/p5.Texture.js:79: * Initializes common texture parameters, creates a gl texture,
+src/webgl/p5.Texture.js:80: * tries to upload the texture for the first time if data is
+src/webgl/p5.Texture.js:89:  this.glWrapS = this._renderer.textureWrapX;
+src/webgl/p5.Texture.js:90:  this.glWrapT = this._renderer.textureWrapY;
+src/webgl/p5.Texture.js:104:    // assign a 1x1 empty texture initially, because data is not yet ready,
+src/webgl/p5.Texture.js:119:    // data is ready: just push the texture!
+src/webgl/p5.Texture.js:132: * Checks if the source data for this texture has changed (if it's
+src/webgl/p5.Texture.js:133: * easy to do so) and reuploads the texture if necessary. If it's not
+src/webgl/p5.Texture.js:135: * not the data has occurred, this method simply re-uploads the texture.
+src/webgl/p5.Texture.js:144:  var textureData = this._getTextureDataFromSource();
+src/webgl/p5.Texture.js:148:  // pull texture from data, make sure width & height are appropriate
+src/webgl/p5.Texture.js:149:  if (textureData.width !== this.width || textureData.height !== this.height) {
+src/webgl/p5.Texture.js:153:    // for some reason, we update our metadata and upload the texture again
+src/webgl/p5.Texture.js:154:    this.width = textureData.width;
+src/webgl/p5.Texture.js:155:    this.height = textureData.height;
+src/webgl/p5.Texture.js:164:      // send the first frame to texture memory.
+src/webgl/p5.Texture.js:189:        // update the texture in gpu mem only if the current
+src/webgl/p5.Texture.js:191:        // time we uploaded this texture (and update the time we
+src/webgl/p5.Texture.js:204:    // there is not enough information to tell if the texture can be
+src/webgl/p5.Texture.js:217:      textureData
+src/webgl/p5.Texture.js:225: * Binds the texture to the appropriate GL target.
+src/webgl/p5.Texture.js:229:  // bind texture using gl context + glTarget and
+src/webgl/p5.Texture.js:230:  // generated gl texture object
+src/webgl/p5.Texture.js:238: * Unbinds the texture from the appropriate GL target.
+src/webgl/p5.Texture.js:248: * Sets how a texture is be interpolated when upscaled or downscaled.
+src/webgl/p5.Texture.js:252: * @param {String} downScale Specifies the texture filtering when
+src/webgl/p5.Texture.js:253: *                           textures are shrunk. Options are LINEAR or NEAREST
+src/webgl/p5.Texture.js:254: * @param {String} upScale Specifies the texture filtering when
+src/webgl/p5.Texture.js:255: *                         textures are magnified. Options are LINEAR or NEAREST
+src/webgl/p5.Texture.js:280: * Sets the texture wrapping mode. This controls how textures behave
+src/webgl/p5.Texture.js:282: * CLAMP, REPEAT, and MIRROR. REPEAT & MIRROR are only available if the texture
+src/webgl/p5.Texture.js:285: * @param {String} wrapX Controls the horizontal texture wrapping behavior
+src/webgl/p5.Texture.js:286: * @param {String} wrapY Controls the vertical texture wrapping behavior
+src/webgl/p5.Texture.js:291:  // for webgl 1 we need to check if the texture is power of two
+src/webgl/p5.Texture.js:306:        'You tried to set the wrap mode to REPEAT but the texture size is not a power of two. Setting to CLAMP instead'
+src/webgl/p5.Texture.js:315:        'You tried to set the wrap mode to MIRROR but the texture size is not a power of two. Setting to CLAMP instead'
+src/webgl/p5.Texture.js:329:        'You tried to set the wrap mode to REPEAT but the texture size is not a power of two. Setting to CLAMP instead'
+src/webgl/p5.Texture.js:338:        'You tried to set the wrap mode to MIRROR but the texture size is not a power of two. Setting to CLAMP instead'
+src/webgl/p5.RendererGL.Immediate.js:104:  var vertexColor = this.curFillColor || [0.5, 0.5, 0.5, 1.0];
+src/webgl/p5.RendererGL.Immediate.js:112:  if (this.textureMode === constants.IMAGE) {
+src/webgl/p5.RendererGL.Immediate.js:121:        'You must first call texture() before using' +
+src/webgl/p5.RendererGL.Immediate.js:275:  if (this.drawMode === constants.FILL && shader.attributes.aVertexColor) {
+src/webgl/p5.RendererGL.Immediate.js:284:    shader.enableAttrib(shader.attributes.aVertexColor, 4);
+src/webgl/p5.RendererGL.Immediate.js:289:    //texture coordinate Attribute
+src/webgl/p5.RendererGL.Immediate.js:338:    this._applyColorBlend(this.curFillColor);
+src/webgl/p5.RendererGL.Immediate.js:382:  this._applyColorBlend(this.curStrokeColor);
+src/webgl/shaders/lighting.glsl:8:uniform vec3 uAmbientColor[8];
+src/webgl/shaders/lighting.glsl:12:uniform vec3 uDirectionalColor[8];
+src/webgl/shaders/lighting.glsl:16:uniform vec3 uPointLightColor[8];
+src/webgl/shaders/lighting.glsl:77:      vec3 lightColor = uDirectionalColor[j];
+src/webgl/shaders/lighting.glsl:79:      totalDiffuse += result.diffuse * lightColor;
+src/webgl/shaders/lighting.glsl:80:      totalSpecular += result.specular * lightColor;
+src/webgl/shaders/lighting.glsl:90:      vec3 lightColor = falloff * uPointLightColor[j];
+src/webgl/shaders/lighting.glsl:93:      totalDiffuse += result.diffuse * lightColor;
+src/webgl/shaders/lighting.glsl:94:      totalSpecular += result.specular * lightColor;
+src/webgl/shaders/phong.frag:3:uniform vec4 uMaterialColor;
+src/webgl/shaders/phong.frag:4:uniform sampler2D uSampler;
+src/webgl/shaders/phong.frag:18:  gl_FragColor = isTexture ? texture2D(uSampler, vTexCoord) : uMaterialColor;
+src/webgl/shaders/phong.frag:19:  gl_FragColor.rgb = gl_FragColor.rgb * (diffuse + vAmbientColor) + specular;
+src/webgl/shaders/phong.vert:8:uniform vec3 uAmbientColor[8];
+src/webgl/shaders/phong.vert:35:      vAmbientColor += uAmbientColor[i];
+src/webgl/shaders/light.vert:12:varying vec3 vDiffuseColor;
+src/webgl/shaders/light.vert:13:varying vec3 vSpecularColor;
+src/webgl/shaders/light.vert:23:  totalLight(viewModelPosition.xyz, vertexNormal, vDiffuseColor, vSpecularColor);
+src/webgl/shaders/light.vert:27:      vDiffuseColor += uAmbientColor[i];
+src/webgl/shaders/immediate.vert:2:attribute vec4 aVertexColor;
+src/webgl/shaders/vertexColor.vert:2:attribute vec4 aVertexColor;
+src/webgl/shaders/light_texture.frag:3:uniform vec4 uMaterialColor;
+src/webgl/shaders/light_texture.frag:4:uniform sampler2D uSampler;
+src/webgl/shaders/light_texture.frag:8:varying vec3 vDiffuseColor;
+src/webgl/shaders/light_texture.frag:9:varying vec3 vSpecularColor;
+src/webgl/shaders/light_texture.frag:12:  gl_FragColor = isTexture ? texture2D(uSampler, vVertTexCoord) : uMaterialColor;
+src/webgl/shaders/light_texture.frag:13:  gl_FragColor.rgb = gl_FragColor.rgb * vDiffuseColor + vSpecularColor;
+src/webgl/shaders/line.frag:4:uniform vec4 uMaterialColor;
+src/webgl/shaders/line.frag:7:  gl_FragColor = uMaterialColor;
+src/webgl/shaders/basic.frag:2:uniform vec4 uMaterialColor;
+src/webgl/shaders/basic.frag:4:  gl_FragColor = uMaterialColor;
+src/webgl/shaders/font.frag:24:uniform sampler2D uSamplerStrokes;
+src/webgl/shaders/font.frag:25:uniform sampler2D uSamplerRowStrokes;
+src/webgl/shaders/font.frag:26:uniform sampler2D uSamplerRows;
+src/webgl/shaders/font.frag:27:uniform sampler2D uSamplerColStrokes;
+src/webgl/shaders/font.frag:28:uniform sampler2D uSamplerCols;
+src/webgl/shaders/font.frag:36:uniform vec4 uMaterialColor;
+src/webgl/shaders/font.frag:69:// retrieves an indexed pixel from a sampler
+src/webgl/shaders/font.frag:70:vec4 getTexel(sampler2D sampler, int pos, ivec2 size) {
+src/webgl/shaders/font.frag:75:  return texture2D(sampler, (vec2(x, y) + 0.5) / vec2(size));
+src/webgl/shaders/font.frag:213:  gl_FragColor = uMaterialColor;
+
+exec
+/bin/bash -lc "sed -n '250,325p' src/webgl/p5.RendererGL.Immediate.js; cat src/webgl/shaders/light_texture.frag; cat src/webgl/shaders/phong.frag; rg -n \"immediate.frag|light_texture.frag|uSampler|_set.*Uniform\" src/webgl/p5.RendererGL.js" in /home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1
+ succeeded in 0ms:
+  isCurve,
+  isBezier,
+  isQuadratic,
+  isContour,
+  shapeKind
+) {
+  var gl = this.GL;
+  var shader = this._getImmediateFillShader();
+  this._setFillUniforms(shader);
+
+  // initialize the fill shader's 'aPosition' buffer
+  if (shader.attributes.aPosition) {
+    //vertex position Attribute
+    this._bindBuffer(
+      this.immediateMode.vertexBuffer,
+      gl.ARRAY_BUFFER,
+      this._vToNArray(this.immediateMode.vertices),
+      Float32Array,
+      gl.DYNAMIC_DRAW
+    );
+
+    shader.enableAttrib(shader.attributes.aPosition, 3);
+  }
+
+  // initialize the fill shader's 'aVertexColor' buffer
+  if (this.drawMode === constants.FILL && shader.attributes.aVertexColor) {
+    this._bindBuffer(
+      this.immediateMode.colorBuffer,
+      gl.ARRAY_BUFFER,
+      this.immediateMode.vertexColors,
+      Float32Array,
+      gl.DYNAMIC_DRAW
+    );
+
+    shader.enableAttrib(shader.attributes.aVertexColor, 4);
+  }
+
+  // initialize the fill shader's 'aTexCoord' buffer
+  if (this.drawMode === constants.TEXTURE && shader.attributes.aTexCoord) {
+    //texture coordinate Attribute
+    this._bindBuffer(
+      this.immediateMode.uvBuffer,
+      gl.ARRAY_BUFFER,
+      this.immediateMode.uvCoords,
+      Float32Array,
+      gl.DYNAMIC_DRAW
+    );
+
+    shader.enableAttrib(shader.attributes.aTexCoord, 2);
+  }
+
+  //if (true || mode) {
+  if (this.drawMode === constants.FILL || this.drawMode === constants.TEXTURE) {
+    switch (this.immediateMode.shapeMode) {
+      case constants.LINE_STRIP:
+      case constants.LINES:
+      case constants.TRIANGLES:
+        this.immediateMode.shapeMode =
+          this.isBezier ||
+          this.isQuadratic ||
+          this.isCurve ||
+          this.immediateMode.shapeMode === constants.LINE_STRIP ||
+          this.immediateMode.shapeMode === constants.TRIANGLES
+            ? constants.TRIANGLES
+            : constants.TRIANGLE_FAN;
+        break;
+    }
+  } else {
+    switch (this.immediateMode.shapeMode) {
+      case constants.LINE_STRIP:
+      case constants.LINES:
+        this.immediateMode.shapeMode = constants.LINE_LOOP;
+        break;
+    }
+  }
+  //}
+precision mediump float;
+
+uniform vec4 uMaterialColor;
+uniform sampler2D uSampler;
+uniform bool isTexture;
+
+varying highp vec2 vVertTexCoord;
+varying vec3 vDiffuseColor;
+varying vec3 vSpecularColor;
+
+void main(void) {
+  gl_FragColor = isTexture ? texture2D(uSampler, vVertTexCoord) : uMaterialColor;
+  gl_FragColor.rgb = gl_FragColor.rgb * vDiffuseColor + vSpecularColor;
+}// include lighting.glgl
+
+uniform vec4 uMaterialColor;
+uniform sampler2D uSampler;
+uniform bool isTexture;
+
+varying vec3 vNormal;
+varying vec2 vTexCoord;
+varying vec3 vViewPosition;
+varying vec3 vAmbientColor;
+
+void main(void) {
+
+  vec3 diffuse;
+  vec3 specular;
+  totalLight(vViewPosition, normalize(vNormal), diffuse, specular);
+
+  gl_FragColor = isTexture ? texture2D(uSampler, vTexCoord) : uMaterialColor;
+  gl_FragColor.rgb = gl_FragColor.rgb * (diffuse + vAmbientColor) + specular;
+}37:    __dirname + '/shaders/light_texture.frag',
+1077:p5.RendererGL.prototype._setStrokeUniforms = function(strokeShader) {
+1085:p5.RendererGL.prototype._setFillUniforms = function(fillShader) {
+1092:    fillShader.setUniform('uSampler', this._tex);
+1116:p5.RendererGL.prototype._setPointUniforms = function(pointShader) {
+
+exec
+/bin/bash -lc "sed -n '1070,1100p' src/webgl/p5.RendererGL.js; rg -n \"uMaterialColor|texture\\(\" src/webgl/shaders" in /home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1
+ succeeded in 0ms:
+  }
+
+  var tex = new p5.Texture(this, img);
+  textures.push(tex);
+  return tex;
+};
+
+p5.RendererGL.prototype._setStrokeUniforms = function(strokeShader) {
+  strokeShader.bindShader();
+
+  // set the uniform values
+  strokeShader.setUniform('uMaterialColor', this.curStrokeColor);
+  strokeShader.setUniform('uStrokeWeight', this.curStrokeWeight);
+};
+
+p5.RendererGL.prototype._setFillUniforms = function(fillShader) {
+  fillShader.bindShader();
+
+  // TODO: optimize
+  fillShader.setUniform('uMaterialColor', this.curFillColor);
+  fillShader.setUniform('isTexture', !!this._tex);
+  if (this._tex) {
+    fillShader.setUniform('uSampler', this._tex);
+  }
+  fillShader.setUniform('uSpecular', this._useSpecularMaterial);
+  fillShader.setUniform('uShininess', this._useShininess);
+
+  fillShader.setUniform('uUseLighting', this._enableLighting);
+
+  var pointLightCount = this.pointLightColors.length / 3;
+  fillShader.setUniform('uPointLightCount', pointLightCount);
+src/webgl/shaders/point.frag:3:uniform vec4 uMaterialColor;
+src/webgl/shaders/point.frag:27:  	gl_FragColor = vec4(uMaterialColor.rgb * (1.0 - mask), uMaterialColor.a) ;
+src/webgl/shaders/light_texture.frag:3:uniform vec4 uMaterialColor;
+src/webgl/shaders/light_texture.frag:12:  gl_FragColor = isTexture ? texture2D(uSampler, vVertTexCoord) : uMaterialColor;
+src/webgl/shaders/line.frag:4:uniform vec4 uMaterialColor;
+src/webgl/shaders/line.frag:7:  gl_FragColor = uMaterialColor;
+src/webgl/shaders/phong.frag:3:uniform vec4 uMaterialColor;
+src/webgl/shaders/phong.frag:18:  gl_FragColor = isTexture ? texture2D(uSampler, vTexCoord) : uMaterialColor;
+src/webgl/shaders/basic.frag:2:uniform vec4 uMaterialColor;
+src/webgl/shaders/basic.frag:4:  gl_FragColor = uMaterialColor;
+src/webgl/shaders/font.frag:36:uniform vec4 uMaterialColor;
+src/webgl/shaders/font.frag:213:  gl_FragColor = uMaterialColor;
+
+codex
+The renderer already stores tint state globally, but textured WebGL shaders sample the image directly and never read it. I’m adding a tint uniform to the textured fill path, including both lit and unlit shader variants.
+exec
+/bin/bash -lc 'ls src/webgl/shaders; rg -n "light_texture|phong.frag|defaultShaders|TEXTURE" src/webgl/p5.RendererGL.js' in /home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1
+ succeeded in 0ms:
+basic.frag
+font.frag
+font.vert
+immediate.vert
+light.vert
+light_texture.frag
+lighting.glsl
+line.frag
+line.vert
+normal.frag
+normal.vert
+phong.frag
+phong.vert
+point.frag
+point.vert
+vertexColor.frag
+vertexColor.vert
+17:var defaultShaders = {
+37:    __dirname + '/shaders/light_texture.frag',
+43:    fs.readFileSync(__dirname + '/shaders/phong.frag', 'utf-8'),
+969:        defaultShaders.phongVert,
+970:        defaultShaders.phongFrag
+975:        defaultShaders.lightVert,
+976:        defaultShaders.lightTextureFrag
+988:      defaultShaders.immediateVert,
+989:      defaultShaders.vertexColorFrag
+1000:      defaultShaders.normalVert,
+1001:      defaultShaders.normalFrag
+1012:      defaultShaders.normalVert,
+1013:      defaultShaders.basicFrag
+1024:      defaultShaders.pointVert,
+1025:      defaultShaders.pointFrag
+1035:      defaultShaders.lineVert,
+1036:      defaultShaders.lineFrag
+1048:      defaultShaders.fontVert,
+1049:      defaultShaders.fontFrag
+
+exec
+/bin/bash -lc "sed -n '1,52p' src/webgl/p5.RendererGL.js; sed -n '950,990p' src/webgl/p5.RendererGL.js; rg -n \"_tint\"" in /home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1
+ succeeded in 0ms:
+'use strict';
+
+var p5 = require('../core/main');
+var constants = require('../core/constants');
+var libtess = require('libtess');
+require('./p5.Shader');
+require('./p5.Camera');
+require('../core/p5.Renderer');
+require('./p5.Matrix');
+var fs = require('fs');
+
+var lightingShader = fs.readFileSync(
+  __dirname + '/shaders/lighting.glsl',
+  'utf-8'
+);
+
+var defaultShaders = {
+  immediateVert: fs.readFileSync(
+    __dirname + '/shaders/immediate.vert',
+    'utf-8'
+  ),
+  vertexColorVert: fs.readFileSync(
+    __dirname + '/shaders/vertexColor.vert',
+    'utf-8'
+  ),
+  vertexColorFrag: fs.readFileSync(
+    __dirname + '/shaders/vertexColor.frag',
+    'utf-8'
+  ),
+  normalVert: fs.readFileSync(__dirname + '/shaders/normal.vert', 'utf-8'),
+  normalFrag: fs.readFileSync(__dirname + '/shaders/normal.frag', 'utf-8'),
+  basicFrag: fs.readFileSync(__dirname + '/shaders/basic.frag', 'utf-8'),
+  lightVert:
+    lightingShader +
+    fs.readFileSync(__dirname + '/shaders/light.vert', 'utf-8'),
+  lightTextureFrag: fs.readFileSync(
+    __dirname + '/shaders/light_texture.frag',
+    'utf-8'
+  ),
+  phongVert: fs.readFileSync(__dirname + '/shaders/phong.vert', 'utf-8'),
+  phongFrag:
+    lightingShader +
+    fs.readFileSync(__dirname + '/shaders/phong.frag', 'utf-8'),
+  fontVert: fs.readFileSync(__dirname + '/shaders/font.vert', 'utf-8'),
+  fontFrag: fs.readFileSync(__dirname + '/shaders/font.frag', 'utf-8'),
+  lineVert: fs.readFileSync(__dirname + '/shaders/line.vert', 'utf-8'),
+  lineFrag: fs.readFileSync(__dirname + '/shaders/line.frag', 'utf-8'),
+  pointVert: fs.readFileSync(__dirname + '/shaders/point.vert', 'utf-8'),
+  pointFrag: fs.readFileSync(__dirname + '/shaders/point.frag', 'utf-8')
+};
+
+/**
+};
+
+p5.RendererGL.prototype._getImmediatePointShader = function() {
+  // select the point shader to use
+  var point = this.userPointShader;
+  if (!point || !point.isPointShader()) {
+    return this._getPointShader();
+  }
+  return point;
+};
+
+p5.RendererGL.prototype._getRetainedLineShader =
+  p5.RendererGL.prototype._getImmediateLineShader;
+
+p5.RendererGL.prototype._getLightShader = function() {
+  if (!this._defaultLightShader) {
+    if (this._pInst._glAttributes.perPixelLighting) {
+      this._defaultLightShader = new p5.Shader(
+        this,
+        defaultShaders.phongVert,
+        defaultShaders.phongFrag
+      );
+    } else {
+      this._defaultLightShader = new p5.Shader(
+        this,
+        defaultShaders.lightVert,
+        defaultShaders.lightTextureFrag
+      );
+    }
+  }
+
+  return this._defaultLightShader;
+};
+
+p5.RendererGL.prototype._getImmediateModeShader = function() {
+  if (!this._defaultImmediateModeShader) {
+    this._defaultImmediateModeShader = new p5.Shader(
+      this,
+      defaultShaders.immediateVert,
+      defaultShaders.vertexColorFrag
+    );
+src/core/p5.Renderer2D.js:103:    if (this._tint) {
+src/core/p5.Renderer2D.js:154:    newPixels[i] = r * this._tint[0] / 255;
+src/core/p5.Renderer2D.js:155:    newPixels[i + 1] = g * this._tint[1] / 255;
+src/core/p5.Renderer2D.js:156:    newPixels[i + 2] = b * this._tint[2] / 255;
+src/core/p5.Renderer2D.js:157:    newPixels[i + 3] = a * this._tint[3] / 255;
+src/core/p5.Renderer.js:55:  this._tint = null;
+src/core/p5.Renderer.js:73:      _tint: this._tint,
+src/image/loading_displaying.js:395:  this._renderer._tint = c.levels;
+src/image/loading_displaying.js:424:  this._renderer._tint = null;
+src/image/loading_displaying.js:454:    newPixels[i] = r * this._renderer._tint[0] / 255;
+src/image/loading_displaying.js:455:    newPixels[i + 1] = g * this._renderer._tint[1] / 255;
+src/image/loading_displaying.js:456:    newPixels[i + 2] = b * this._renderer._tint[2] / 255;
+src/image/loading_displaying.js:457:    newPixels[i + 3] = a * this._renderer._tint[3] / 255;
+
+apply patch
+patch: completed
+/home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1/src/webgl/p5.RendererGL.js
+diff --git a/src/webgl/p5.RendererGL.js b/src/webgl/p5.RendererGL.js
+index fa87490c111a7fce5b0172bb19de31cdd5a7631a..18b9bfa5ed69d17fff1fcfbc87813e92abd133fc
+--- a/src/webgl/p5.RendererGL.js
++++ b/src/webgl/p5.RendererGL.js
+@@ -1087,6 +1087,17 @@
+ 
+   // TODO: optimize
+   fillShader.setUniform('uMaterialColor', this.curFillColor);
++  fillShader.setUniform(
++    'uTintColor',
++    this._tint
++      ? [
++          this._tint[0] / 255,
++          this._tint[1] / 255,
++          this._tint[2] / 255,
++          this._tint[3] / 255
++        ]
++      : [1, 1, 1, 1]
++  );
+   fillShader.setUniform('isTexture', !!this._tex);
+   if (this._tex) {
+     fillShader.setUniform('uSampler', this._tex);
+
+apply patch
+patch: completed
+/home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1/src/webgl/shaders/light_texture.frag
+diff --git a/src/webgl/p5.RendererGL.js b/src/webgl/p5.RendererGL.js
+index fa87490c111a7fce5b0172bb19de31cdd5a7631a..18b9bfa5ed69d17fff1fcfbc87813e92abd133fc
+--- a/src/webgl/p5.RendererGL.js
++++ b/src/webgl/p5.RendererGL.js
+@@ -1087,6 +1087,17 @@
+ 
+   // TODO: optimize
+   fillShader.setUniform('uMaterialColor', this.curFillColor);
++  fillShader.setUniform(
++    'uTintColor',
++    this._tint
++      ? [
++          this._tint[0] / 255,
++          this._tint[1] / 255,
++          this._tint[2] / 255,
++          this._tint[3] / 255
++        ]
++      : [1, 1, 1, 1]
++  );
+   fillShader.setUniform('isTexture', !!this._tex);
+   if (this._tex) {
+     fillShader.setUniform('uSampler', this._tex);
+diff --git a/src/webgl/shaders/light_texture.frag b/src/webgl/shaders/light_texture.frag
+index d439945eaf357bfdef905b8f518f88b94cc00241..a34ac7a786a5afc76413afa03865d0726db9a5f9
+--- a/src/webgl/shaders/light_texture.frag
++++ b/src/webgl/shaders/light_texture.frag
+@@ -1,6 +1,7 @@
+ precision mediump float;
+ 
+ uniform vec4 uMaterialColor;
++uniform vec4 uTintColor;
+ uniform sampler2D uSampler;
+ uniform bool isTexture;
+ 
+@@ -10,5 +11,6 @@
+ 
+ void main(void) {
+   gl_FragColor = isTexture ? texture2D(uSampler, vVertTexCoord) : uMaterialColor;
++  if (isTexture) gl_FragColor *= uTintColor;
+   gl_FragColor.rgb = gl_FragColor.rgb * vDiffuseColor + vSpecularColor;
+-}
+\ No newline at end of file
++}
+
+apply patch
+patch: completed
+/home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1/src/webgl/shaders/phong.frag
+diff --git a/src/webgl/p5.RendererGL.js b/src/webgl/p5.RendererGL.js
+index fa87490c111a7fce5b0172bb19de31cdd5a7631a..18b9bfa5ed69d17fff1fcfbc87813e92abd133fc
+--- a/src/webgl/p5.RendererGL.js
++++ b/src/webgl/p5.RendererGL.js
+@@ -1087,6 +1087,17 @@
+ 
+   // TODO: optimize
+   fillShader.setUniform('uMaterialColor', this.curFillColor);
++  fillShader.setUniform(
++    'uTintColor',
++    this._tint
++      ? [
++          this._tint[0] / 255,
++          this._tint[1] / 255,
++          this._tint[2] / 255,
++          this._tint[3] / 255
++        ]
++      : [1, 1, 1, 1]
++  );
+   fillShader.setUniform('isTexture', !!this._tex);
+   if (this._tex) {
+     fillShader.setUniform('uSampler', this._tex);
+diff --git a/src/webgl/shaders/light_texture.frag b/src/webgl/shaders/light_texture.frag
+index d439945eaf357bfdef905b8f518f88b94cc00241..a34ac7a786a5afc76413afa03865d0726db9a5f9
+--- a/src/webgl/shaders/light_texture.frag
++++ b/src/webgl/shaders/light_texture.frag
+@@ -1,6 +1,7 @@
+ precision mediump float;
+ 
+ uniform vec4 uMaterialColor;
++uniform vec4 uTintColor;
+ uniform sampler2D uSampler;
+ uniform bool isTexture;
+ 
+@@ -10,5 +11,6 @@
+ 
+ void main(void) {
+   gl_FragColor = isTexture ? texture2D(uSampler, vVertTexCoord) : uMaterialColor;
++  if (isTexture) gl_FragColor *= uTintColor;
+   gl_FragColor.rgb = gl_FragColor.rgb * vDiffuseColor + vSpecularColor;
+-}
+\ No newline at end of file
++}
+diff --git a/src/webgl/shaders/phong.frag b/src/webgl/shaders/phong.frag
+index c188fa2d120a9aef53c112cb6b1f67938564176c..7a3f777e445d1742c880946303ef3d2cf6dd01b8
+--- a/src/webgl/shaders/phong.frag
++++ b/src/webgl/shaders/phong.frag
+@@ -1,6 +1,7 @@
+ // include lighting.glgl
+ 
+ uniform vec4 uMaterialColor;
++uniform vec4 uTintColor;
+ uniform sampler2D uSampler;
+ uniform bool isTexture;
+ 
+@@ -16,5 +17,6 @@
+   totalLight(vViewPosition, normalize(vNormal), diffuse, specular);
+ 
+   gl_FragColor = isTexture ? texture2D(uSampler, vTexCoord) : uMaterialColor;
++  if (isTexture) gl_FragColor *= uTintColor;
+   gl_FragColor.rgb = gl_FragColor.rgb * (diffuse + vAmbientColor) + specular;
+-}
+\ No newline at end of file
++}
+
+exec
+/bin/bash -lc 'git diff -- src/webgl/p5.RendererGL.js src/webgl/shaders/light_texture.frag src/webgl/shaders/phong.frag && git status --short' in /home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1
+ succeeded in 71ms:
+diff --git a/src/webgl/p5.RendererGL.js b/src/webgl/p5.RendererGL.js
+index fa87490c1..18b9bfa5e 100755
+--- a/src/webgl/p5.RendererGL.js
++++ b/src/webgl/p5.RendererGL.js
+@@ -1087,6 +1087,17 @@ p5.RendererGL.prototype._setFillUniforms = function(fillShader) {
+ 
+   // TODO: optimize
+   fillShader.setUniform('uMaterialColor', this.curFillColor);
++  fillShader.setUniform(
++    'uTintColor',
++    this._tint
++      ? [
++          this._tint[0] / 255,
++          this._tint[1] / 255,
++          this._tint[2] / 255,
++          this._tint[3] / 255
++        ]
++      : [1, 1, 1, 1]
++  );
+   fillShader.setUniform('isTexture', !!this._tex);
+   if (this._tex) {
+     fillShader.setUniform('uSampler', this._tex);
+diff --git a/src/webgl/shaders/light_texture.frag b/src/webgl/shaders/light_texture.frag
+index d439945ea..a34ac7a78 100644
+--- a/src/webgl/shaders/light_texture.frag
++++ b/src/webgl/shaders/light_texture.frag
+@@ -1,6 +1,7 @@
+ precision mediump float;
+ 
+ uniform vec4 uMaterialColor;
++uniform vec4 uTintColor;
+ uniform sampler2D uSampler;
+ uniform bool isTexture;
+ 
+@@ -10,5 +11,6 @@ varying vec3 vSpecularColor;
+ 
+ void main(void) {
+   gl_FragColor = isTexture ? texture2D(uSampler, vVertTexCoord) : uMaterialColor;
++  if (isTexture) gl_FragColor *= uTintColor;
+   gl_FragColor.rgb = gl_FragColor.rgb * vDiffuseColor + vSpecularColor;
+-}
+\ No newline at end of file
++}
+diff --git a/src/webgl/shaders/phong.frag b/src/webgl/shaders/phong.frag
+index c188fa2d1..7a3f777e4 100644
+--- a/src/webgl/shaders/phong.frag
++++ b/src/webgl/shaders/phong.frag
+@@ -1,6 +1,7 @@
+ // include lighting.glgl
+ 
+ uniform vec4 uMaterialColor;
++uniform vec4 uTintColor;
+ uniform sampler2D uSampler;
+ uniform bool isTexture;
+ 
+@@ -16,5 +17,6 @@ void main(void) {
+   totalLight(vViewPosition, normalize(vNormal), diffuse, specular);
+ 
+   gl_FragColor = isTexture ? texture2D(uSampler, vTexCoord) : uMaterialColor;
++  if (isTexture) gl_FragColor *= uTintColor;
+   gl_FragColor.rgb = gl_FragColor.rgb * (diffuse + vAmbientColor) + specular;
+-}
+\ No newline at end of file
++}
+ M src/webgl/p5.RendererGL.js
+ M src/webgl/shaders/light_texture.frag
+ M src/webgl/shaders/phong.frag
+
+codex
+Implemented WebGL tinting for textured shapes. The renderer now passes the current tint color to both lit and unlit texture shaders, which multiply it into the sampled texture, including alpha.
+
+Changed [p5.RendererGL.js](/home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1/src/webgl/p5.RendererGL.js), [light_texture.frag](/home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1/src/webgl/shaders/light_texture.frag), and [phong.frag](/home/sanjuoxn/acb-workspaces/18cbed12/processing__p5-js-3709_60a25f5d_r1/src/webgl/shaders/phong.frag). I did not run tests, as requested.
+tokens used
+45,445

@@ -1,0 +1,1005 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": false,
+  "outcome": "acceptance_failed",
+  "error": null,
+  "started_at": "2026-11-25T15:11:56.129926+00:00",
+  "duration_s": 377.74,
+  "task": {
+    "id": "diegomura__react-pdf-1280",
+    "kind": "swebench",
+    "dataset": "SWE-bench/SWE-bench_Multimodal",
+    "task_hash": "e4875ad191a61d86b523c54245bfa588fd078f4e76971ada10e4d39c852491f4",
+    "prompt_hash": "d0c79f5504a008bd609f026e033d3cb907882d7ae5b8d9fd9988daeb9485618e",
+    "starter_hash": "52923088c5ca622ce45be28a05f91a5ef57972f78ab5710e9712b469b671ab50",
+    "test_hash": "d0c8235735793360f3479422ad466b5dac7fd0874c29f5aa9925c04f03b5a2fe"
+  },
+  "run_context": {
+    "run_id": "9f1132c5-f40f-433f-af50-220007d8862f",
+    "experiment_id": "56546823-6159-4b03-92d1-ec245f124c05",
+    "assistant_id": "copilot",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "diegomura__react-pdf-1280_9f1132c5_r1",
+    "snapshot_hash": "68ff6d18c429ba1e0b7f5a2d05f41d96b3d8691a577554bf8931739e457e51a4"
+  },
+  "diff": {
+    "files_changed": 2,
+    "lines_added": 2,
+    "lines_removed": 2,
+    "files": [
+      "packages/stylesheet/src/expand.js",
+      "packages/types/style.d.ts"
+    ],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": {
+    "status": "ran",
+    "passed": 0,
+    "failed": 1,
+    "errors": 0,
+    "total": 1,
+    "expected_total": 1,
+    "tests": [
+      {
+        "id": "packages/stylesheet/tests/resolve.test.js",
+        "outcome": "failed"
+      }
+    ]
+  },
+  "regression": {
+    "status": "ran",
+    "passed": 210,
+    "failed": 0,
+    "errors": 0,
+    "total": 210,
+    "expected_total": 210,
+    "tests": [
+      {
+        "id": "packages/textkit/tests/run/remove.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/layout/resolveAttachments.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/equals.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/layout/wrapWords.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/layout/generateGlyphs.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/image/tests/cache.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/unicode-properties/test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setAspectRatio.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/utils/isFirstItem.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/layout/preprocessRuns.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/containsRect.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/steps/resolveStyles.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/renderer/tests/propsEqual.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/slice.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/offset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/position.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isPolyline.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/stylesheet/tests/flatten.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/dropLast.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/matchPercent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setBorderWidth.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/misc.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/padding.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setFlexGrow.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/layout/applyDefaultStyles.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/ascent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setDisplay.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setFlexDirection.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/percentage.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/insertGlyph.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/utils/isNumber.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/steps/resolvePercentHeight.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/steps/resolveInhritance.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/sliceAtOffset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/computedMargin.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/alignSelf.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/runIndexAt.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/page/isLandscape.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setAlignSelf.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/flexDirection.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/runIndexAt.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setJustifyContent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/topLeft.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/flatten.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/computedPadding.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isLink.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/containsPoint.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/infiniteHeight.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/alignItems.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/empty.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/omit.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isCanvas.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/indices/resolve.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/area.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isTspan.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/maxY.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/primitives/tests/index.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/getOrigin.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/layout/resolveYOffset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/start.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/bottomLeft.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/bottomRight.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/flexSpec.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isGroup.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/advanceWidthBetween.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isPolygon.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/glyph/fromCodePoint.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/page/getSize.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/stylesheet/tests/expand.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isLine.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/indices/append.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/trailingOffset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isNote.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/filter.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/defaultValues.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/indices/normalize.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/getDimension.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/image/tests/resolve.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/runAt.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isText.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/glyph/isWhiteSpace.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/isEmpty.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/primitives/renderBackground.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/primitives/renderCircle.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/utils/isBetween.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/copy.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/engines/fontSubstitution.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/getPadding.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setPadding.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/includes.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/page/isHeightAuto.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/getBorderWidth.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/utils/upperFirst.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/steps/resolveLinkSubstitution.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setDimension.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/trim.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setPositionType.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/edge.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isReadialGradient.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setMargin.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/length.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/utils/stringFromCodePoints.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/objectFit.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/svg/getBoundingBox.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setAlignContent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/fromFragments.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/steps/resolvePageSizes.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/operations/restore.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/copy.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setAlignItems.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/operations/setDestination.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/engines/scriptItemizer.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/steps/resolvePagePaddings.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/layout/splitParagraphs.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/removePaddings.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/glyphAt.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/dropLast.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/indexAtOffset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/utils/url.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/advanceWidth.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/extend.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/advanceWidth.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/utils/isLastItem.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/utils/capitalize.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/subtract.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/flexbox.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isPath.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/margin.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/zeroOutLayoutRecursivly.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/page/isPortrait.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/getPosition.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/index.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/page/getOrientation.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/equal.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/svg/parsePoints.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/add.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/border.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/text/layoutText.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/prepend.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/append.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/indices/prepend.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/intersects.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setFlexShrink.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/stylesheet/tests/colors.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/stylesheet/tests/units.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/primitives/renderEllipse.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/prepend.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setOverflow.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/text/heightAtLineIndex.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/contains.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/lineGap.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/glyph/slice.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/dimention.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isImage.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/descent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isSvg.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/scale.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/operations/save.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/engines/wordHyphenation.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/renderer/tests/node.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/image/getSource.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/sizeOverflow.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/utils/matchPercent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/ascent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/flexWrap.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/operations/addMetadata.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/display.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/descent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/minMaxDimension.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/justifyContent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/indexAtOffset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/nodeChild.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isPage.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/aspectRatio.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isCircle.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/glyphIndexAt.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/concat.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/renderer/tests/dom.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/length.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/topRight.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/insert.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/alignContent.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/getFont.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/append.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/end.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/stylesheet/tests/mediaQueries.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isTextInstance.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/slice.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/getMargin.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setFlexBasis.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/text/lineIndexAtHeight.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setPosition.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isRect.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/rounding.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/trailingOffset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/leadingOffset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/height.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/leadingOffset.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/empty.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/height.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/attributedString/advanceWidthBetween.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/yoga/tests/absolutePosition.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/utils/count.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/layout/tests/node/setFlexWrap.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/empty.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/rect/maxX.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/utils/isEllipse.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/utils/mapIndexed.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/render/tests/primitives/renderCanvas.test.js",
+        "outcome": "passed"
+      },
+      {
+        "id": "packages/textkit/tests/run/sort.test.js",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "ran",
+    "scorer": "golden/agentbench/code_quality (same as gold_quality_score)",
+    "quality_score": 100.0,
+    "subscores": {
+      "reliability": 100.0,
+      "complexity": 100.0,
+      "maintainability": 100.0,
+      "security": 100.0,
+      "hygiene": 100.0,
+      "size": 100.0
+    },
+    "penalties": {
+      "reliability": 0,
+      "complexity": 0.0,
+      "maintainability": 0.0,
+      "security": 0,
+      "hygiene": 0.0,
+      "size": 0.0
+    },
+    "coverage": {
+      "source_files": 2,
+      "analyzed_files": 2,
+      "status": {
+        "analyzed": 2
+      }
+    },
+    "changed_source_lines": 4,
+    "size_ratio_vs_reference": 0.667,
+    "tests_included": false,
+    "stray_files": [],
+    "lint_new": {},
+    "bandit_new": {},
+    "security_patterns": {},
+    "smells": {},
+    "new_complex_functions": [],
+    "ccn_delta": 1,
+    "mi_delta_worst": null,
+    "files": [
+      {
+        "path": "packages/stylesheet/src/expand.js",
+        "language": "javascript",
+        "status": "analyzed",
+        "added_lines": 1,
+        "removed_lines": 1,
+        "ccn_before": 66,
+        "ccn_after": 67,
+        "new_complex_functions": [],
+        "max_ccn_increase": 1,
+        "long_functions_added": 0,
+        "mi_before": null,
+        "mi_after": null,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {},
+        "security_patterns": {}
+      },
+      {
+        "path": "packages/types/style.d.ts",
+        "language": "typescript",
+        "status": "analyzed",
+        "added_lines": 1,
+        "removed_lines": 1,
+        "ccn_before": 0,
+        "ccn_after": 0,
+        "new_complex_functions": [],
+        "max_ccn_increase": 0,
+        "long_functions_added": 0,
+        "mi_before": null,
+        "mi_after": null,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {},
+        "security_patterns": {}
+      }
+    ],
+    "reference_changed_lines": 6,
+    "gold_quality_score": 100.0,
+    "delta_vs_gold": 0.0
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-harness (docker)"
+  },
+  "swebench": {
+    "resolved": false,
+    "patch_applied": true,
+    "harness_run": true,
+    "harness_run_id": "acb-9f1132c5-f40f-433f-af50-220007d8862f",
+    "harness": "swebench",
+    "harness_report": "logs/run_evaluation/acb-9f1132c5-f40f-433f-af50-220007d8862f/copilot/diegomura__react-pdf-1280/report.json"
+  }
+}

@@ -1,0 +1,53 @@
+ ● Disabled tools: web_fetch
+
+ MD Read ISSUE.md 32 lines read
+
+ / Search "flexBasis|flex-basis" in **/*.{js,ts,tsx,json} 8 lines found
+
+ $ Shell Check working tree and repository root 1 line…
+   git status --short && git rev-parse --show-toplevel
+
+ JS Read packages/stylesheet/src/expand.js 249 lines read
+
+ JS Read packages/layout/src/node/setYogaValue.js 59 lines read
+
+ TS Read packages/types/style.d.ts 117 lines read
+
+ / Search "setYogaValue|setFlexBasis|isFlexBasis|percent" in **/*.js (packages/layou… 76 lines found
+
+ JS Read packages/layout/src/utils/matchPercent.js 22 lines read
+
+ JS Read packages/stylesheet/src/shorthands.js 55 lines read
+
+ JS Read packages/stylesheet/tests/expand.test.js 529 lines read
+
+ / Search "flexBasis|flex:" in **/*.{js,jsx,ts,tsx} (packages) 13 lines found
+
+ ● Edit  Edit packages/stylesheet/src/expand.js (+1 -1)  Edit packages/types/style.d.ts (+1 -1)
+
+ $ Shell Inspect root package scripts 85 lines…
+   cat package.json
+
+ $ Shell Review the source changes 25 lines…
+   git diff --check && git diff -- packages/stylesheet/src/expand.js packages/types/style.d.ts
+
+ ✗ Shell Lint the modified stylesheet code Failed with exit code 127  /bin/bash: line 1: ./node_mod…
+   ./node_modules/.bin/eslint packages/stylesheet/src/expand.js
+   /bin/bash: line 1: ./node_modules/.bin/eslint: No such file or directory
+   Failed with exit code 127
+
+ ✗ Shell Run stylesheet expansion tests Failed with exit code 127  > @react-pdf/root@2.0.0 test > j…
+   npm test -- --runInBand packages/stylesheet/tests/expand.test.js
+   > @react-pdf/root@2.0.0 test
+   > jest --runInBand packages/stylesheet/tests/expand.test.js
+   
+   sh: 1: jest: not found
+   Failed with exit code 127
+
+ $ Shell Confirm final worktree and whitespace 2 lines…
+   git status --short && git diff --check
+
+Fixed `flexBasis` handling: standalone values such as `"50%"` are now preserved instead of being treated as part of the `flex` shorthand. Updated the style type to accept string values such as percentages and `auto`.
+
+The existing stylesheet tests and ESLint could not run because dependencies are not installed. No tests were added or modified.
+

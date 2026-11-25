@@ -1,0 +1,856 @@
+Reading additional input from stdin...
+OpenAI Codex v0.172.0
+--------
+workdir: /home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1
+model: gpt-6-luna
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a21275-fce2-77e2-8ee8-6d54ff1f3cbb
+--------
+user
+You are working in a checkout of the diegomura/react-pdf repository at commit 2a8152e66e02.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+The flexBasis rule does not work in v2.0.8.
+The flexBasis rule does not work since I upgraded to version 2.0.8 from 1.6.14.
+I have the following code:
+
+```
+<View
+  style={{
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  }}
+>
+  <Text style={{ flexBasis: "50%" }}>One</Text>
+  <Text style={{ flexBasis: "25%" }}>Two</Text>
+  <Text style={{ flexBasis: "25%" }}>Three</Text>
+</View>
+```
+
+Before:
+![image](https://user-images.githubusercontent.com/21165322/116717903-ca19ee00-a9af-11eb-89bd-7633c37bd21f.png)
+
+After:
+![image](https://user-images.githubusercontent.com/21165322/116718099-01889a80-a9b0-11eb-9d12-a15756b0a819.png)
+</issue>
+
+codex
+I’ll inspect how styles flow into Yoga, focusing on `flexBasis` parsing and the v2-era changes. I’ll keep the fix in source code and leave tests untouched.
+exec
+/bin/bash -lc 'rg -n "flexBasis|flex-basis|basis" packages src' in /home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1
+ exited 2 in 0ms:
+rg: src: No such file or directory (os error 2)
+packages/types/style.d.ts:13:  flexBasis?: number;
+packages/yoga/tests/percentage.test.js:113:  test('percentage_flex_basis', () => {
+packages/yoga/tests/percentage.test.js:163:  test('percentage_flex_basis_cross', () => {
+packages/yoga/tests/percentage.test.js:212:  test('percentage_flex_basis_cross_min_height', () => {
+packages/yoga/tests/percentage.test.js:261:  test('percentage_flex_basis_main_max_height', () => {
+packages/yoga/tests/percentage.test.js:313:  test('percentage_flex_basis_cross_max_height', () => {
+packages/yoga/tests/percentage.test.js:364:  test('percentage_flex_basis_main_max_width', () => {
+packages/yoga/tests/percentage.test.js:416:  test('percentage_flex_basis_cross_max_width', () => {
+packages/yoga/tests/percentage.test.js:467:  test('percentage_flex_basis_main_min_width', () => {
+packages/yoga/tests/percentage.test.js:519:  test('percentage_flex_basis_cross_min_width', () => {
+packages/yoga/tests/flexSpec.test.js:4:  test('flex_basis_flex_grow_column', () => {
+packages/yoga/tests/flexSpec.test.js:52:  test('flex_basis_flex_grow_row', () => {
+packages/yoga/tests/flexSpec.test.js:101:  test('flex_basis_flex_shrink_column', () => {
+packages/yoga/tests/flexSpec.test.js:149:  test('flex_basis_flex_shrink_row', () => {
+packages/yoga/tests/flexSpec.test.js:262:  test('flex_basis_overrides_main_size', () => {
+packages/yoga/tests/aspectRatio.test.js:184:  test('aspect_ratio_basis', () => {
+packages/yoga/tests/aspectRatio.test.js:476:  test('aspect_ratio_height_as_flex_basis', () => {
+packages/yoga/tests/aspectRatio.test.js:508:  test('aspect_ratio_width_as_flex_basis', () => {
+packages/yoga/tests/rounding.test.js:4:  test('rounding_flex_basis_flex_grow_row_width_of_100', () => {
+packages/yoga/tests/rounding.test.js:66:  test('rounding_flex_basis_flex_grow_row_prime_number_width', () => {
+packages/yoga/tests/rounding.test.js:156:  test('rounding_flex_basis_flex_shrink_row', () => {
+packages/yoga/tests/rounding.test.js:219:  test('rounding_flex_basis_overrides_main_size', () => {
+packages/yoga/tests/flexWrap.test.js:325:  test('flex_wrap_children_with_min_main_overriding_flex_basis', () => {
+packages/layout/src/node/setYogaValue.js:43:      } else if (attr === 'flexBasis') {
+packages/layout/src/node/setFlexBasis.js:4: * Set flex basis attribute to node's Yoga instance
+packages/layout/src/node/setFlexBasis.js:6: * @param {Number} flex basis value
+packages/layout/src/node/setFlexBasis.js:10:const setFlexBasis = setYogaValue('flexBasis');
+packages/yoga/tests/flexbox.test.js:50:  test('Should have the same flexBasis by default', () => {
+packages/stylesheet/tests/expand.test.js:159:    const expectedKeys = ['flexGrow', 'flexShrink', 'flexBasis'];
+packages/layout/src/steps/resolveDimensions.js:122:    setFlexBasis(node.style.flexBasis),
+packages/stylesheet/src/shorthands.js:52:  flex: ['flexGrow', 'flexShrink', 'flexBasis'],
+packages/stylesheet/src/expand.js:60:const isFlexBasis = key => key === 'flexBasis';
+packages/yoga/src/dist/entry-common.js.flow:182:  setFlexBasis(flexBasis: number | string): void,
+packages/yoga/src/dist/entry-common.js.flow:183:  setFlexBasisPercent(flexBasis: number): void,
+
+exec
+/bin/bash -lc "cat packages/layout/src/node/setYogaValue.js; cat packages/layout/src/node/setFlexBasis.js; sed -n '1,110p' packages/stylesheet/src/expand.js; cat packages/types/style.d.ts; rg -n \"setFlexBasisPercent|setFlexBasis\\(\" packages/layout packages" in /home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1
+ succeeded in 0ms:
+/* eslint-disable no-unused-expressions */
+
+import * as R from 'ramda';
+import Yoga from '@react-pdf/yoga';
+
+import upperFirst from '../utils/upperFirst';
+import matchPercent from '../utils/matchPercent';
+
+const isNotNil = R.complement(R.isNil);
+
+/**
+ * Set generic yoga attribute to node's Yoga instance, handing `auto`, edges and percentage cases
+ *
+ * @param {String} property
+ * @param {Number} edge
+ * @param {any} value
+ * @param {Object} node instance
+ * @return {Object} node instance
+ */
+const setYogaValue = (attr, edge) => value => node => {
+  const yogaNode = node._yogaNode;
+
+  if (!R.isNil(value) && yogaNode) {
+    const hasEdge = isNotNil(edge);
+    const fixedMethod = `set${upperFirst(attr)}`;
+    const autoMethod = `${fixedMethod}Auto`;
+    const percentMethod = `${fixedMethod}Percent`;
+    const percent = matchPercent(value);
+
+    if (percent && !yogaNode[percentMethod]) {
+      throw new Error(`You can't pass percentage values to ${attr} property`);
+    }
+
+    if (percent) {
+      if (hasEdge) {
+        yogaNode[percentMethod]?.(edge, percent.value);
+      } else {
+        yogaNode[percentMethod]?.(percent.value);
+      }
+    } else if (value === 'auto') {
+      if (hasEdge) {
+        yogaNode[autoMethod]?.(edge);
+      } else if (attr === 'flexBasis') {
+        // YogaNode.setFlexBasisAuto is missing (#766)
+        yogaNode.setFlexBasis(Yoga.UNIT_AUTO);
+      } else {
+        yogaNode[autoMethod]?.();
+      }
+    } else if (hasEdge) {
+      yogaNode[fixedMethod]?.(edge, value);
+    } else {
+      yogaNode[fixedMethod]?.(value);
+    }
+  }
+
+  return node;
+};
+
+export default setYogaValue;
+import setYogaValue from './setYogaValue';
+
+/**
+ * Set flex basis attribute to node's Yoga instance
+ *
+ * @param {Number} flex basis value
+ * @param {Object} node instance
+ * @return {Object} node instance
+ */
+const setFlexBasis = setYogaValue('flexBasis');
+
+export default setFlexBasis;
+import * as R from 'ramda';
+
+import shorthands from './shorthands';
+
+const BOX_MODEL_REGEX = /-?\d+(\.\d+)?(px|in|mm|cm|pt|%|vw|vh|px)?/g;
+const OBJECT_POSITION_REGEX = /-?\d+(\.\d+)?(px|in|mm|cm|pt|%|vw|vh|px)?/g;
+const BORDER_SHORTHAND_REGEX = /(-?\d+(\.\d+)?(px|in|mm|cm|pt|vw|vh|px)?)\s(\S+)\s(.+)/;
+const TRANSFORM_ORIGIN_REGEX = /(-?\d+(px|in|mm|cm|pt|%|vw|vh|px)?)|top|right|bottom|left|center/g;
+
+const FONT_WEIGHTS = {
+  thin: 100,
+  hairline: 100,
+  ultralight: 200,
+  extralight: 200,
+  light: 300,
+  normal: 400,
+  medium: 500,
+  semibold: 600,
+  demibold: 600,
+  bold: 700,
+  ultrabold: 800,
+  extrabold: 800,
+  heavy: 900,
+  black: 900,
+};
+
+const matchBoxModel = R.match(BOX_MODEL_REGEX);
+const matchObjectPosition = R.match(OBJECT_POSITION_REGEX);
+const matchBorderShorthand = R.match(BORDER_SHORTHAND_REGEX);
+const matchTransformOrigin = R.match(TRANSFORM_ORIGIN_REGEX);
+
+const isNumber = R.is(Number);
+
+const FONT_WEIGHT_REGEX = /^fontWeight/;
+
+const isFontWeightStyle = key => key.match(FONT_WEIGHT_REGEX);
+
+const BORDER_STYLE_REGEX = /^border(Top|Right|Bottom|Left)(Color|Width|Style)/;
+
+const isBorderStyle = (key, value) =>
+  key.match(BORDER_STYLE_REGEX) && typeof value === 'string';
+
+const BOX_MODEL_STYLE_REGEX = /^(margin)|(padding)/;
+
+const isBoxModelStyle = (key, value) =>
+  key.match(BOX_MODEL_STYLE_REGEX) && typeof value === 'string';
+
+const OBJECT_POSITION_STYLE_REGEX = /^objectPosition/;
+
+const isObjectPositionStyle = (key, value) =>
+  key.match(OBJECT_POSITION_STYLE_REGEX) && typeof value === 'string';
+
+const isTransformOriginStyle = (key, value) =>
+  key.match(/^transformOrigin/) && typeof value === 'string';
+
+const isFlexGrow = key => key === 'flexGrow';
+
+const isFlexShrink = key => key === 'flexShrink';
+
+const isFlexBasis = key => key === 'flexBasis';
+
+const processBorders = (key, value) => {
+  const match = matchBorderShorthand(value);
+
+  if (match) {
+    if (key.match(/Color$/)) {
+      return match[5] || value;
+    }
+
+    if (key.match(/Style$/)) {
+      return match[4] || value;
+    }
+
+    if (key.match(/Width$/)) {
+      return match[1] || value;
+    }
+
+    throw new Error(`StyleSheet: Invalid '${value}' for '${key}'`);
+  }
+
+  return value;
+};
+
+const processBoxModel = (key, value) => {
+  if (value === 'auto') return value;
+
+  const match = matchBoxModel(value);
+
+  if (match) {
+    if (key.match(/Top$/)) {
+      return match[0];
+    }
+
+    if (key.match(/Right$/)) {
+      return match[1] || match[0];
+    }
+
+    if (key.match(/Bottom$/)) {
+      return match[2] || match[0];
+    }
+
+    if (key.match(/Left$/)) {
+      return match[3] || match[1] || match[0];
+    }
+
+    throw new Error(`StyleSheet: Invalid '${value}' for '${key}'`);
+  }
+
+  return value;
+};
+export interface Style {
+  //Flexbox
+
+  alignContent?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'space-between' | 'space-around';
+  alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+  alignSelf?: 'auto' | 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
+  flex?: number;
+  flexDirection?: 'row' | 'row-reverse' | 'column' | 'column-reverse';
+  flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
+  flexFlow?: number;
+  flexGrow?: number;
+  flexShrink?: number;
+  flexBasis?: number;
+  justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-around' | 'space-between' | 'space-evenly';
+  order?: number;
+
+  // Layout
+
+  bottom?: number | string;
+  display?: 'flex' | 'none';
+  left?: number | string;
+  position?: 'absolute' | 'relative';
+  right?: number | string;
+  top?: number | string;
+  overflow?: 'hidden';
+
+  // Dimension
+
+  height?: number | string;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
+  width?: number | string;
+
+  // Color
+
+  backgroundColor?: string;
+  color?: string;
+  opacity?: number;
+
+  // Text
+
+  fontSize?: number | string;
+  fontFamily?: string;
+  fontStyle?: string | 'normal';
+  fontWeight?: number | 'thin' | 'hairline' | 'ultralight' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'demibold' | 'bold' | 'ultrabold' | 'extrabold' | 'heavy' | 'black';
+  letterSpacing?: number | string;
+  lineHeight?: number | string;
+  maxLines?: number; //?
+  textAlign?: 'left' | 'right' | 'center' | 'justify'; //?
+  textDecoration?: 'line-through' | 'underline' | 'none';
+  textDecorationColor?: string;
+  textDecorationStyle?: "dashed" | "dotted" | "solid" | string; //?
+  textIndent?: any; //?
+  textOverflow?: 'ellipsis';
+  textTransform?: 'capitalize' | 'lowercase' | 'uppercase';
+
+  // Sizing/positioning
+
+  objectFit?: string;
+  objectPosition?: number | string;
+  objectPositionX?: number | string;
+  objectPositionY?: number | string;
+
+  // Margin/padding
+
+  margin?: number | string;
+  marginHorizontal?: number | string;
+  marginVertical?: number | string;
+  marginTop?: number | string;
+  marginRight?: number | string;
+  marginBottom?: number | string;
+  marginLeft?: number | string;
+  padding?: number | string;
+  paddingHorizontal?: number | string;
+  paddingVertical?: number | string;
+  paddingTop?: number | string;
+  paddingRight?: number | string;
+  paddingBottom?: number | string;
+  paddingLeft?: number | string;
+
+  // Transformations
+
+  transform?: string;
+  transformOrigin?: number | string;
+  transformOriginX?: number | string;
+  transformOriginY?: number | string;
+
+  // Borders
+
+  border?: number | string;
+  borderWidth?: number;
+  borderColor?: string;
+  borderStyle?: "dashed" | "dotted" | "solid";
+  borderTop?: number | string;
+  borderTopColor?: string;
+  borderTopStyle?: "dashed" | "dotted" | "solid"; // ?
+  borderTopWidth?: number | string;
+  borderRight?: number | string;
+  borderRightColor?: string;
+  borderRightStyle?: "dashed" | "dotted" | "solid"; //?
+  borderRightWidth?: number | string;
+  borderBottom?: number | string;
+  borderBottomColor?: string;
+  borderBottomStyle?: "dashed" | "dotted" | "solid"; //?
+  borderBottomWidth?: number | string;
+  borderLeft?: number | string;
+  borderLeftColor?: string;
+  borderLeftStyle?: "dashed" | "dotted" | "solid"; //?
+  borderLeftWidth?: number | string;
+  borderTopLeftRadius?: number | string;
+  borderTopRightRadius?: number | string;
+  borderBottomRightRadius?: number | string;
+  borderBottomLeftRadius?: number | string;
+  borderRadius?: number | string
+}
+packages/layout/tests/node/setFlexBasis.test.js:13:    const result = setFlexBasis(null)(emptyNode);
+packages/layout/tests/node/setFlexBasis.test.js:19:    const result = setFlexBasis(2)(node);
+packages/layout/tests/node/setFlexBasis.test.js:13:    const result = setFlexBasis(null)(emptyNode);
+packages/layout/tests/node/setFlexBasis.test.js:19:    const result = setFlexBasis(2)(node);
+packages/layout/src/node/setYogaValue.js:45:        yogaNode.setFlexBasis(Yoga.UNIT_AUTO);
+packages/layout/src/steps/resolveDimensions.js:122:    setFlexBasis(node.style.flexBasis),
+packages/layout/src/node/setYogaValue.js:45:        yogaNode.setFlexBasis(Yoga.UNIT_AUTO);
+packages/layout/src/steps/resolveDimensions.js:122:    setFlexBasis(node.style.flexBasis),
+packages/yoga/tests/alignContent.test.js:202:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:208:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:220:    child3.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:784:    child00.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:893:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:904:    child3.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:992:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:1002:    child3.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:1623:    child00.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:1629:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/flexbox.test.js:120:    yogaNode.setFlexBasis(1);
+packages/yoga/tests/flexbox.test.js:121:    flexboxNode.setFlexBasis(1);
+packages/yoga/tests/flexbox.test.js:126:  test('Should setFlexBasisPercent', () => {
+packages/yoga/tests/flexbox.test.js:127:    yogaNode.setFlexBasisPercent(1);
+packages/yoga/tests/flexbox.test.js:128:    flexboxNode.setFlexBasisPercent(1);
+packages/yoga/tests/minMaxDimension.test.js:369:    root_child0_child0.setFlexBasis(0);
+packages/yoga/tests/minMaxDimension.test.js:412:    root_child0.setFlexBasis(0);
+packages/yoga/tests/minMaxDimension.test.js:594:    root_child0.setFlexBasis(200);
+packages/yoga/tests/minMaxDimension.test.js:649:    root_child0_child0.setFlexBasis(200);
+packages/yoga/tests/minMaxDimension.test.js:713:    root_child0_child0.setFlexBasis(200);
+packages/yoga/tests/minMaxDimension.test.js:870:    root_child0_child0.setFlexBasis(100);
+packages/yoga/tests/minMaxDimension.test.js:928:    root_child0.setFlexBasis(100);
+packages/yoga/tests/minMaxDimension.test.js:977:    root_child0.setFlexBasis(0);
+packages/yoga/tests/minMaxDimension.test.js:983:    root_child1.setFlexBasisPercent(50);
+packages/yoga/tests/aspectRatio.test.js:192:    child1.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:11:    child0.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:60:    child0.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:108:    child0.setFlexBasis(100);
+packages/yoga/tests/flexSpec.test.js:112:    child1.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:157:    child0.setFlexBasis(100);
+packages/yoga/tests/flexSpec.test.js:161:    child1.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:269:    child0.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:381:    child0.setFlexBasis(40);
+packages/yoga/tests/rounding.test.js:164:    root_child0.setFlexBasis(100);
+packages/yoga/tests/rounding.test.js:168:    root_child1.setFlexBasis(25);
+packages/yoga/tests/rounding.test.js:172:    root_child2.setFlexBasis(25);
+packages/yoga/tests/rounding.test.js:226:    root_child0.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:291:    root_child0.setFlexBasis(50.3);
+packages/yoga/tests/rounding.test.js:356:    root_child0.setFlexBasis(50.3);
+packages/yoga/tests/rounding.test.js:362:    root_child0_child0.setFlexBasis(0.3);
+packages/yoga/tests/rounding.test.js:369:    root_child0_child1.setFlexBasis(0.3);
+packages/yoga/tests/rounding.test.js:455:    root_child0.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:520:    root_child0.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:586:    root_child0.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:652:    root_child0.setFlexBasis(50);
+packages/yoga/tests/percentage.test.js:121:    root_child0.setFlexBasisPercent(50);
+packages/yoga/tests/percentage.test.js:126:    root_child1.setFlexBasisPercent(25);
+packages/yoga/tests/percentage.test.js:170:    root_child0.setFlexBasisPercent(50);
+packages/yoga/tests/percentage.test.js:175:    root_child1.setFlexBasisPercent(25);
+packages/yoga/tests/percentage.test.js:269:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:275:    root_child1.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:320:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:326:    root_child1.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:372:    root_child0.setFlexBasisPercent(15);
+packages/yoga/tests/percentage.test.js:378:    root_child1.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:423:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:429:    root_child1.setFlexBasisPercent(15);
+packages/yoga/tests/percentage.test.js:475:    root_child0.setFlexBasisPercent(15);
+packages/yoga/tests/percentage.test.js:481:    root_child1.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:526:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:532:    root_child1.setFlexBasisPercent(15);
+packages/yoga/tests/percentage.test.js:577:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:615:    root_child1.setFlexBasisPercent(15);
+packages/yoga/tests/margin.test.js:1647:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/margin.test.js:1699:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/flexWrap.test.js:332:    child0.setFlexBasis(50);
+packages/yoga/tests/flexWrap.test.js:338:    child1.setFlexBasis(50);
+packages/yoga/tests/flexWrap.test.js:1357:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/flexWrap.test.js:1366:    child1.setFlexBasisPercent(0);
+packages/yoga/src/dist/entry-common.js.flow:182:  setFlexBasis(flexBasis: number | string): void,
+packages/yoga/src/dist/entry-common.js.flow:183:  setFlexBasisPercent(flexBasis: number): void,
+packages/yoga/tests/display.test.js:166:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/display.test.js:172:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/display.test.js:179:    child2.setFlexBasisPercent(0);
+packages/yoga/tests/display.test.js:188:    child3.setFlexBasisPercent(0);
+packages/yoga/tests/index.test.js:13:    firstChild.setFlexBasis(50);
+
+exec
+/bin/bash -lc "cat packages/layout/src/utils/matchPercent.js; sed -n '110,210p' packages/stylesheet/src/expand.js; git status --short; cat ISSUE.md" in /home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1
+ succeeded in 0ms:
+const isPercent = value => /((-)?\d+\.?\d*)%/g.exec(value);
+
+/**
+ * Get percentage value of input
+ *
+ * @param {String} value
+ * @returns {Object} percent value (if matches)
+ */
+const matchPercent = value => {
+  const match = isPercent(value);
+
+  if (match) {
+    const f = parseFloat(match[1], 10);
+    const percent = f / 100;
+
+    return { percent, value: f };
+  }
+
+  return null;
+};
+
+export default matchPercent;
+};
+
+export const processFontWeight = (key, value) => {
+  if (!value) return FONT_WEIGHTS.normal;
+  if (typeof value === 'number') return value;
+  return FONT_WEIGHTS[value.toLowerCase()];
+};
+
+export const processObjectPosition = (key, value) => {
+  const match = matchObjectPosition(value);
+
+  if (match) {
+    if (key.match(/X$/)) {
+      return match[0] || value;
+    }
+
+    if (key.match(/Y$/)) {
+      return match[1] || value;
+    }
+
+    throw new Error(`StyleSheet: Invalid '${value}' for '${key}'`);
+  }
+
+  return value;
+};
+
+const transformOffsetKeywords = value => {
+  switch (value) {
+    case 'top':
+    case 'left':
+      return '0%';
+    case 'right':
+    case 'bottom':
+      return '100%';
+    case 'center':
+      return '50%';
+    default:
+      return value;
+  }
+};
+
+// Transforms shorthand transformOrigin values
+const processTransformOrigin = (key, value) => {
+  const match = matchTransformOrigin(value);
+
+  if (match) {
+    let result;
+
+    if (key.match(/X$/)) {
+      result = match[0] || value;
+    } else if (key.match(/Y$/)) {
+      result = match[1] || match[0] || value;
+    } else {
+      throw new Error(`StyleSheet: Invalid '${value}' for '${key}'`);
+    }
+
+    return transformOffsetKeywords(result);
+  }
+
+  return value;
+};
+
+const processFlexGrow = (key, value) => {
+  if (isNumber(value)) return value;
+  const matches = value.split(' ');
+  return matches[0];
+};
+
+const processFlexShrink = (key, value) => {
+  if (isNumber(value)) return value;
+  const matches = value.split(' ');
+  return matches[1];
+};
+
+const processFlexBasis = (key, value) => {
+  if (isNumber(value)) return value;
+  const matches = value.split(' ');
+  return matches[2];
+};
+
+const keepSame = (key, value) => value;
+
+const matchNumber = R.when(R.is(String), R.test(/^-?\d*\.?\d*$/));
+
+const castFloat = R.when(matchNumber, v => parseFloat(v, 10));
+
+/**
+ * Transforms style key-value
+ *
+ * @param {String} key style key
+ * @param {String} value style value
+ * @returns {String | Number} transformed style values
+ */
+const transformStyle = R.compose(
+  castFloat,
+  R.cond([
+    [isBorderStyle, processBorders],
+    [isBoxModelStyle, processBoxModel],
+    [isObjectPositionStyle, processObjectPosition],
+    [isTransformOriginStyle, processTransformOrigin],
+    [isFontWeightStyle, processFontWeight],
+You are working in a checkout of the diegomura/react-pdf repository at commit 2a8152e66e02.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+The flexBasis rule does not work in v2.0.8.
+The flexBasis rule does not work since I upgraded to version 2.0.8 from 1.6.14.
+I have the following code:
+
+```
+<View
+  style={{
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  }}
+>
+  <Text style={{ flexBasis: "50%" }}>One</Text>
+  <Text style={{ flexBasis: "25%" }}>Two</Text>
+  <Text style={{ flexBasis: "25%" }}>Three</Text>
+</View>
+```
+
+Before:
+![image](https://user-images.githubusercontent.com/21165322/116717903-ca19ee00-a9af-11eb-89bd-7633c37bd21f.png)
+
+After:
+![image](https://user-images.githubusercontent.com/21165322/116718099-01889a80-a9b0-11eb-9d12-a15756b0a819.png)
+</issue>
+
+exec
+/bin/bash -lc 'rg -n "setFlexBasisPercent|setFlexBasis" packages/yoga/src packages/yoga' in /home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1
+ succeeded in 0ms:
+packages/yoga/src/dist/entry-common.js.flow:182:  setFlexBasis(flexBasis: number | string): void,
+packages/yoga/src/dist/entry-common.js.flow:183:  setFlexBasisPercent(flexBasis: number): void,
+packages/yoga/src/dist/entry-common.js.flow:246:    'setFlexBasis',
+packages/yoga/tests/percentage.test.js:121:    root_child0.setFlexBasisPercent(50);
+packages/yoga/tests/percentage.test.js:126:    root_child1.setFlexBasisPercent(25);
+packages/yoga/tests/percentage.test.js:170:    root_child0.setFlexBasisPercent(50);
+packages/yoga/tests/percentage.test.js:175:    root_child1.setFlexBasisPercent(25);
+packages/yoga/tests/percentage.test.js:269:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:275:    root_child1.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:320:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:326:    root_child1.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:372:    root_child0.setFlexBasisPercent(15);
+packages/yoga/tests/percentage.test.js:378:    root_child1.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:423:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:429:    root_child1.setFlexBasisPercent(15);
+packages/yoga/tests/percentage.test.js:475:    root_child0.setFlexBasisPercent(15);
+packages/yoga/tests/percentage.test.js:481:    root_child1.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:526:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:532:    root_child1.setFlexBasisPercent(15);
+packages/yoga/tests/percentage.test.js:577:    root_child0.setFlexBasisPercent(10);
+packages/yoga/tests/percentage.test.js:615:    root_child1.setFlexBasisPercent(15);
+packages/yoga/tests/index.test.js:13:    firstChild.setFlexBasis(50);
+packages/yoga/src/dist/entry-common.js:137:  var _arr = ['setPosition', 'setMargin', 'setFlexBasis', 'setWidth', 'setHeight', 'setMinWidth', 'setMinHeight', 'setMaxWidth', 'setMaxHeight', 'setPadding'];
+packages/yoga/tests/flexSpec.test.js:11:    child0.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:60:    child0.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:108:    child0.setFlexBasis(100);
+packages/yoga/tests/flexSpec.test.js:112:    child1.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:157:    child0.setFlexBasis(100);
+packages/yoga/tests/flexSpec.test.js:161:    child1.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:269:    child0.setFlexBasis(50);
+packages/yoga/tests/flexSpec.test.js:381:    child0.setFlexBasis(40);
+packages/yoga/tests/aspectRatio.test.js:192:    child1.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:164:    root_child0.setFlexBasis(100);
+packages/yoga/tests/rounding.test.js:168:    root_child1.setFlexBasis(25);
+packages/yoga/tests/rounding.test.js:172:    root_child2.setFlexBasis(25);
+packages/yoga/tests/rounding.test.js:226:    root_child0.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:291:    root_child0.setFlexBasis(50.3);
+packages/yoga/tests/rounding.test.js:356:    root_child0.setFlexBasis(50.3);
+packages/yoga/tests/rounding.test.js:362:    root_child0_child0.setFlexBasis(0.3);
+packages/yoga/tests/rounding.test.js:369:    root_child0_child1.setFlexBasis(0.3);
+packages/yoga/tests/rounding.test.js:455:    root_child0.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:520:    root_child0.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:586:    root_child0.setFlexBasis(50);
+packages/yoga/tests/rounding.test.js:652:    root_child0.setFlexBasis(50);
+packages/yoga/tests/display.test.js:166:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/display.test.js:172:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/display.test.js:179:    child2.setFlexBasisPercent(0);
+packages/yoga/tests/display.test.js:188:    child3.setFlexBasisPercent(0);
+packages/yoga/tests/margin.test.js:1647:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/margin.test.js:1699:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:202:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:208:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:220:    child3.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:784:    child00.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:893:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:904:    child3.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:992:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:1002:    child3.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:1623:    child00.setFlexBasisPercent(0);
+packages/yoga/tests/alignContent.test.js:1629:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/flexWrap.test.js:332:    child0.setFlexBasis(50);
+packages/yoga/tests/flexWrap.test.js:338:    child1.setFlexBasis(50);
+packages/yoga/tests/flexWrap.test.js:1357:    child0.setFlexBasisPercent(0);
+packages/yoga/tests/flexWrap.test.js:1366:    child1.setFlexBasisPercent(0);
+packages/yoga/tests/flexbox.test.js:119:  test('Should setFlexBasis', () => {
+packages/yoga/tests/flexbox.test.js:120:    yogaNode.setFlexBasis(1);
+packages/yoga/tests/flexbox.test.js:121:    flexboxNode.setFlexBasis(1);
+packages/yoga/tests/flexbox.test.js:126:  test('Should setFlexBasisPercent', () => {
+packages/yoga/tests/flexbox.test.js:127:    yogaNode.setFlexBasisPercent(1);
+packages/yoga/tests/flexbox.test.js:128:    flexboxNode.setFlexBasisPercent(1);
+packages/yoga/tests/minMaxDimension.test.js:369:    root_child0_child0.setFlexBasis(0);
+packages/yoga/tests/minMaxDimension.test.js:412:    root_child0.setFlexBasis(0);
+packages/yoga/tests/minMaxDimension.test.js:594:    root_child0.setFlexBasis(200);
+packages/yoga/tests/minMaxDimension.test.js:649:    root_child0_child0.setFlexBasis(200);
+packages/yoga/tests/minMaxDimension.test.js:713:    root_child0_child0.setFlexBasis(200);
+packages/yoga/tests/minMaxDimension.test.js:870:    root_child0_child0.setFlexBasis(100);
+packages/yoga/tests/minMaxDimension.test.js:928:    root_child0.setFlexBasis(100);
+packages/yoga/tests/minMaxDimension.test.js:977:    root_child0.setFlexBasis(0);
+packages/yoga/tests/minMaxDimension.test.js:983:    root_child1.setFlexBasisPercent(50);
+packages/yoga/src/dist/entry-common.js.flow:182:  setFlexBasis(flexBasis: number | string): void,
+packages/yoga/src/dist/entry-common.js.flow:183:  setFlexBasisPercent(flexBasis: number): void,
+packages/yoga/src/dist/entry-common.js.flow:246:    'setFlexBasis',
+packages/yoga/src/dist/entry-common.js:137:  var _arr = ['setPosition', 'setMargin', 'setFlexBasis', 'setWidth', 'setHeight', 'setMinWidth', 'setMinHeight', 'setMaxWidth', 'setMaxHeight', 'setPadding'];
+
+exec
+/bin/bash -lc "sed -n '120,175p' packages/yoga/src/dist/entry-common.js; sed -n '225,255p' packages/yoga/src/dist/entry-common.js; cat packages/yoga/src/index.js" in /home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1
+ exited 1 in 0ms:
+
+  return Value;
+}();
+
+module.exports = function (bind, lib) {
+  function patch(prototype, name, fn) {
+    var original = prototype[name];
+
+    prototype[name] = function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return fn.call.apply(fn, [this, original].concat(args));
+    };
+  }
+
+  var _arr = ['setPosition', 'setMargin', 'setFlexBasis', 'setWidth', 'setHeight', 'setMinWidth', 'setMinHeight', 'setMaxWidth', 'setMaxHeight', 'setPadding'];
+
+  var _loop = function _loop() {
+    var _methods;
+
+    var fnName = _arr[_i];
+    var methods = (_methods = {}, _defineProperty(_methods, CONSTANTS.UNIT_POINT, lib.Node.prototype[fnName]), _defineProperty(_methods, CONSTANTS.UNIT_PERCENT, lib.Node.prototype[fnName + 'Percent']), _defineProperty(_methods, CONSTANTS.UNIT_AUTO, lib.Node.prototype[fnName + 'Auto']), _methods);
+
+    patch(lib.Node.prototype, fnName, function (original) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        args[_key2 - 1] = arguments[_key2];
+      }
+
+      // We patch all these functions to add support for the following calls:
+      // .setWidth(100) / .setWidth("100%") / .setWidth(.getWidth()) / .setWidth("auto")
+
+      var value = args.pop();
+      var unit = void 0,
+          asNumber = void 0;
+
+      if (value === 'auto') {
+        unit = CONSTANTS.UNIT_AUTO;
+        asNumber = undefined;
+      } else if (value instanceof Value) {
+        unit = value.unit;
+        asNumber = value.valueOf();
+      } else {
+        unit = typeof value === 'string' && value.endsWith('%') ? CONSTANTS.UNIT_PERCENT : CONSTANTS.UNIT_POINT;
+        asNumber = parseFloat(value);
+        if (!Number.isNaN(value) && Number.isNaN(asNumber)) {
+          throw new Error('Invalid value ' + value + ' for ' + fnName);
+        }
+      }
+
+      if (!methods[unit]) throw new Error('Failed to execute "' + fnName + '": Unsupported unit \'' + value + '\'');
+
+      if (asNumber !== undefined) {
+        var _methods$unit;
+
+    }
+  });
+
+  patch(lib.Node.prototype, 'calculateLayout', function (original) {
+    var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : NaN;
+    var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : NaN;
+    var direction = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : CONSTANTS.DIRECTION_LTR;
+
+    // Just a small patch to add support for the function default parameters
+    return original.call(this, width, height, direction);
+  });
+
+  return _extends({
+    Config: lib.Config,
+    Node: lib.Node,
+    Layout: bind('Layout', Layout),
+    Size: bind('Size', Size),
+    Value: bind('Value', Value),
+    getInstanceCount: function getInstanceCount() {
+      return lib.getInstanceCount.apply(lib, arguments);
+    }
+  }, CONSTANTS);
+};cat: packages/yoga/src/index.js: No such file or directory
+
+exec
+/bin/bash -lc 'rg -n "matchPercent|isPercent" packages/layout' in /home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1
+ succeeded in 0ms:
+packages/layout/tests/utils/matchPercent.test.js:1:import matchPercent from '../../src/utils/matchPercent';
+packages/layout/tests/utils/matchPercent.test.js:5:    expect(matchPercent(null)).toBeNull();
+packages/layout/tests/utils/matchPercent.test.js:9:    expect(matchPercent(40)).toBeNull();
+packages/layout/tests/utils/matchPercent.test.js:13:    expect(matchPercent('hey%')).toBeNull();
+packages/layout/tests/utils/matchPercent.test.js:17:    const match = matchPercent('35%');
+packages/layout/tests/utils/matchPercent.test.js:24:    const match = matchPercent('35.5%');
+packages/layout/tests/utils/matchPercent.test.js:31:    const match = matchPercent('-35%');
+packages/layout/tests/utils/matchPercent.test.js:38:    const match = matchPercent('-35.5%');
+packages/layout/src/utils/matchPercent.js:1:const isPercent = value => /((-)?\d+\.?\d*)%/g.exec(value);
+packages/layout/src/utils/matchPercent.js:9:const matchPercent = value => {
+packages/layout/src/utils/matchPercent.js:10:  const match = isPercent(value);
+packages/layout/src/utils/matchPercent.js:22:export default matchPercent;
+packages/layout/src/steps/resolvePagePaddings.js:3:import matchPercent from '../utils/matchPercent';
+packages/layout/src/steps/resolvePagePaddings.js:13:  const match = matchPercent(value);
+packages/layout/src/steps/resolvePagePaddings.js:25:  const match = matchPercent(value);
+packages/layout/src/steps/resolvePercentRadius.js:3:import matchPercent from '../utils/matchPercent';
+packages/layout/src/steps/resolvePercentRadius.js:12:  const match = matchPercent(value);
+packages/layout/src/steps/resolvePercentHeight.js:3:import matchPercent from '../utils/matchPercent';
+packages/layout/src/steps/resolvePercentHeight.js:12:  const match = matchPercent(height);
+packages/layout/src/node/getOrigin.js:3:import matchPercent from '../utils/matchPercent';
+packages/layout/src/node/getOrigin.js:20:  const percentX = matchPercent(transformOriginX);
+packages/layout/src/node/getOrigin.js:21:  const percentY = matchPercent(transformOriginY);
+packages/layout/src/node/setYogaValue.js:7:import matchPercent from '../utils/matchPercent';
+packages/layout/src/node/setYogaValue.js:28:    const percent = matchPercent(value);
+packages/layout/src/steps/resolveSvg.js:10:import matchPercent from '../utils/matchPercent';
+packages/layout/src/steps/resolveSvg.js:45:    const match = matchPercent(value);
+packages/layout/src/steps/resolveSvg.js:59:  const match = matchPercent(value);
+
+apply patch
+patch: completed
+/home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1/packages/layout/src/utils/matchPercent.js
+diff --git a/packages/layout/src/utils/matchPercent.js b/packages/layout/src/utils/matchPercent.js
+index 23f8913e7273da0d2bb8662bd9922f9f9b107e2e..8448ca9f5f6e141f354d6b245fcd27e65f1af546
+--- a/packages/layout/src/utils/matchPercent.js
++++ b/packages/layout/src/utils/matchPercent.js
+@@ -1,4 +1,7 @@
+-const isPercent = value => /((-)?\d+\.?\d*)%/g.exec(value);
++// This expression is reused across calls, so it must not be stateful. With the
++// global flag, RegExp.exec advances `lastIndex` and can miss every other
++// percentage value (for example, consecutive flexBasis values).
++const isPercent = value => /((-)?\d+\.?\d*)%/.exec(value);
+ 
+ /**
+  * Get percentage value of input
+
+codex
+Fixed percentage parsing in [matchPercent.js](/home/sanjuoxn/acb-workspaces/18cbed12/diegomura__react-pdf-1280_83340ebb_r1/packages/layout/src/utils/matchPercent.js). Its reused regex had the global flag, which made `exec` retain state and miss some consecutive percentage values, including flex-basis values. Removed the stateful flag.
+
+I left tests unchanged and did not run them.
+tokens used
+20,486

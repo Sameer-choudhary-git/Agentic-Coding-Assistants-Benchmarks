@@ -1,0 +1,55 @@
+ ● Disabled tools: web_fetch
+
+ / Search "def email|name:|email" in **/*internet* (lib/faker) 14 lines found
+
+ $ Shell Check worktree and read issue details 42 lines…
+   git status --short && git rev-parse --show-toplevel && sed -n '1,120p' ISSUE.md
+
+ RB Read lib/faker/default/internet.rb L530:590 (49 lines read)
+
+ RB Read lib/faker/default/internet.rb L1:70 (69 lines read)
+
+ / Search "sanitize_email_local_part|email\(name:|separators:" in **/*.rb (lib, test) 18 lines found
+
+ RB Read lib/faker/default/internet.rb L60:120 (61 lines read)
+
+ ● Edit  Edit lib/faker/default/internet.rb (+3 -1)
+
+ RB Read test/faker/default/test_faker_internet.rb L1:100 (100 lines read)
+
+ ✗ Shell Review and run Internet tests Failed with exit code 127  diff --git a/lib/faker/default/in…
+   git diff --check && git diff -- lib/faker/default/internet.rb && bundle exec ruby -Itest
+   test/faker/default/test_faker_internet.rb
+   diff --git a/lib/faker/default/internet.rb b/lib/faker/default/internet.rb
+   index 688b9f89..e068de52 100644
+   --- a/lib/faker/default/internet.rb
+   +++ b/lib/faker/default/internet.rb
+   @@ -565,9 +565,11 @@ module Faker
+              "!#$%&'*+-/=?^_`{|}~.".chars
+            ].flatten
+    
+   -        local_part.chars.map do |char|
+   +        sanitized_local_part = local_part.chars.map do |char|
+              char_range.include?(char) ? char : '#'
+            end.join
+   +
+   +        sanitized_local_part.gsub(/\.{2,}/, '.').gsub(/\A\.|\.\z/, '#')
+          end
+    
+          def construct_email(local_part, domain_name)
+   /bin/bash: line 1: bundle: command not found
+   Failed with exit code 127
+
+ ✗ Shell Verify generated emai… /bin/bash: line 1: ruby: command not found Failed with exit code 127
+   ruby -v && ruby -Ilib -e "require 'faker'; Faker::Config.random = Random.new(1); 100.times {
+   email = Faker::Internet.email(name: ' Msgr. Titus Harvey'); local = email.split('@').first; abort
+   email if local.match?(/\.\.|\A\.|\.\z/) }; puts '100 generated addresses have no consecutive or
+   edge dots'"
+
+ $ Shell Check final worktree and whitespace 1 line…
+   git status --short && git diff --check
+
+Updated email local-part sanitization to collapse repeated dots and replace leading or trailing dots, preventing invalid dot placement in generated addresses. Only `lib/faker/default/internet.rb` was changed.
+
+Validation was blocked because Ruby and Bundler are unavailable in the environment; `git diff --check` passed.
+

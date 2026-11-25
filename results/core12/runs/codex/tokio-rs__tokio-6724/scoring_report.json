@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": false,
+  "outcome": "patch_failed",
+  "error": null,
+  "started_at": "2026-11-25T12:19:08.698503+00:00",
+  "duration_s": 150.51,
+  "task": {
+    "id": "tokio-rs__tokio-6724",
+    "kind": "swebench",
+    "dataset": "SWE-bench/SWE-bench_Multilingual",
+    "task_hash": "9fd63a18194ea4c43b512b09f167c1de9d9a85f193947e7d2e4b94408f4ea83d",
+    "prompt_hash": "4913fd7bbb35e12584287fa212127eb7ce88ec8a68a702c70ef2bee20b017478",
+    "starter_hash": "cd7e7ba6bef9218e5fccf3770c51cee9b91531b9b6cf56d04d72052e178c5404",
+    "test_hash": "20d9860963c3405936eb68db9940edbb35cc64f7433e60e0e1989b22613bd15e"
+  },
+  "run_context": {
+    "run_id": "93ea8c3d-970f-4153-8198-fe8f9eda87cd",
+    "experiment_id": "18cbed12-083d-4b5b-b1f4-aa629f84c3fe",
+    "assistant_id": "codex",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "tokio-rs__tokio-6724_93ea8c3d_r1",
+    "snapshot_hash": "5f2881abd6f5ff5d16f742d2759d2f6a91bd74e18e5609f70a18fb44f47a0494"
+  },
+  "diff": {
+    "files_changed": 1,
+    "lines_added": 11,
+    "lines_removed": 2,
+    "files": [
+      "tokio/src/io/util/write_all_buf.rs"
+    ],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": {
+    "status": "none",
+    "passed": 0,
+    "failed": 0,
+    "errors": 0,
+    "total": 0,
+    "expected_total": 0,
+    "tests": []
+  },
+  "regression": {
+    "status": "none",
+    "passed": 0,
+    "failed": 0,
+    "errors": 0,
+    "total": 0,
+    "expected_total": 0,
+    "tests": []
+  },
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "ran",
+    "scorer": "golden/agentbench/code_quality (same as gold_quality_score)",
+    "quality_score": 100.0,
+    "subscores": {
+      "reliability": 100.0,
+      "complexity": 100.0,
+      "maintainability": 100.0,
+      "security": 100.0,
+      "hygiene": 100.0,
+      "size": 100.0
+    },
+    "penalties": {
+      "reliability": 0,
+      "complexity": 0.0,
+      "maintainability": 0.0,
+      "security": 0,
+      "hygiene": 0.0,
+      "size": 0.0
+    },
+    "coverage": {
+      "source_files": 1,
+      "analyzed_files": 1,
+      "status": {
+        "analyzed": 1
+      }
+    },
+    "changed_source_lines": 13,
+    "size_ratio_vs_reference": 1.083,
+    "tests_included": false,
+    "stray_files": [],
+    "lint_new": {},
+    "bandit_new": {},
+    "security_patterns": {},
+    "smells": {},
+    "new_complex_functions": [],
+    "ccn_delta": 2,
+    "mi_delta_worst": null,
+    "files": [
+      {
+        "path": "tokio/src/io/util/write_all_buf.rs",
+        "language": "rust",
+        "status": "analyzed",
+        "added_lines": 11,
+        "removed_lines": 2,
+        "ccn_before": 6,
+        "ccn_after": 8,
+        "new_complex_functions": [],
+        "max_ccn_increase": 2,
+        "long_functions_added": 0,
+        "mi_before": null,
+        "mi_after": null,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {},
+        "security_patterns": {}
+      }
+    ],
+    "reference_changed_lines": 12,
+    "gold_quality_score": 100.0,
+    "delta_vs_gold": 0.0
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-harness (docker)"
+  },
+  "swebench": {
+    "resolved": false,
+    "patch_applied": false,
+    "harness_run": true,
+    "harness_run_id": "acb-93ea8c3d-970f-4153-8198-fe8f9eda87cd",
+    "harness": "swebench",
+    "harness_report": "logs/run_evaluation/acb-93ea8c3d-970f-4153-8198-fe8f9eda87cd/codex/tokio-rs__tokio-6724/report.json"
+  }
+}

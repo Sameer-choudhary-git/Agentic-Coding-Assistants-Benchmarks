@@ -1,0 +1,3 @@
+Updated [write_all_buf.rs](/home/sanjuoxn/acb-workspaces/18cbed12/tokio-rs__tokio-6724_93ea8c3d_r1/tokio/src/io/util/write_all_buf.rs) to use `Buf::chunks_vectored` and `poll_write_vectored` when the writer supports vectored I/O. The existing single-chunk path remains for other writers, and successful writes still advance the buffer by the number of bytes written.
+
+I did not add or modify tests, and did not run them.

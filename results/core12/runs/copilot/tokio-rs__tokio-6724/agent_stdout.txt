@@ -1,0 +1,74 @@
+ ● Disabled tools: web_fetch
+
+ MD Read ISSUE.md 26 lines read
+
+ RS Read tokio/src/io/util/write_all_buf.rs 56 lines read
+
+ / Search "chunks_vectored|poll_write_vectored|is_write_vectored" in *.rs (tokio/src… 60 lines found
+
+ $ Shell Check working tree changes No Content
+   git status --short
+
+ RS Read tokio/src/io/util/write_vectored.rs 47 lines read
+
+ RS Read tokio/src/io/async_write.rs L1:150 (150 lines read)
+
+ / Search "write_all_buf" in *.rs (tokio/src) 8 lines found
+
+ / Search "IoSlice::new\(&\[\]\)|chunks_vectored\(" in *.rs 10 lines found
+
+ RS Read tokio-util/src/util/poll_buf.rs 145 lines read
+
+ RS Read tokio/src/io/async_write.rs L165:255 (91 lines read)
+
+ $ Shell Check bytes dependency version 1 line…
+   grep -n '^bytes\|bytes =' tokio/Cargo.toml Cargo.toml
+
+ ● Edit  Edit tokio/src/io/util/write_all_buf.rs (+12 -2)
+
+ $ Shell Review patch and whitespace 32 lines…
+   git diff --check && git diff -- tokio/src/io/util/write_all_buf.rs
+
+ $ Shell Check Rust formatting No Content
+   cargo fmt --all -- --check
+
+ ✗ Shell Check Tokio io-util build Failed with exit code 101      Updating crates.io index Locking …
+   cargo check -p tokio --features io-util
+   Updating crates.io index
+        Locking 197 packages to latest compatible versions
+         Adding criterion v0.5.1 (available: v0.8.2)
+         Adding hashbrown v0.14.5 (available: v0.17.2)
+         Adding http v0.2.12 (available: v1.5.0)
+         Adding minicov v0.3.8 (available: v0.3.9)
+         Adding mio-aio v0.9.0 (available: v2.0.2)
+         Adding mockall v0.11.4 (available: v0.15.0)
+         Adding nix v0.29.0 (available: v0.32.0)
+         Adding parking_lot v0.12.5 (available: v0.13.0)
+         Adding rand v0.8.8 (available: v0.10.4)
+         Adding rand_chacha v0.3.1 (available: v0.10.0)
+         Adding socket2 v0.5.10 (available: v0.6.5)
+         Adding syn v2.0.119 (available: v3.0.10)
+         Adding windows-sys v0.52.0 (available: v0.61.2)
+    Downloading crates ...
+     Downloaded pin-project-lite v0.2.18
+     Downloaded bytes v1.12.2
+   error: specification `tokio` is ambiguous
+   help: re-run this command with one of the following specifications
+     tokio@1.39.2
+     tokio@1.54.1
+   Failed with exit code 101
+
+ $ Shell Identify Tokio package version 2 lines…
+   grep -n '^version =' tokio/Cargo.toml | head -1 && grep -n '^name = "tokio"' Cargo.toml
+   tokio/Cargo.toml
+
+ $ Shell Check for generated manifest changes 3 lines…
+   git status --short && git diff --stat
+
+ $ Shell Check Tokio io-util build offline 4 lines…
+   cargo check --offline -p tokio@1.39.2 --features io-util
+
+`write_all_buf` now uses `chunks_vectored` and `poll_write_vectored` when the writer supports vectored I/O, while retaining the existing single-slice path otherwise. Formatting and the offline Tokio `io-util` check pass.
+
+An initial check command omitted `--offline` and attempted to update Cargo’s index; it made no repository changes.
+

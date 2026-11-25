@@ -1,0 +1,2 @@
+assistant_a,assistant_b,paired_runs,a_rate,b_rate,only_a_resolved,only_b_resolved,mcnemar_p,quality_pairs,quality_diff_mean,quality_diff_ci_low,quality_diff_ci_high,mcnemar_p_holm
+codex,copilot,12,0.5,0.5833333333333334,1,2,1.0,11,-0.6636363636363634,-1.4545454545454546,0.0,1.0

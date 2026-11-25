@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": false,
+  "outcome": "empty_patch",
+  "error": null,
+  "started_at": "2026-11-25T11:56:49.793762+00:00",
+  "duration_s": 0.19,
+  "task": {
+    "id": "caddyserver__caddy-6115",
+    "kind": "swebench",
+    "dataset": "SWE-bench/SWE-bench_Multilingual",
+    "task_hash": "da3e9c0be88fb6755c3928dac6c6ce596854c7b29afaa37a225b0a545042e435",
+    "prompt_hash": "b627c4f7b8ed284173afc23161a0a40ebb5a78eb7620e66ae0f8eec6d5f9b93f",
+    "starter_hash": "c2eb5d8198ed2ac202c8bc0b4d77d4eb745654bd7f48c47e6c418c1c0b129ee3",
+    "test_hash": "9ba708266fb87c5b35b7c208096cdfc6094c1ee02142f3153a7249057a83d01d"
+  },
+  "run_context": {
+    "run_id": "a3d32b07-29b8-459c-a475-3291da695114",
+    "experiment_id": "18cbed12-083d-4b5b-b1f4-aa629f84c3fe",
+    "assistant_id": "codex",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "caddyserver__caddy-6115_a3d32b07_r1",
+    "snapshot_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "diff": {
+    "files_changed": 0,
+    "lines_added": 0,
+    "lines_removed": 0,
+    "files": [],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": null,
+  "regression": null,
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "not_applicable"
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-harness (docker)"
+  },
+  "swebench": {
+    "resolved": false,
+    "patch_applied": null,
+    "harness_run": false
+  }
+}

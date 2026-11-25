@@ -1,0 +1,6 @@
+
+
+Changes    +3 -2
+AI Credits 0.38 (35s)
+Tokens     ↑ 174.7k (162.3k cached, 12.4k written) • ↓ 1.2k (413 reasoning)
+Resume     copilot --resume=2fb1db66-1029-426b-a20b-c9f5b86eabce

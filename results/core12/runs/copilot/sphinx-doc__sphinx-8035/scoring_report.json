@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": true,
+  "outcome": "passed",
+  "error": null,
+  "started_at": "2026-11-25T15:06:47.197385+00:00",
+  "duration_s": 39.7,
+  "task": {
+    "id": "sphinx-doc__sphinx-8035",
+    "kind": "swebench",
+    "dataset": "princeton-nlp/SWE-bench_Verified",
+    "task_hash": "76c9545bd1dd47f4a34dea209eeacd2c4c46f67e2296c20d9057801cd995a30c",
+    "prompt_hash": "e332a2d62c55dc38972fd8a5b41a454eaa366a1490fb5d51211d22b92873616d",
+    "starter_hash": "505267d982248014e59810650361251cf4bbb6d81ba1b240b36014e2b00ab2d1",
+    "test_hash": "fba774189b443d1342bf7f85e4c6ae85df0812c58594d13880c3653fde3b0e20"
+  },
+  "run_context": {
+    "run_id": "c3b9e8fa-2b9d-46da-8e88-d597deba968a",
+    "experiment_id": "56546823-6159-4b03-92d1-ec245f124c05",
+    "assistant_id": "copilot",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "sphinx-doc__sphinx-8035_c3b9e8fa_r1",
+    "snapshot_hash": "ffd30c3d2adccabcd06da9b801228a136148745392031b57842be19cd5e0734c"
+  },
+  "diff": {
+    "files_changed": 2,
+    "lines_added": 28,
+    "lines_removed": 12,
+    "files": [
+      "doc/usage/extensions/autodoc.rst",
+      "sphinx/ext/autodoc/__init__.py"
+    ],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": {
+    "status": "ran",
+    "passed": 1,
+    "failed": 0,
+    "errors": 0,
+    "total": 1,
+    "expected_total": 1,
+    "tests": [
+      {
+        "id": "tests/test_ext_autodoc_private_members.py::test_private_members",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "regression": {
+    "status": "ran",
+    "passed": 2,
+    "failed": 0,
+    "errors": 0,
+    "total": 2,
+    "expected_total": 2,
+    "tests": [
+      {
+        "id": "tests/test_ext_autodoc_private_members.py::test_private_field",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/test_ext_autodoc_private_members.py::test_private_field_and_private_members",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "ran",
+    "scorer": "golden/agentbench/code_quality (same as gold_quality_score)",
+    "quality_score": 100.0,
+    "subscores": {
+      "reliability": 100.0,
+      "complexity": 100.0,
+      "maintainability": 100.0,
+      "security": 100.0,
+      "hygiene": 100.0,
+      "size": 100.0
+    },
+    "penalties": {
+      "reliability": 0,
+      "complexity": 0.0,
+      "maintainability": 0.0,
+      "security": 0,
+      "hygiene": 0.0,
+      "size": 0.0
+    },
+    "coverage": {
+      "source_files": 1,
+      "analyzed_files": 1,
+      "status": {
+        "analyzed": 1
+      }
+    },
+    "changed_source_lines": 40,
+    "size_ratio_vs_reference": 0.87,
+    "tests_included": false,
+    "stray_files": [],
+    "lint_new": {},
+    "bandit_new": {},
+    "security_patterns": {},
+    "smells": {},
+    "new_complex_functions": [],
+    "ccn_delta": 3,
+    "mi_delta_worst": -0.0,
+    "files": [
+      {
+        "path": "sphinx/ext/autodoc/__init__.py",
+        "language": "python",
+        "status": "analyzed",
+        "added_lines": 17,
+        "removed_lines": 11,
+        "ccn_before": 217,
+        "ccn_after": 220,
+        "new_complex_functions": [],
+        "max_ccn_increase": 0,
+        "long_functions_added": 0,
+        "mi_before": 0.0,
+        "mi_after": 0.0,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {},
+        "security_patterns": {}
+      }
+    ],
+    "reference_changed_lines": 46,
+    "gold_quality_score": 97.0,
+    "delta_vs_gold": 3.0
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-harness (docker)"
+  },
+  "swebench": {
+    "resolved": true,
+    "patch_applied": true,
+    "harness_run": true,
+    "harness_run_id": "acb-c3b9e8fa-2b9d-46da-8e88-d597deba968a",
+    "harness": "swebench",
+    "harness_report": "logs/run_evaluation/acb-c3b9e8fa-2b9d-46da-8e88-d597deba968a/copilot/sphinx-doc__sphinx-8035/report.json"
+  }
+}

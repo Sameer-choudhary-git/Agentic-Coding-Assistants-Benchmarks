@@ -1,0 +1,17 @@
+diff --git a/lib/faker/default/internet.rb b/lib/faker/default/internet.rb
+index 688b9f89..e068de52 100644
+--- a/lib/faker/default/internet.rb
++++ b/lib/faker/default/internet.rb
+@@ -565,9 +565,11 @@ module Faker
+           "!#$%&'*+-/=?^_`{|}~.".chars
+         ].flatten
+ 
+-        local_part.chars.map do |char|
++        sanitized_local_part = local_part.chars.map do |char|
+           char_range.include?(char) ? char : '#'
+         end.join
++
++        sanitized_local_part.gsub(/\.{2,}/, '.').gsub(/\A\.|\.\z/, '#')
+       end
+ 
+       def construct_email(local_part, domain_name)

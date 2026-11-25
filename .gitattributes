@@ -1,0 +1,3 @@
+
+# Shared study data: keep exact bytes (bundle checksums, patches)
+results/** -text

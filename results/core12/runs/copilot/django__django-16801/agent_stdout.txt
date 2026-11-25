@@ -1,0 +1,51 @@
+ ● Disabled tools: web_fetch
+
+ / Search "post_init|ImageField" in *.py (django/db/models/fields/files.py, django/d… 31 lines found
+
+ $ Shell Check worktree and read issue details 14 lines…
+   git status --short && cat ISSUE.md
+
+ PY Read django/db/models/fields/files.py L390:505 (116 lines read)
+
+ / Search "width_field|height_field|update_dimension_fields" in *.py (django/db/mode… 40 lines found
+
+ / Search "from django.db.models import signals|signals\." (django/db/models/fields/… 11 lines found
+
+ ● Edit  Edit django/db/models/fields/files.py (+3 -2)
+
+ / Search "ImageField|width_field|height_field" in **/*files*.py (tests) No matches found
+
+ $ Shell Review the ImageField change 17 lines…
+   git diff --check && git diff -- django/db/models/fields/files.py && git status --short
+
+ / Search "update_dimension_fields|ImageField" in **/*.py (tests) 14 files found
+
+ ✗ Shell Run ImageField mode… /bin/bash: line 1: python: command not found Failed with exit code 127
+   python tests/runtests.py model_fields.test_imagefield
+
+ ✗ Shell Run ImageField model field tests Failed with exit code 1  Traceback (most recent call last…
+   python3 tests/runtests.py model_fields.test_imagefield
+   Traceback (most recent call last):
+     File 
+   "/home/sanjuoxn/acb-workspaces/56546823/django__django-16801_db39b2ab_r1/tests/runtests.py", line
+    17, in <module>
+       import django
+   ModuleNotFoundError: No module named 'django'
+   
+   The above exception was the direct cause of the following exception:
+   
+   Traceback (most recent call last):
+     File 
+   "/home/sanjuoxn/acb-workspaces/56546823/django__django-16801_db39b2ab_r1/tests/runtests.py", line
+    19, in <module>
+       raise RuntimeError(
+   RuntimeError: Django module not found, reference tests/README.rst for instructions.
+   Failed with exit code 1
+
+ $ Shell Check syntax and final worktree state 1 line…
+   python3 -m py_compile django/db/models/fields/files.py && git diff --check && git status --short
+
+Updated `ImageField.contribute_to_class()` to register the `post_init` handler only when `width_field` or `height_field` is configured.
+
+The ImageField test suite couldn’t run because Django isn’t installed in the environment. The modified file passed Python syntax compilation and `git diff --check`.
+

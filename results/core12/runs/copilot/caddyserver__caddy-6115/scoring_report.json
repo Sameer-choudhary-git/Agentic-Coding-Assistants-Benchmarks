@@ -1,0 +1,210 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": false,
+  "outcome": "regression_failed",
+  "error": null,
+  "started_at": "2026-11-25T15:08:27.309789+00:00",
+  "duration_s": 37.96,
+  "task": {
+    "id": "caddyserver__caddy-6115",
+    "kind": "swebench",
+    "dataset": "SWE-bench/SWE-bench_Multilingual",
+    "task_hash": "da3e9c0be88fb6755c3928dac6c6ce596854c7b29afaa37a225b0a545042e435",
+    "prompt_hash": "b627c4f7b8ed284173afc23161a0a40ebb5a78eb7620e66ae0f8eec6d5f9b93f",
+    "starter_hash": "c2eb5d8198ed2ac202c8bc0b4d77d4eb745654bd7f48c47e6c418c1c0b129ee3",
+    "test_hash": "9ba708266fb87c5b35b7c208096cdfc6094c1ee02142f3153a7249057a83d01d"
+  },
+  "run_context": {
+    "run_id": "8950585f-8f75-473b-b944-280ae090fa0f",
+    "experiment_id": "56546823-6159-4b03-92d1-ec245f124c05",
+    "assistant_id": "copilot",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "caddyserver__caddy-6115_8950585f_r1",
+    "snapshot_hash": "19dcf99e367c91ab4c8ec7b6d3069200619df97b016f76563108476486bc492e"
+  },
+  "diff": {
+    "files_changed": 1,
+    "lines_added": 5,
+    "lines_removed": 4,
+    "files": [
+      "modules/caddyhttp/reverseproxy/selectionpolicies.go"
+    ],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": {
+    "status": "ran",
+    "passed": 1,
+    "failed": 0,
+    "errors": 0,
+    "total": 1,
+    "expected_total": 1,
+    "tests": [
+      {
+        "id": "TestCookieHashPolicyWithSecureRequest",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "regression": {
+    "status": "ran",
+    "passed": 15,
+    "failed": 1,
+    "errors": 0,
+    "total": 16,
+    "expected_total": 16,
+    "tests": [
+      {
+        "id": "TestParseUpstreamDialAddress",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestEqualFold",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestIsPrint",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestRoundRobinPolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestWeightedRoundRobinPolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestLeastConnPolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestIPHashPolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestClientIPHashPolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestFirstPolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestQueryHashPolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestURIHashPolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestLeastRequests",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestRandomChoicePolicy",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestCookieHashPolicyWithFirstFallback",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestHandlerCopyResponse",
+        "outcome": "passed"
+      },
+      {
+        "id": "TestCookieHashPolicy",
+        "outcome": "failed"
+      }
+    ]
+  },
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "ran",
+    "scorer": "golden/agentbench/code_quality (same as gold_quality_score)",
+    "quality_score": 100.0,
+    "subscores": {
+      "reliability": 100.0,
+      "complexity": 100.0,
+      "maintainability": 100.0,
+      "security": 100.0,
+      "hygiene": 100.0,
+      "size": 100.0
+    },
+    "penalties": {
+      "reliability": 0,
+      "complexity": 0.0,
+      "maintainability": 0.0,
+      "security": 0,
+      "hygiene": 0.0,
+      "size": 0.0
+    },
+    "coverage": {
+      "source_files": 1,
+      "analyzed_files": 1,
+      "status": {
+        "analyzed": 1
+      }
+    },
+    "changed_source_lines": 9,
+    "size_ratio_vs_reference": 0.643,
+    "tests_included": false,
+    "stray_files": [],
+    "lint_new": {},
+    "bandit_new": {},
+    "security_patterns": {},
+    "smells": {},
+    "new_complex_functions": [],
+    "ccn_delta": 0,
+    "mi_delta_worst": null,
+    "files": [
+      {
+        "path": "modules/caddyhttp/reverseproxy/selectionpolicies.go",
+        "language": "go",
+        "status": "analyzed",
+        "added_lines": 5,
+        "removed_lines": 4,
+        "ccn_before": 162,
+        "ccn_after": 162,
+        "new_complex_functions": [],
+        "max_ccn_increase": 0,
+        "long_functions_added": 0,
+        "mi_before": null,
+        "mi_after": null,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {},
+        "security_patterns": {}
+      }
+    ],
+    "reference_changed_lines": 14,
+    "gold_quality_score": 97.0,
+    "delta_vs_gold": 3.0
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-harness (docker)"
+  },
+  "swebench": {
+    "resolved": false,
+    "patch_applied": true,
+    "harness_run": true,
+    "harness_run_id": "acb-8950585f-8f75-473b-b944-280ae090fa0f",
+    "harness": "swebench",
+    "harness_report": "logs/run_evaluation/acb-8950585f-8f75-473b-b944-280ae090fa0f/copilot/caddyserver__caddy-6115/report.json"
+  }
+}

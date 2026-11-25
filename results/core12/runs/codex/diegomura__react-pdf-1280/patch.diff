@@ -1,0 +1,13 @@
+diff --git a/packages/layout/src/utils/matchPercent.js b/packages/layout/src/utils/matchPercent.js
+index 23f8913e..8448ca9f 100644
+--- a/packages/layout/src/utils/matchPercent.js
++++ b/packages/layout/src/utils/matchPercent.js
+@@ -1,4 +1,7 @@
+-const isPercent = value => /((-)?\d+\.?\d*)%/g.exec(value);
++// This expression is reused across calls, so it must not be stateful. With the
++// global flag, RegExp.exec advances `lastIndex` and can miss every other
++// percentage value (for example, consecutive flexBasis values).
++const isPercent = value => /((-)?\d+\.?\d*)%/.exec(value);
+ 
+ /**
+  * Get percentage value of input

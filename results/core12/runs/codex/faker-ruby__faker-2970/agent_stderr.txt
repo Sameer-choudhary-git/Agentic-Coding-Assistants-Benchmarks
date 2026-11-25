@@ -1,0 +1,315 @@
+Reading additional input from stdin...
+OpenAI Codex v0.172.0
+--------
+workdir: /home/sanjuoxn/acb-workspaces/18cbed12/faker-ruby__faker-2970_bc5d701b_r1
+model: gpt-6-luna
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a212c4-c865-7382-b304-8bd3040fec4a
+--------
+user
+You are working in a checkout of the faker-ruby/faker repository at commit 37a7ea2cdcea.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+Latest version generates invalid email addresses
+## Describe the bug
+
+When letting faker generate email addresses based on names, it now generates invalid email addresses, where older versions did not.
+
+Example:
+
+```ruby
+# Faker 3.4.1
+Faker::Internet.unique.email(name: " Msgr. Titus Harvey")
+# => "harvey.msgr..titus@russel-von.example"
+```
+
+The email is invalid as two sequential dots appear.
+
+```ruby
+# Faker 3.3.1
+Faker::Internet.unique.email(name: " Msgr. Titus Harvey")
+# => "harvey_msgr_titus@corwin.example"
+```
+
+## To Reproduce
+
+See code samples above
+
+## Expected behavior
+
+Factory should keep generating valid email addresses, as a major escape is to populate databases with valid looking data.
+
+## Additional context
+
+None
+</issue>
+
+codex
+I’ll trace the name-based email generation path and its sanitization rules, then make the smallest source change that prevents invalid consecutive dots.
+exec
+/bin/bash -lc "pwd && rg -n \"def email|email\\(\" lib/faker -g '*.rb' && sed -n '1,160p' ISSUE.md" in /home/sanjuoxn/acb-workspaces/18cbed12/faker-ruby__faker-2970_bc5d701b_r1
+ succeeded in 0ms:
+/home/sanjuoxn/acb-workspaces/18cbed12/faker-ruby__faker-2970_bc5d701b_r1
+lib/faker/tv_shows/the_it_crowd.rb:44:        def email
+lib/faker/tv_shows/silicon_valley.rb:112:        def email
+lib/faker/default/omniauth.rb:15:      @email = email || Internet.email(name: self.name)
+lib/faker/default/internet.rb:29:      #   Faker::Internet.email(name: 'smith')                                            #=> "smith@bergnaum.test"
+lib/faker/default/internet.rb:30:      #   Faker::Internet.email(name: 'sam smith', separators: ['-'])                     #=> "smith-sam@tromp.example"
+lib/faker/default/internet.rb:31:      #   Faker::Internet.email(name: 'sam smith', separators: ['-'], domain: 'test')     #=> "sam-smith@test.example"
+lib/faker/default/internet.rb:32:      #   Faker::Internet.email(domain: 'gmail.com')                                      #=> "foo@gmail.com"
+lib/faker/default/internet.rb:33:      def email(name: nil, separators: nil, domain: nil)
+lib/faker/default/internet.rb:48:        construct_email(sanitized_local_part, generate_domain)
+lib/faker/default/internet.rb:573:      def construct_email(local_part, domain_name)
+You are working in a checkout of the faker-ruby/faker repository at commit 37a7ea2cdcea.
+
+Resolve the GitHub issue below by changing the repository's source code. Do not modify or add tests unless
+the issue explicitly asks for it; hidden tests will be run afterwards. Do not commit; leave your changes in
+the working tree. Work offline: do not search the web or look up how the issue was fixed upstream. The issue
+text is also saved in ISSUE.md in the repository root.
+
+<issue>
+Latest version generates invalid email addresses
+## Describe the bug
+
+When letting faker generate email addresses based on names, it now generates invalid email addresses, where older versions did not.
+
+Example:
+
+```ruby
+# Faker 3.4.1
+Faker::Internet.unique.email(name: " Msgr. Titus Harvey")
+# => "harvey.msgr..titus@russel-von.example"
+```
+
+The email is invalid as two sequential dots appear.
+
+```ruby
+# Faker 3.3.1
+Faker::Internet.unique.email(name: " Msgr. Titus Harvey")
+# => "harvey_msgr_titus@corwin.example"
+```
+
+## To Reproduce
+
+See code samples above
+
+## Expected behavior
+
+Factory should keep generating valid email addresses, as a major escape is to populate databases with valid looking data.
+
+## Additional context
+
+None
+</issue>
+
+exec
+/bin/bash -lc "sed -n '1,90p' lib/faker/default/internet.rb && sed -n '540,610p' lib/faker/default/internet.rb && rg -n \"sanitize|email\" lib/faker/default/internet.rb" in /home/sanjuoxn/acb-workspaces/18cbed12/faker-ruby__faker-2970_bc5d701b_r1
+ succeeded in 0ms:
+# frozen_string_literal: true
+
+module Faker
+  class Internet < Base
+    # Private, Host, and Link-Local network address blocks as defined in https://en.wikipedia.org/wiki/IPv4#Special-use_addresses
+    PRIVATE_IPV4_ADDRESS_RANGES = [
+      [10..10,   0..255,   0..255, 1..255], # 10.0.0.0/8     - Used for local communications within a private network
+      [100..100, 64..127,  0..255, 1..255], # 100.64.0.0/10  - Shared address space for communications between an ISP and its subscribers
+      [127..127, 0..255,   0..255, 1..255], # 127.0.0.0/8    - Used for loopback addresses to the local host
+      [169..169, 254..254, 0..255, 1..255], # 169.254.0.0/16 - Used for link-local addresses between two hosts on a single link when
+      [172..172, 16..31,   0..255, 1..255], # 172.16.0.0/12  - Used for local communications within a private network
+      [192..192, 0..0,     0..0,   1..255], # 192.0.0.0/24   - IETF Protocol Assignments
+      [192..192, 168..168, 0..255, 1..255], # 192.168.0.0/16 - Used for local communications within a private network
+      [198..198, 18..19,   0..255, 1..255]  # 198.18.0.0/15  - Used for benchmark testing of inter-network communications between subnets
+    ].each(&:freeze).freeze
+
+    class << self
+      ##
+      # Returns the email address
+      #
+      # @return [String]
+      #
+      # @param name [String]
+      # @param separators [Array]
+      # @param domain [String]
+      #
+      # @example
+      #   Faker::Internet.email                                                           #=> "renee@zieme.test"
+      #   Faker::Internet.email(name: 'smith')                                            #=> "smith@bergnaum.test"
+      #   Faker::Internet.email(name: 'sam smith', separators: ['-'])                     #=> "smith-sam@tromp.example"
+      #   Faker::Internet.email(name: 'sam smith', separators: ['-'], domain: 'test')     #=> "sam-smith@test.example"
+      #   Faker::Internet.email(domain: 'gmail.com')                                      #=> "foo@gmail.com"
+      def email(name: nil, separators: nil, domain: nil)
+        local_part = if separators
+                       username(specifier: name, separators: separators)
+                     else
+                       username(specifier: name)
+                     end
+
+        sanitized_local_part = sanitize_email_local_part(local_part)
+
+        generate_domain = if domain.nil?
+                            domain_name
+                          else
+                            domain_name(domain: domain)
+                          end
+
+        construct_email(sanitized_local_part, generate_domain)
+      end
+
+      ##
+      # Returns the username
+      #
+      # @return [String]
+      #
+      # @param specifier [Integer, Range, String] When int value passed it returns the username longer than specifier. Max value can be 10^6
+      # @param separators [Array]
+      #
+      # @example
+      #   Faker::Internet.username(specifier: 10)                     #=> "lulu.goodwin"
+      #   Faker::Internet.username(specifier: 5..10)                  #=> "morris"
+      #   Faker::Internet.username(specifier: 5..10)                  #=> "berryberry"
+      #   Faker::Internet.username(specifier: 20, separators: ['_'])  #=> "nikki_sawaynnikki_saway"
+      def username(specifier: nil, separators: %w[. _])
+        with_locale(:en) do
+          case specifier
+          when ::String
+            names = specifier&.gsub("'", '')&.split
+            shuffled_names = shuffle(names)
+
+            return shuffled_names.join(sample(separators)).downcase
+          when Integer
+            # If specifier is Integer and has large value, Argument error exception is raised to overcome memory full error
+            raise ArgumentError, 'Given argument is too large' if specifier > 10**6
+
+            tries = 0 # Don't try forever in case we get something like 1_000_000.
+            result = nil
+            loop do
+              result = username(specifier: nil, separators: separators)
+              tries += 1
+              break unless result.length < specifier && tries < 7
+            end
+            return result * (specifier / result.length + 1) if specifier.positive?
+          when Range
+            tries = 0
+            result = nil
+            loop do
+              result = username(specifier: specifier.min, separators: separators)
+              tries += 1
+              break unless !specifier.include?(result.length) && tries < 7
+      # @example
+      #   Faker::Internet.user #=> { username: 'alexie', email: 'trudie@grant.test' }
+      #
+      # @example
+      #   Faker::Internet.user('username', 'email', 'password') #=> { username: 'alexie', email: 'gayle@kohler.test', password: 'DtEf9P8wS31iMyC' }
+      #
+      # @return [hash]
+      #
+      # @faker.version next
+      def user(*args)
+        user_hash = {}
+        args = %w[username email] if args.empty?
+        args.each { |arg| user_hash[:"#{arg}"] = send(arg) }
+        user_hash
+      end
+
+      alias user_name username
+
+      private
+
+      def sanitize_email_local_part(local_part)
+        char_range = [
+          Array('0'..'9'),
+          Array('A'..'Z'),
+          Array('a'..'z'),
+          "!#$%&'*+-/=?^_`{|}~.".chars
+        ].flatten
+
+        local_part.chars.map do |char|
+          char_range.include?(char) ? char : '#'
+        end.join
+      end
+
+      def construct_email(local_part, domain_name)
+        [local_part, domain_name].join('@')
+      end
+    end
+  end
+end
+19:      # Returns the email address
+28:      #   Faker::Internet.email                                                           #=> "renee@zieme.test"
+29:      #   Faker::Internet.email(name: 'smith')                                            #=> "smith@bergnaum.test"
+30:      #   Faker::Internet.email(name: 'sam smith', separators: ['-'])                     #=> "smith-sam@tromp.example"
+31:      #   Faker::Internet.email(name: 'sam smith', separators: ['-'], domain: 'test')     #=> "sam-smith@test.example"
+32:      #   Faker::Internet.email(domain: 'gmail.com')                                      #=> "foo@gmail.com"
+33:      def email(name: nil, separators: nil, domain: nil)
+40:        sanitized_local_part = sanitize_email_local_part(local_part)
+48:        construct_email(sanitized_local_part, generate_domain)
+541:      #   Faker::Internet.user #=> { username: 'alexie', email: 'trudie@grant.test' }
+544:      #   Faker::Internet.user('username', 'email', 'password') #=> { username: 'alexie', email: 'gayle@kohler.test', password: 'DtEf9P8wS31iMyC' }
+551:        args = %w[username email] if args.empty?
+560:      def sanitize_email_local_part(local_part)
+573:      def construct_email(local_part, domain_name)
+
+apply patch
+patch: completed
+/home/sanjuoxn/acb-workspaces/18cbed12/faker-ruby__faker-2970_bc5d701b_r1/lib/faker/default/internet.rb
+diff --git a/lib/faker/default/internet.rb b/lib/faker/default/internet.rb
+index 688b9f8976953a352e897f19f7d898c66a86fc73..d3831eccbdaf75dc9f6650037676bb7c44333760
+--- a/lib/faker/default/internet.rb
++++ b/lib/faker/default/internet.rb
+@@ -565,9 +565,13 @@
+           "!#$%&'*+-/=?^_`{|}~.".chars
+         ].flatten
+ 
+-        local_part.chars.map do |char|
++        sanitized_local_part = local_part.chars.map do |char|
+           char_range.include?(char) ? char : '#'
+         end.join
++
++        # Dots may separate parts of a local part, but cannot be adjacent or
++        # appear at either end (as in an RFC dot-atom).
++        sanitized_local_part.gsub(/\.{2,}/, '.').sub(/\A\./, '').sub(/\.$/, '')
+       end
+ 
+       def construct_email(local_part, domain_name)
+
+codex
+The sanitizer allowed periods as ordinary characters, so a name ending in punctuation could combine with the username separator and produce `..`. I’ve normalized repeated periods and removed periods at the edges of the local part; I’m checking the resulting diff and behavior now.
+exec
+/bin/bash -lc "git diff --check && git diff -- lib/faker/default/internet.rb && bundle exec ruby -Ilib -e \"require 'faker'; puts Faker::Internet.email(name: ' Msgr. Titus Harvey')\" " in /home/sanjuoxn/acb-workspaces/18cbed12/faker-ruby__faker-2970_bc5d701b_r1
+ exited 127 in 18ms:
+diff --git a/lib/faker/default/internet.rb b/lib/faker/default/internet.rb
+index 688b9f89..d3831ecc 100644
+--- a/lib/faker/default/internet.rb
++++ b/lib/faker/default/internet.rb
+@@ -565,9 +565,13 @@ module Faker
+           "!#$%&'*+-/=?^_`{|}~.".chars
+         ].flatten
+ 
+-        local_part.chars.map do |char|
++        sanitized_local_part = local_part.chars.map do |char|
+           char_range.include?(char) ? char : '#'
+         end.join
++
++        # Dots may separate parts of a local part, but cannot be adjacent or
++        # appear at either end (as in an RFC dot-atom).
++        sanitized_local_part.gsub(/\.{2,}/, '.').sub(/\A\./, '').sub(/\.$/, '')
+       end
+ 
+       def construct_email(local_part, domain_name)
+/bin/bash: line 1: bundle: command not found
+
+codex
+Updated [internet.rb](/home/sanjuoxn/acb-workspaces/18cbed12/faker-ruby__faker-2970_bc5d701b_r1/lib/faker/default/internet.rb:560) to collapse consecutive periods and remove periods at the start or end of email local parts.
+
+`git diff --check` passed. I couldn’t run the Ruby check because `bundle` isn’t available in the environment.
+tokens used
+12,012

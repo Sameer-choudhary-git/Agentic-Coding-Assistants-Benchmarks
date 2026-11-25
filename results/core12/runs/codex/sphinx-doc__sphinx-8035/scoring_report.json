@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0",
+  "evaluator_version": "1.0.0",
+  "benchmark": "golden",
+  "status": "completed",
+  "success": false,
+  "outcome": "acceptance_failed",
+  "error": null,
+  "started_at": "2026-11-25T12:00:53.884728+00:00",
+  "duration_s": 91.97,
+  "task": {
+    "id": "sphinx-doc__sphinx-8035",
+    "kind": "swebench",
+    "dataset": "princeton-nlp/SWE-bench_Verified",
+    "task_hash": "76c9545bd1dd47f4a34dea209eeacd2c4c46f67e2296c20d9057801cd995a30c",
+    "prompt_hash": "e332a2d62c55dc38972fd8a5b41a454eaa366a1490fb5d51211d22b92873616d",
+    "starter_hash": "505267d982248014e59810650361251cf4bbb6d81ba1b240b36014e2b00ab2d1",
+    "test_hash": "fba774189b443d1342bf7f85e4c6ae85df0812c58594d13880c3653fde3b0e20"
+  },
+  "run_context": {
+    "run_id": "56360ca1-fcf9-4f07-9eb2-0ceacabc4093",
+    "experiment_id": "18cbed12-083d-4b5b-b1f4-aa629f84c3fe",
+    "assistant_id": "codex",
+    "attempt_number": 1,
+    "run_number": 1
+  },
+  "workspace": {
+    "name": "sphinx-doc__sphinx-8035_56360ca1_r1",
+    "snapshot_hash": "e59e2ee956c402f92134291f944646a1f25943ca5f5bb0635060de1de1c0467b"
+  },
+  "diff": {
+    "files_changed": 1,
+    "lines_added": 21,
+    "lines_removed": 2,
+    "files": [
+      "sphinx/ext/autodoc/__init__.py"
+    ],
+    "test_files_changed": [],
+    "out_of_scope_files": []
+  },
+  "acceptance": {
+    "status": "ran",
+    "passed": 0,
+    "failed": 1,
+    "errors": 0,
+    "total": 1,
+    "expected_total": 1,
+    "tests": [
+      {
+        "id": "tests/test_ext_autodoc_private_members.py::test_private_members",
+        "outcome": "failed"
+      }
+    ]
+  },
+  "regression": {
+    "status": "ran",
+    "passed": 2,
+    "failed": 0,
+    "errors": 0,
+    "total": 2,
+    "expected_total": 2,
+    "tests": [
+      {
+        "id": "tests/test_ext_autodoc_private_members.py::test_private_field",
+        "outcome": "passed"
+      },
+      {
+        "id": "tests/test_ext_autodoc_private_members.py::test_private_field_and_private_members",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "test_quality": null,
+  "ruff": {
+    "status": "not_applicable"
+  },
+  "semgrep": {
+    "status": "not_applicable"
+  },
+  "code_quality": {
+    "status": "ran",
+    "scorer": "golden/agentbench/code_quality (same as gold_quality_score)",
+    "quality_score": 100.0,
+    "subscores": {
+      "reliability": 100.0,
+      "complexity": 100.0,
+      "maintainability": 100.0,
+      "security": 100.0,
+      "hygiene": 100.0,
+      "size": 100.0
+    },
+    "penalties": {
+      "reliability": 0,
+      "complexity": 0.0,
+      "maintainability": 0.0,
+      "security": 0,
+      "hygiene": 0.0,
+      "size": 0.0
+    },
+    "coverage": {
+      "source_files": 1,
+      "analyzed_files": 1,
+      "status": {
+        "analyzed": 1
+      }
+    },
+    "changed_source_lines": 23,
+    "size_ratio_vs_reference": 0.5,
+    "tests_included": false,
+    "stray_files": [],
+    "lint_new": {},
+    "bandit_new": {},
+    "security_patterns": {},
+    "smells": {},
+    "new_complex_functions": [],
+    "ccn_delta": 7,
+    "mi_delta_worst": -0.0,
+    "files": [
+      {
+        "path": "sphinx/ext/autodoc/__init__.py",
+        "language": "python",
+        "status": "analyzed",
+        "added_lines": 21,
+        "removed_lines": 2,
+        "ccn_before": 217,
+        "ccn_after": 224,
+        "new_complex_functions": [],
+        "max_ccn_increase": 0,
+        "long_functions_added": 0,
+        "mi_before": 0.0,
+        "mi_after": 0.0,
+        "lint_new": {},
+        "bandit_new": {},
+        "smells": {},
+        "security_patterns": {}
+      }
+    ],
+    "reference_changed_lines": 46,
+    "gold_quality_score": 97.0,
+    "delta_vs_gold": 3.0
+  },
+  "environment": {
+    "host_python": "3.12.3",
+    "execution": "swebench-harness (docker)"
+  },
+  "swebench": {
+    "resolved": false,
+    "patch_applied": true,
+    "harness_run": true,
+    "harness_run_id": "acb-56360ca1-fcf9-4f07-9eb2-0ceacabc4093",
+    "harness": "swebench",
+    "harness_report": "logs/run_evaluation/acb-56360ca1-fcf9-4f07-9eb2-0ceacabc4093/codex/sphinx-doc__sphinx-8035/report.json"
+  }
+}

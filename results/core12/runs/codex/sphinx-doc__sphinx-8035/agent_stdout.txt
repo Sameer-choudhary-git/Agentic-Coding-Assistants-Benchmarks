@@ -1,0 +1,3 @@
+Updated autodoc so `:private-members:` accepts a comma-separated list for module and class directives. Selected names are included alongside `:members:`; a bare `:private-members:` still includes all private members.
+
+I left tests unchanged and did not run them.

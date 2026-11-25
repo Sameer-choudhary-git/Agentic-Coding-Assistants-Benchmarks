@@ -1,0 +1,26 @@
+diff --git a/packages/stylesheet/src/expand.js b/packages/stylesheet/src/expand.js
+index 50c40f6c..51b6bbc3 100644
+--- a/packages/stylesheet/src/expand.js
++++ b/packages/stylesheet/src/expand.js
+@@ -184,7 +184,7 @@ const processFlexShrink = (key, value) => {
+ const processFlexBasis = (key, value) => {
+   if (isNumber(value)) return value;
+   const matches = value.split(' ');
+-  return matches[2];
++  return matches.length > 1 ? matches[2] : value;
+ };
+ 
+ const keepSame = (key, value) => value;
+diff --git a/packages/types/style.d.ts b/packages/types/style.d.ts
+index e727c046..7e306389 100644
+--- a/packages/types/style.d.ts
++++ b/packages/types/style.d.ts
+@@ -10,7 +10,7 @@ export interface Style {
+   flexFlow?: number;
+   flexGrow?: number;
+   flexShrink?: number;
+-  flexBasis?: number;
++  flexBasis?: number | string;
+   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-around' | 'space-between' | 'space-evenly';
+   order?: number;
+ 

